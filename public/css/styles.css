@@ -1,0 +1,22 @@
+:root{
+    --color-uno: #0A0A0F;
+    --color-dos: #d4a017;
+    --color-tres: #F5F5F0;
+    --color-cuatro: #1C1C24;
+    --color-cinco: #E8C547;
+    --color-seis: #C0392B;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.fondo{
+    background: var(--color-uno);
+}
+
+.texto-rojo{
+    color: var(--color-seis) !important;
+}
