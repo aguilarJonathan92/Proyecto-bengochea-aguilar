@@ -1,31 +1,21 @@
 <?php
 
+use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\PrincipalController;
+use App\Http\Controllers\QueriesController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('pages.home');
-})->name('home');
+Route::get('/', [PrincipalController::class, 'index'])->name('home');
 
-Route::get('/contacto', function () {
-    return view('pages.contact');
-})->name('contact');
+Route::get('/comercializacion', [PrincipalController::class, 'marketing'])->name('marketing');
 
-Route::get('/catalogo', function () {
-    return view('pages.catalog');
-})->name('catalog');
+Route::get('/terminos', [PrincipalController::class, 'terms'])->name('terms');
 
-Route::get('/comercializacion', function () {
-    return view('pages.marketing');
-})->name('marketing');
+Route::get('/acerca-de', [PrincipalController::class, 'about'])->name('about');
 
-Route::get('/consultas', function () {
-    return view('pages.queries');
-})->name('queries');
+Route::get('/consultas', [QueriesController::class, 'index'])->name('queries');
 
-Route::get('/terminos', function () {
-    return view('pages.term-and-uses');
-})->name('terms');
+Route::get('/catalogo', [CatalogController::class, 'index'])->name('catalog');
 
-Route::get('/acerca-de', function () {
-    return view('pages.about');
-})->name('about');
+Route::get('/contacto', [ContactController::class, 'index'])->name('contact');
