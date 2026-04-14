@@ -73,7 +73,7 @@
     </div>
     <div class="row align-items-center border-top py-2">
         <div class="col align-self-center">
-            © 2026 Copyright SoundWave Store: Todos los derechos reservados 
+             SoundWave Store © Copyright 2026 - Todos los derechos reservados 
         </div>
     </div>
 </footer>
