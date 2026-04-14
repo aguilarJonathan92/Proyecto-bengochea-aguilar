@@ -11,14 +11,14 @@
             <a class="nav-link link-light {{ request()->routeIs('marketing') ? 'active fw-bold border-bottom':'' }}" href="{{ route('marketing') }}">COMERCIALIZACIÓN</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link link-light {{ request()->routeIs('contact') ? 'active fw-bold border-bottom':'' }}" href="{{ route('contact') }}">INFORMACIÓN DE CONTACTO</a>
+            <a class="nav-link link-light {{ request()->routeIs('contact') ? 'active fw-bold border-bottom':'' }}" href="{{ route('contact') }}">CONTACTO</a>
         </li>
         <li class="nav-item">
             <a class="nav-link link-light {{ request()->routeIs('terms') ? 'active fw-bold border-bottom':'' }}" href="{{ route('terms') }}">TÉRMINOS DE USO</a>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link link-light dropdown-toggle {{ request()->routeIs('catalog')? 'active fw-bold border-bottom': '' }}" role="button" data-bs-toggle="dropdown">CATÁLOGO</a>
-            <ul class="dropdown-menu bg-black">
+            <ul class="dropdown-menu">
                 <li>
                     <a class="item-catalogo dropdown-item" href="{{ route('catalog') }}">VER TODO</a>
                 </li>

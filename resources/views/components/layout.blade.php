@@ -7,10 +7,13 @@
     <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{ asset('css/styles.css')}}">
 </head>
-<body class="fondo">
+<body class="fondo d-flex flex-column min-vh-100">
     <x-header/>
     <x-navbar/>
-    {{ $slot }}
+    <main class="flex-grow-1">
+        {{ $slot }}
+    </main>
+    <x-footer/>
     <script src=" {{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
