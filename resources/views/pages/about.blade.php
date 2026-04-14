@@ -1,3 +1,4 @@
-<div>
-    <!-- I begin to speak only when I am certain what I will say is not better left unsaid. - Cato the Younger -->
-</div>
+<x-layout>
+    <x-slot name="title">Acerca De</x-slot>
+    <h2 class="text-center bg-white"> Acerca de nosotros </h2>
+</x-layout>
