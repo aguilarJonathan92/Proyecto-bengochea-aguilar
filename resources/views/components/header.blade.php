@@ -23,8 +23,8 @@
                     <img src="{{ asset('icons/svg/persona.svg')}}" alt="iniciar Sesion">
 
                     <div class="d-flex flex-column" style="line-height: 1.2;">
-                        <span class="fw-semibold text-white">¡Hola! Iniciá sesión</span>
-                        <small class="text-secondary">O podés registrarte</small>
+                        <span class="fw-semibold text-white p-lg-1">¡Hola! Inicia Sesión</span>
+                        <small class="text-secondary text-center">¿Eres Nuevo?</small>
                     </div>
                 </a>
             </div>
