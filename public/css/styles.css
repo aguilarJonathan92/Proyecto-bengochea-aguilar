@@ -1,4 +1,4 @@
-:root{
+:root {
     --color-uno: #1A1A1A;
     --color-dos: #d4a017;
     --color-tres: #F5F5F0;
@@ -7,29 +7,48 @@
     --color-seis: #C0392B;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-.fondo{
+.fondo {
     background: var(--color-uno);
 }
 
-.texto-rojo{
+.texto-rojo {
     color: var(--color-seis) !important;
 }
 
-.item-catalogo, .dropdown-menu, footer{
-    color:white;
+.item-catalogo,
+.dropdown-menu,
+footer {
+    color: white;
     background-color: #1a1a1a;
 }
+
 .item-catalogo:hover {
-    color:#1C1C24;
+    color: #1C1C24;
     background-color: white;
 }
+
 .terms-decoration {
-    border:1px solid #F5F5F0;
+    border: 1px solid #F5F5F0;
     border-radius: 7px;
+}
+
+iframe {
+    height: auto;
+    width: 30vw;
+    border-radius: 7px;
+    /*Sólo para que se vea, ya que la dirección al parecer está mal*/
+    border: 1px solid #F5F5F0;
+}
+
+@media(max-width:640px) {
+    iframe {
+        height: 40vh;
+        width: 50vw;
+    }
 }
