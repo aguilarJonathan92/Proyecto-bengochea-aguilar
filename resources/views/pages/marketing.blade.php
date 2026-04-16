@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot name="title">Comercialización</x-slot>
     <div class="container p-2 p-md-4 px-lg-5">
-        <div class="terms-decoration text-light my-4 px-3 px-md-5 pb-4">
+        <div class="pages-decoration text-light my-4 px-3 px-md-5 pb-4">
             <h2 class="text-center border-bottom  py-4">Comercialización</h2>
             <p class="pb-2">En Soundwave Store desarrollamos un modelo de comercialización integral orientado a
                 garantizar eficiencia, transparencia y sostenibilidad en cada operación. Nuestra gestión se basa en

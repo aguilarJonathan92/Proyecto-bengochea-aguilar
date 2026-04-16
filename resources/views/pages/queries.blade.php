@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot name="title">Consultas</x-slot>
     <div class="container p-2 p-md-4 px-lg-5">
-        <div class="terms-decoration text-light my-4 px-3 px-md-5 pb-4">
+        <div class="pages-decoration text-light my-4 px-3 px-md-5 pb-4">
             <h2 class="text-center border-bottom py-4">Formulario de consulta</h2>
             <p class="text-center mb-4">
                 Nuestro compromiso es responder cada consulta con la mayor eficiencia posible,

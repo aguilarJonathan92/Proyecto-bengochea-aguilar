@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot name="title">Contacto</x-slot>
     <div class="container p-2 p-md-4 px-lg-5">
-        <div class="terms-decoration text-light my-4 px-3 px-md-5 pb-4">
+        <div class="pages-decoration text-light my-4 px-3 px-md-5 pb-4">
             <div class="text-white">
                 <h2 class="text-center border-bottom py-4">Contacto</h2>
                 <p class="px-2 px-md-4">
