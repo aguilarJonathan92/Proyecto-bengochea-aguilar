@@ -22,9 +22,9 @@
                 <div class="col-12 col-md-7">
                     <h3 class="text-center border-bottom py-4">Datos de Contacto</h3>
                     <ul class="list-unstyled text-center text-md-start ps-md-3">
-                        <li><i class="bi bi-envelope"></i> <strong>Correo:</strong> info@soundwavestore.com</li>
-                        <li><i class="bi bi-telephone"></i> <strong>Teléfono:</strong> [379-XXXXXXX]</li>
-                        <li><i class="bi bi-geo-alt"></i> <strong>Dirección:</strong> Corrientes, Argentina</li>
+                        <li><i class="bi bi-envelope me-2"></i> <strong>Correo:</strong> info@soundwavestore.com</li>
+                        <li><i class="bi bi-telephone me-2"></i> <strong>Teléfono:</strong> [379-XXXXXXX]</li>
+                        <li><i class="bi bi-geo-alt me-2"></i> <strong>Dirección:</strong> Corrientes, Argentina</li>
                     </ul>
 
                     <h3 class="text-center border-bottom py-4">Horarios de Atención</h3>
