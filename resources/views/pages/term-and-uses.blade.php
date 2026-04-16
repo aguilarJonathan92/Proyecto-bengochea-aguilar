@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot name="title">Términos</x-slot>
-    <div class="container p-4">
-        <div class="terms-decoration text-white my-4 px-4">
+    <div class="container p-2 p-md-4 px-lg-5">
+        <div class="terms-decoration text-light my-4 px-3 px-md-5 pb-4">
             <h2 class="text-center border-bottom py-4">Términos De Uso</h2>
             <p class="text-center">El presente documento establece los términos y condiciones de uso del sitio web
                 Soundwave Store. Al acceder y utilizar nuestra plataforma, el usuario acepta plenamente las

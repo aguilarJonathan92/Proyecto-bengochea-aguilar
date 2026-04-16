@@ -1,8 +1,8 @@
 <x-layout>
     <x-slot name="title">Comercialización</x-slot>
-    <div class="container p-4">
-        <div class="terms-decoration text-light my-4 px-4 pb-4">
-            <h2 class="text-center text-uppercase border-bottom py-4">comercialización</h2>
+    <div class="container p-2 p-md-4 px-lg-5">
+        <div class="terms-decoration text-light my-4 px-3 px-md-5 pb-4">
+            <h2 class="text-center text-uppercase border-bottom  py-4">comercialización</h2>
             <p class="pb-2">En Soundwave Store desarrollamos un modelo de comercialización integral orientado a
                 garantizar eficiencia, transparencia y sostenibilidad en cada operación. Nuestra gestión se basa en
                 procesos estandarizados que permiten optimizar la cadena de valor, desde la adquisición de instrumentos
@@ -15,9 +15,9 @@
             <h3>Canales de venta</h3>
             <p class="pb-2">Nuestra comercialización se estructura en dos canales principales:</p>
             <ul class="pb-2">
-                <li>E-commerce propio: plataforma dtext-light border rounded-4 my-4igital con alcance nacional, diseñada
+                <li class="mb-2">E-commerce propio: plataforma digital con alcance nacional, diseñada
                     para ofrecer una experiencia de compra segura y eficiente.</li>
-                <li>Distribución regional: presencia activa en Corrientes y provincias aledañas, con logística adaptada
+                <li class="mb-2">Distribución regional: presencia activa en Corrientes y provincias aledañas, con logística adaptada
                     a las características del mercado local.</li>
             </ul>
             <h3>Política de precios y financiamiento</h3>
@@ -32,9 +32,9 @@
             <h3>Compromiso corporativo</h3>
             <p class="pb-2">Nuestra comercialización se sustenta en tres principios:</p>
             <ul>
-                <li>Eficiencia operativa: optimización de procesos internos para reducir costos y tiempos.</li>
-                <li>Transparencia: comunicación clara y cumplimiento estricto de condiciones pactadas.</li>
-                <li>Sostenibilidad: prácticas responsables que favorecen el desarrollo de la comunidad musical y el
+                <li class="mb-2">Eficiencia operativa: optimización de procesos internos para reducir costos y tiempos.</li>
+                <li class="mb-2">Transparencia: comunicación clara y cumplimiento estricto de condiciones pactadas.</li>
+                <li class="mb-2">Sostenibilidad: prácticas responsables que favorecen el desarrollo de la comunidad musical y el
                     crecimiento del sector.</li>
             </ul>
         </div>

@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot name="title">Acerca De</x-slot>
-    <div class="container p-4">
-        <div class="terms-decoration px-4 my-4">
+    <div class="container p-2 p-md-4 px-lg-5">
+        <div class="terms-decoration text-light my-4 px-3 px-md-5 pb-4">
             <h2 class="text-center text-light py-4 border-bottom"> Quienes Somos </h2>
             <p class="text-light">En <strong class="texto-rojo text-uppercase">Soundwave Store</strong> creemos que la
                 música no es solo sonido: es emoción, identidad y conexión. Nacimos con la misión de acercar

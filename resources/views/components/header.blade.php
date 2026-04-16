@@ -3,7 +3,7 @@
 
         {{-- logo --}}
         <div class="col-xl-3 col-sm-12 d-flex justify-content-center fs-3">
-            <a class="navbar-brand texto-rojo" href="{{ route('home') }}">SOUNDWAVE<span class="text-secondary"> STORE</span></a>
+            <a class="navbar-brand texto-rojo animate__animated animate__pulse animate__infinite" href="{{ route('home') }}">SOUNDWAVE<span class="text-secondary"> STORE</span></a>
         </div>
 
         {{-- buscador --}}
