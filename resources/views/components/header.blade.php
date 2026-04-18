@@ -7,7 +7,7 @@
         </div>
 
         {{-- buscador --}}
-        <div class="col-xl-6 p-2 px-xl-4 bd-search">
+        <div class="col-xl-6 p-2 px-xl-4 d-none d-lg-block bd-search">
             <form class="d-flex">
                 <input class="form-control rounded-start-pill" type="search" placeholder="¿Qué estás buscando?">
                 <button class="btn btn-outline-secondary rounded-end-pill" type="submit">
