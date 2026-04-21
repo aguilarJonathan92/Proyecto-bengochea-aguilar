@@ -27,4 +27,5 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
+<x-card/>
 </x-layout>

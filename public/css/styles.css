@@ -46,3 +46,64 @@ footer {
 .form-control:focus, .form-select:focus {
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); /* Suavizado del brillo al clickear */
 }
+
+/* Estilos para Cards */
+.product-card{
+    width: 17rem;
+    background-color: var(--color-tres);
+    border: 1px solid var(--color-cuatro);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.card-link{
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+
+.card-title{
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-uno);
+}
+
+.card-subtitle{
+    font-size: 0.9rem;
+    color: var(--color-cuatro);
+    margin-bottom: 0.5rem;
+}
+
+.precio{
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-dos);
+    margin: 0.5rem 0;
+}
+
+.cuotas{
+    font-size: 0.9rem;
+    color: var(--color-seis);
+}
+
+.cuotas span{
+    font-weight: 600;
+}
+
+.btn-agregar{
+    display: block;
+    width: 100%;
+    background-color: var(--color-dos);
+    color: var(--color-tres);
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6rem;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+.btn-agregar:hover {
+  background-color: var(--color-cinco);
+  color: var(--color-uno);
+}

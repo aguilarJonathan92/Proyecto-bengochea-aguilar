@@ -30,7 +30,6 @@
             </div>
 
             <a href="#" class="text-decoration-none px-2"><img src="{{ asset('icons/svg/carrito.svg')}}" alt="carrito de compras"></a>
-            <a href="#" class="text-decoration-none"><img src="{{ asset('icons/svg/modo-claro.svg')}}" alt="modo claro"></a>
         </div>
     </div>
 </header>
