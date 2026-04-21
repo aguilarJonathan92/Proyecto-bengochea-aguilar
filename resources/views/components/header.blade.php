@@ -22,7 +22,7 @@
                 <a href="#" class="d-flex align-items-center text-decoration-none">
                     <img src="{{ asset('icons/svg/persona.svg')}}" alt="iniciar Sesion">
 
-                    <div class="d-flex flex-column" style="line-height: 1.2;">
+                    <div class="d-flex flex-column d-none d-lg-flex" style="line-height: 1.2;">
                         <span class="fw-semibold text-white p-lg-1">¡Hola! Inicia Sesión</span>
                         <small class="text-secondary text-center">¿Eres Nuevo?</small>
                     </div>
