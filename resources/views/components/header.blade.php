@@ -23,8 +23,8 @@
                     <img src="{{ asset('icons/svg/persona.svg')}}" alt="iniciar Sesion">
 
                     <div class="d-flex flex-column d-none d-lg-flex" style="line-height: 1.2;">
-                        <span class="fw-semibold text-white p-lg-1">¡Hola! Inicia Sesión</span>
-                        <small class="text-secondary text-center">¿Eres Nuevo?</small>
+                        <a href="{{ route('login')}}"><span class="fw-semibold text-white p-lg-1">¡Hola! Inicia Sesión</span></a>
+                        <a href="{{ route('signup')}}"><small class="text-secondary text-center">¿Eres Nuevo? Regístrate</small></a>
                     </div>
                 </a>
             </div>

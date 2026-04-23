@@ -1,0 +1,50 @@
+:root {
+    --color-uno: #1A1A1A;
+    --color-dos: #d4a017;
+    --color-tres: #F5F5F0;
+    --color-cuatro: #1C1C24;
+    --color-cinco: #E8C547;
+    --color-seis: #C0392B;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.auth-card {
+  max-width: 400px;
+  margin: auto;
+  background-color: var(--color-tres);
+  border: 1px solid var(--color-cuatro);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.auth-header .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-dos);
+}
+
+.auth-header .titulo {
+  font-size: 1.2rem;
+  color: var(--color-uno);
+}
+
+.btn-auth {
+  background-color: var(--color-dos);
+  color: var(--color-tres);
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  padding: 0.6rem;
+  width: 100%;
+}
+
+.btn-auth:hover {
+  background-color: var(--color-cinco);
+  color: var(--color-uno);
+}

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PrincipalController;
@@ -22,3 +23,7 @@ Route::get('/catalogo', [CatalogController::class, 'index'])->name('catalog');
 Route::get('/contacto', [ContactController::class, 'index'])->name('contact');
 
 Route::get('/producto-detalles', [CatalogController::class, 'details'])->name('product-details');
+
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+
+Route::get('/signup', [AuthController::class, 'signup'])->name('signup');
