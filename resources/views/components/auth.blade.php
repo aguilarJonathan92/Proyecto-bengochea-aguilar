@@ -12,7 +12,7 @@
 </head>
 <body class="bg-dark d-flex align-items-center justify-content-center" style="min-height: 100vh;">
     <div class="w-100">
-        @yield('content')
+        {{ $slot }}
     </div>
     <script src=" {{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>s
 </body>

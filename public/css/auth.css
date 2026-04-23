@@ -14,7 +14,9 @@
 }
 
 .auth-card {
-  max-width: 400px;
+  width: 90%;
+  max-width: 550px;
+  min-width: 350px;
   margin: auto;
   background-color: var(--color-tres);
   border: 1px solid var(--color-cuatro);
@@ -47,4 +49,45 @@
 .btn-auth:hover {
   background-color: var(--color-cinco);
   color: var(--color-uno);
+}
+
+.btn-volver {
+  background-color: transparent;
+  text-decoration: none;
+  color: var(--color-seis);
+  border: 1px solid var(--color-seis);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-volver:hover {
+  background-color: var(--color-seis);
+  color: var(--color-tres);
+  text-decoration: none;
+}
+
+.form-control {
+  border-radius: 6px;
+  border: 1px solid var(--color-cuatro);
+  background-color: #fff;
+}
+
+.form-control:focus {
+  border-color: var(--color-dos);
+  box-shadow: 0 0 0 0.2rem rgba(212,160,23,0.25);
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.logo-soundwave {
+  color: var(--color-seis); /* rojo (#C0392B) */
+}
+
+.logo-store {
+  color: var(--color-cuatro); /* gris oscuro (#1C1C24) */
 }
