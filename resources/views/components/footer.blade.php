@@ -31,7 +31,7 @@
             <h5>Navegación</h5>
             <ul class="list-group list-unstyled">
                 <li>
-                    <a class="link-secondary text-decoration-none" href="#">Pricipal</a>
+                    <a class="link-secondary text-decoration-none" href="#">Principal</a>
                 </li>
                 <li>
                     <a class="link-secondary text-decoration-none" href="#">Quienes Somos</a>
@@ -57,16 +57,16 @@
             <h5>Contactános</h5>
             <ul class="list-group list-unstyled">
                 <li>
-                    <a class="link-secondary text-decoration-none" href="#">1149382277</a>
+                    <a class="link-secondary text-decoration-none" href="#"><i class="bi bi-telephone-fill"></i> 1149382277</a>
                 </li>
                 <li>
-                    <a class="link-secondary text-decoration-none" href="#">3795372819</a>
+                    <a class="link-secondary text-decoration-none" href="#"><i class="fa-brands fa-whatsapp"></i> 3795372819</a>
                 </li>
                 <li>
-                    <a class="link-secondary text-decoration-none" href="#">soundwave.store@gmail.com</a>
+                    <a class="link-secondary text-decoration-none" href="#"><i class="bi bi-envelope-fill"></i> soundwave.store@gmail.com</a>
                 </li>
                 <li>
-                    <a class="link-secondary text-decoration-none" href="#">9 de Julio y Catamarca</a>
+                    <a class="link-secondary text-decoration-none" href="#"><i class="bi bi-geo-alt-fill"></i> 9 de Julio y Catamarca</a>
                 </li>
             </ul>
         </div>
