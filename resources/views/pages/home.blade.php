@@ -2,7 +2,7 @@
     <x-slot name="title">Principal</x-slot>
 
     {{-- Carrusel --}}
-    <div id="carouselExampleIndicators" class="carousel slide">
+    <div id="carouselExampleIndicators" class="carousel slide mb-3" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
                 aria-current="true" aria-label="Slide 1"></button>
@@ -37,30 +37,23 @@
     {{-- Secciones de Productos --}}
     @php
         $secciones = [
-            ['titulo' => 'Novedades', 'icon' => 'bi-stars'],
-            ['titulo' => 'Ofertas imperdibles', 'icon' => 'bi-tag-fill'],
-            ['titulo' => 'Más visitados', 'icon' => 'bi-graph-up'],
+            ['titulo' => 'Novedades', 'icon' => 'bi-stars', 'datos' => $novedades],
+            ['titulo' => 'Ofertas imperdibles', 'icon' => 'bi-tag-fill', 'datos' => $ofertas_home],
+            ['titulo' => 'Más visitados', 'icon' => 'bi-graph-up', 'datos' => $mas_visitados],
         ];
     @endphp
 
     @foreach ($secciones as $seccion)
-        <div class="container my-5">
-            <h3 class="mb-4 text-center text-white">
-                <i class="bi {{ $seccion['icon'] }}"></i> {{ $seccion['titulo'] }}
+        <div class="container pt-2 pb-5">
+            <h3 class="mb-4 text-center text-white border-bottom border-secondary pb-3">
+                <i class="bi {{ $seccion['icon'] }} texto-rojo me-2"></i> {{ $seccion['titulo'] }}
             </h3>
-            <div class="row g-4"> {{-- g-4 añade un espaciado uniforme --}}
-                @for ($i = 1; $i <= 4; $i++)
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card h-100 shadow-sm">
-                            <img src="..." class="card-img-top" alt="Producto" loading="lazy">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title fs-6">Producto {{ $i }}</h5>
-                                <p class="card-text small text-muted">Descripción breve...</p>
-                                <a href="#" class="btn btn-danger mt-auto">Ver más</a>
-                            </div>
-                        </div>
+            <div class="row justify-content-center g-4 px-2">
+                @foreach ($seccion['datos'] as $card)
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center">
+                        <x-card :card="$card" />
                     </div>
-                @endfor
+                @endforeach
             </div>
         </div>
     @endforeach
