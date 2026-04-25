@@ -37,7 +37,7 @@
                 <img src="{{ asset('icons/svg/carrito.svg') }}" alt="carrito"
                     style="filter: brightness(0) invert(1); width: 24px;">
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style="font-size: 0.6rem;">
+                    style="font-size: 0.5rem;">
                     1
                 </span>
             </a>
