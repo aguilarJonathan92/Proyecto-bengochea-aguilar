@@ -18,7 +18,7 @@ Route::get('/acerca-de', [PrincipalController::class, 'about'])->name('about');
 
 Route::get('/consultas', [QueriesController::class, 'index'])->name('queries');
 
-Route::get('/catalogo', [CatalogController::class, 'index'])->name('catalog');
+Route::get('/catalogo/{categoria?}', [CatalogController::class, 'index'])->name('catalog');
 
 Route::get('/contacto', [ContactController::class, 'index'])->name('contact');
 

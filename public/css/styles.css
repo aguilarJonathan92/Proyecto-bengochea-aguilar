@@ -1,3 +1,4 @@
+/* VARIABLES */
 :root {
     --color-uno: #1A1A1A;
     --color-dos: #d4a017;
@@ -13,6 +14,7 @@
     box-sizing: border-box;
 }
 
+/* ESTILOS GENERALES */
 .fondo {
     background: var(--color-uno);
 }
@@ -45,13 +47,13 @@ footer {
 }
 
 .form-control:focus, .form-select:focus {
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); /* Suavizado del brillo al clickear */
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-/* Estilos para Cards */
-.product-card{
-    width: 100%; 
-    max-width: 280px;
+/* TARJETAS */
+
+.product-card {
+    width: 100%;
     background-color: var(--color-tres);
     border: 1px solid var(--color-cuatro);
     border-radius: 8px;
@@ -59,83 +61,84 @@ footer {
     position: relative;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 
+    /* Flexbox principal de la tarjeta */
     display: flex;
     flex-direction: column;
+    height: 100%; /* Asegura que todas las cards de una fila tengan el mismo alto */
 
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Transición suave */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                box-shadow 0.3s ease;
 }
 
 .product-card:hover {
-    transform: translateY(-6px) scale(1.02);
+    transform: translateY(-8px);
     box-shadow: 0 15px 30px rgba(0,0,0,0.2);
 }
 
-.badge-producto{
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #dc3545;
-    color: white;
-    font-size: 0.7rem;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-weight: bold;
+/* Imagen: SOLUCIÓN A DIFERENTES ALTURAS */
+.card-img-top {
+    width: 100%;
+    height: 250px; /* Una altura fija un poco mayor para guitarras */
+    object-fit: contain; /* CAMBIO CLAVE: 'contain' evita estiramientos */
+    background-color: #fff; /* Fondo neutro para imágenes cortas o transparentes */
+    padding: 15px; /* Da un aire profesional a la imagen */
 }
-.card-body{
+
+/* Cuerpo de la tarjeta: Flexbox para alinear contenido */
+.card-body {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    padding: 0.8rem;
+    flex-grow: 1; /* Ocupa todo el espacio restante hasta el botón */
+    padding: 1.2rem 1rem;
 }
 
-.card-img-top{
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-}
-
-.card-link{
-  color: inherit;
-  text-decoration: none;
-  display: block;
-}
-
-.card-title{
+/* Títulos: SOLUCIÓN A DIFERENTES LÍNEAS */
+.card-title {
     font-size: 1rem;
-    font-weight: 600;
-    min-height: 40px;
+    font-weight: 700;
     color: var(--color-uno);
+    margin-bottom: 0.4rem;
+    line-height: 1.2;
+
+    /* Truncado Multilínea: Siempre ocupa espacio de 2 líneas */
+    display: -webkit-box;
+    line-clamp: 2; /* Para navegadores modernos */
+    -webkit-line-clamp: 2; /* Muestra máximo 2 líneas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.4em; /* Asegura el mismo espacio para títulos de 1 o 2 líneas */
 }
 
-.card-subtitle{
-    font-size: 0.9rem;
-    color: var(--color-cuatro);
-    margin-bottom: 0.5rem;
+.card-subtitle {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 1rem;
 }
 
-.precio{
+/* Precios y Envío */
+.precio {
     font-size: 1.4rem;
     font-weight: 700;
     color: var(--color-dos);
     margin: 0.5rem 0;
 }
 
-/* Precio con descuento (el importante) */
-.precio-descuento{
+.precio-descuento {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #d32f2f; /* rojo atractivo */
+    color: #d32f2f;
     margin: 0.3rem 0;
+    line-height: 1;
 }
 
-.descuento-label{
+.descuento-label {
     font-size: 0.8rem;
-    color: #2e7d32;
+    color: whitesmoke;
     font-weight: 600;
 }
 
-/* Precio original tachado */
-.precio-original{
+.precio-original {
     font-size: 0.95rem;
     color: #888;
     text-decoration: line-through;
@@ -143,39 +146,69 @@ footer {
     opacity: 0.7;
 }
 
-.cuotas{
+.cuotas {
     font-size: 0.9rem;
     color: var(--color-seis);
 }
 
-.cuotas span{
+.cuotas span {
     font-weight: 600;
 }
 
-.envio{
+.envio {
     font-size: 0.8rem;
     color: #28a745;
     font-weight: 600;
+    margin-bottom: 1.2rem;
 }
 
-.btn-agregar{
-    margin-top: auto;
+/* Botón: SOLUCIÓN A ALINEACIÓN INFERIOR */
+.btn-agregar {
+    margin-top: auto; /* TRUCO CLAVE: Empuja el botón hasta el borde inferior */
     display: block;
     width: 100%;
     background-color: var(--color-dos);
-    color: var(--color-tres);
-    font-weight: 600;
+    color: var(--color-uno); /* Negro sobre dorado mejora de legibilidad */
+    font-weight: 700;
     border: none;
-    border-radius: 4px;
-    padding: 0.6rem;
+    border-radius: 6px;
+    padding: 0.8rem;
     text-align: center;
+    text-transform: uppercase;
+    font-size: 0.85rem;
     cursor: pointer;
     letter-spacing: 0.5px;
-
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .btn-agregar:hover {
-  background-color: var(--color-cinco);
-  color: var(--color-uno);
+    background-color: var(--color-cinco);
+    color: var(--color-uno);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Aseguro que el estilo esté al frente */
+.badge-producto {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #dc3545;
+    color: white;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    z-index: 10;
+}
+.nav-link:hover {
+    border-bottom: 1px solid gray;
+}
+
+/*Decoración de la opción activada del menú desplegable (catálogo)*/
+.dropdown-item.active {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+    border-radius: 6px; /* Bordes redondeados */
+    margin: 0 5px; /* Un pequeño margen para que no toque los bordes */
+    width: calc(100% - 10px); /* Ajuste del ancho por el margen */
 }
