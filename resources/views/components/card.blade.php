@@ -1,4 +1,4 @@
-{{--  @props(['card']) --}}
+@props(['card'])
 
 <div class="card product-card h-100 m-1">
     {{-- Badge de descuento con z-index alto para estar sobre el link invisible --}}
