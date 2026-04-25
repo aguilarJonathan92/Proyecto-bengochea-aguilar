@@ -20,6 +20,7 @@
     <main class="flex-grow-1">
         {{ $slot }}
     </main>
+    <x-cart />
     <x-footer />
     <script src=" {{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
 </body>

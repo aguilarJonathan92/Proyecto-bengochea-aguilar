@@ -29,7 +29,12 @@
                 </a>
             </div>
 
-            <a href="#" class="text-decoration-none px-2"><img src="{{ asset('icons/svg/carrito.svg')}}" alt="carrito de compras"></a>
+           <a href="#" class="text-decoration-none px-2 position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart">
+                <img src="{{ asset('icons/svg/carrito.svg')}}" alt="carrito" style="filter: brightness(0) invert(1); width: 24px;">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                    1
+                </span>
+            </a>
         </div>
     </div>
 </header>

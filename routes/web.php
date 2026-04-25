@@ -27,3 +27,8 @@ Route::get('/producto-detalles', [CatalogController::class, 'details'])->name('p
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 
 Route::get('/signup', [AuthController::class, 'signup'])->name('signup');
+
+//falta crear el controlador para poner esta ruta
+Route::get('/checkout', function () {
+    return view('pages.checkout');
+})->name('checkout');
