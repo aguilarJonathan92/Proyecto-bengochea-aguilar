@@ -193,4 +193,8 @@ class PrincipalController extends Controller
     {
         return view('pages.marketing');
     }
+
+    public function contact(){
+        return view('pages.contact');
+    }
 }

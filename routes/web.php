@@ -20,7 +20,7 @@ Route::get('/consultas', [QueriesController::class, 'index'])->name('queries');
 
 Route::get('/catalogo/{categoria?}', [CatalogController::class, 'index'])->name('catalog');
 
-Route::get('/contacto', [ContactController::class, 'index'])->name('contact');
+Route::get('/contacto', [PrincipalController::class, 'contact'])->name('contact');
 
 Route::get('/producto-detalles', [CatalogController::class, 'details'])->name('product-details');
 
