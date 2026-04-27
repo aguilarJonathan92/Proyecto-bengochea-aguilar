@@ -35,7 +35,8 @@
                         </li>
                         <li class="mb-2">
                             <i class="bi bi-geo-alt me-2"></i>
-                            <strong>Dirección:</strong> 9 de Julio 1449 (Corrientes, Argentina)
+                            <strong>Dirección:</strong>
+                            <a href="https://maps.app.goo.gl/yhESDqhKsFdvNLtk6" class="text-white text-decoration-none"> 9 de Julio 1449 (Corrientes, Argentina)</a>
                         </li>
                     </ul>
 
