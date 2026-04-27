@@ -7,10 +7,10 @@
     </div>
 
     <div class="row g-4">
-        <div class="col-md-7 col-lg-8">
+        <div class="col-md-7 col-lg-8 order-2 order-md-1">
             <div class="checkout-section-card">
                 <h4 class="checkout-title">Datos de Entrega</h4>
-                
+
                 <form class="needs-validation" novalidate>
                     <div class="row g-3">
                         <div class="col-sm-6">
@@ -54,14 +54,14 @@
             </div>
         </div>
 
-        <div class="col-md-5 col-lg-4">
+        <div class="col-md-5 col-lg-4 order-1 order-md-2">
             <div class="card checkout-summary-card">
                 <div class="summary-header">
                     <h5 class="d-flex justify-content-between align-items-center mb-0 fw-bold">
                         RESUMEN <span class="badge rounded-pill bg-white text-dark">1</span>
                     </h5>
                 </div>
-                
+
                 <div class="card-body p-4">
                     <div class="product-item d-flex align-items-center mb-3">
                         <div class="product-info flex-grow-1">
