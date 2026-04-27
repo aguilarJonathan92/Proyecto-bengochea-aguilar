@@ -345,3 +345,105 @@ footer {
     margin-bottom: 2rem;
     transition: border-color 0.3s ease;
 }
+
+/*--- PRODUCT-DETAILS ---*/
+/* Contenedor de la imagen principal */
+.product-main-image-card {
+    background-color: var(--color-cuatro);
+    border: 1px solid rgba(245, 245, 240, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Miniaturas verticales */
+.thumb-container {
+    background-color: var(--color-cuatro);
+    border: 1px solid rgba(245, 245, 240, 0.1);
+    border-radius: 6px;
+    padding: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.thumb-container:hover, .thumb-container.active {
+    border-color: var(--color-dos);
+    transform: scale(1.05);
+}
+
+.thumb-container img {
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+}
+
+/* Card de información a la derecha */
+.product-info-card {
+    background-color: var(--color-cuatro);
+    border: 1px solid rgba(245, 245, 240, 0.05);
+    border-radius: 10px;
+}
+
+/* Botón Añadir al Carrito */
+.btn-add-cart {
+    background-color: var(--color-dos);
+    color: white;
+    border: none;
+    transition: background 0.3s ease;
+}
+
+.btn-add-cart:hover {
+    background-color: var(--color-cinco);
+    color: white;
+}
+
+/* Estilo para el botón regresar */
+.btn-outline-secondary:hover {
+    background-color: var(--color-dos);
+    border-color: var(--color-dos);
+    color: white;
+}
+
+/* Contenedor de detalles inferiores */
+.product-details-container {
+    background-color: var(--color-cuatro);
+    border: 1px solid rgba(245, 245, 240, 0.05);
+    border-radius: 12px;
+}
+
+/* Estilo de las pestañas (Tabs) */
+.custom-tab {
+    background: transparent !important;
+    border: none !important;
+    color: var(--color-tres) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    padding: 10px 20px !important;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+.custom-tab.active {
+    opacity: 1;
+    color: var(--color-dos) !important; /* Dorado cuando está activa */
+    border-bottom: 3px solid var(--color-dos) !important;
+}
+
+/* Estilo de la tabla de especificaciones */
+.custom-table {
+    background-color: transparent !important;
+    color: var(--color-tres);
+    margin-bottom: 0;
+}
+
+.custom-table th {
+    width: 30%;
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.2); /* Un fondo levemente más oscuro para los encabezados */
+}
+
+.custom-table td {
+    color: rgba(245, 245, 240, 0.8);
+}
