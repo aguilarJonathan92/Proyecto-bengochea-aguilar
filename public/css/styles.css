@@ -212,3 +212,136 @@ footer {
     margin: 0 5px; /* Un pequeño margen para que no toque los bordes */
     width: calc(100% - 10px); /* Ajuste del ancho por el margen */
 }
+
+
+
+/* --- pagina de checkout --- */
+/* Contenedor principal de la sección de datos */
+.checkout-section-card {
+    background-color: var(--color-cuatro); /* Tu fondo oscuro */
+    border: 1px solid rgba(245, 245, 240, 0.1);
+    border-radius: 8px;
+    padding: 2.5rem; /* Más espacio interno como en la imagen */
+}
+
+
+.checkout-back-link {
+    color: var(--color-dos);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.checkout-back-link:hover {
+    color: var(--color-cinco);
+}
+
+.checkout-title {
+    color: var(--color-tres);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-label{
+    color: var(--color-tres);
+    font-size: 1.1rem;
+}
+.checkout-input {
+    background-color: var(--color-uno) !important;
+    border: 1px solid rgba(245, 245, 240, 0.2) !important;
+    color: white !important;
+    padding: 0.8rem 1rem !important;
+    border-radius: 6px;
+}
+
+.checkout-input::placeholder {
+    color: rgba(245, 245, 240, 0.4); /* Placeholder sutil */
+}
+
+.checkout-input:focus {
+    border-color: var(--color-dos) !important;
+    box-shadow: 0 0 0 0.25rem rgba(212, 160, 23, 0.1) !important;
+}
+
+/* Opciones de pago tipo "listado" */
+.checkout-payment-option {
+    background-color: var(--color-uno);
+    border: 1px solid rgba(245, 245, 240, 0.1);
+    padding: 1rem 1rem 1rem 2.5rem;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    color: var(--color-tres);
+}
+
+.btn-confirm-order {
+    background-color: var(--color-dos);
+    color: white;
+    border: none;
+    padding: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-confirm-order:hover {
+    background-color: var(--color-cinco);
+    transform: translateY(-2px);
+}
+
+/* Separador sutil */
+.checkout-separator {
+    margin: 3rem 0;
+    border-top: 1px solid rgba(245, 245, 240, 0.1);
+}
+/* Tarjeta de Resumen */
+.checkout-summary-card {
+    background-color: var(--color-cuatro) !important;
+    border: 1px solid rgba(245, 245, 240, 0.1) !important;
+    border-radius: 8px !important;
+}
+
+.summary-header {
+    background-color: var(--color-cuatro);
+    padding: 1rem;
+    color: white;
+    border-bottom: 4px solid var(--color-dos);
+}
+
+.product-name {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--color-tres);
+    text-transform: uppercase;
+}
+
+.product-price {
+    font-weight: 700;
+    color: var(--color-tres);
+}
+
+.summary-total-section {
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+    margin-top: 1rem;
+}
+
+.total-amount {
+   color: var(--color-dos);
+    font-size: 1.75rem;
+}
+
+/* Card para las secciones del formulario */
+.checkout-section-card {
+    background-color: var(--color-cuatro); /* Tu gris azulado oscuro */
+    border: 1px solid rgba(245, 245, 240, 0.08); /* Borde casi invisible pero presente */
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: border-color 0.3s ease;
+}

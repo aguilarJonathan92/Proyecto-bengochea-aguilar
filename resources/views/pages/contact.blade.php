@@ -22,13 +22,31 @@
                 <div class="col-12 col-md-7">
                     <h3 class="text-center border-bottom py-4">Datos de Contacto</h3>
                     <ul class="list-unstyled text-center text-md-start ps-md-3">
-                        <li><i class="bi bi-envelope me-2"></i> <strong>Correo:</strong> info@sw-store.com</li>
-                        <li><i class="bi bi-telephone me-2"></i> <strong>Teléfono:</strong> (+54)379-5372819</li>
-                        <li><i class="bi bi-geo-alt me-2"></i> <strong>Dirección:</strong> 9 de Julio 1449 (Corrientes,
-                            Argentina)</li>
+                        <li class="mb-2">
+                            <i class="bi bi-envelope me-2"></i>
+                            <strong>Correo:</strong>
+                            <a href="mailto:info@sw-store.com"
+                                class="text-white text-decoration-none">info@sw-store.com</a>
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-telephone me-2"></i>
+                            <strong>Teléfono:</strong>
+                            <a href="tel:+543795372819" class="text-white text-decoration-none">(+54) 379-5372819</a>
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-geo-alt me-2"></i>
+                            <strong>Dirección:</strong> 9 de Julio 1449 (Corrientes, Argentina)
+                        </li>
                     </ul>
 
-                    <h3 class="text-center border-bottom py-4">Horarios de Atención</h3>
+                    <div class="text-center text-md-start ps-md-3 mt-4">
+                        <p class="small mb-2 text-secondary">¿Tienes una duda específica?</p>
+                        <a href="{{ route('queries') }}" class="btn btn-outline-light px-4">
+                            <i class="bi bi-chat-left-text me-2"></i>Ir al Formulario de Consultas
+                        </a>
+                    </div>
+
+                    <h3 class="text-center border-bottom py-4 mt-2">Horarios de Atención</h3>
                     <div class="text-center text-md-start ps-md-3">
                         <p class="mb-1">Lunes a viernes de 9:00 a 18:00 hs.</p>
                         <p>Sábados de 9:00 a 13:00 hs.</p>
