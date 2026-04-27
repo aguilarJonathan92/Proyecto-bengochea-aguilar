@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="d-grid d-md-block text-center">
-                    <button type="submit" class="btn btn-primary px-5 py-2">Enviar Mensaje</button>
+                    <button type="submit" class="btn btn-brand px-5 py-2">Enviar Mensaje</button>
                 </div>
             </form>
         </div>

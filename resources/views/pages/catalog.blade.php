@@ -12,7 +12,7 @@
                     <div class="alert alert-light border shadow-sm">
                         <p class="h4">No hay productos disponibles</p>
                         <p>Actualmente no tenemos artículos en <strong>{{ $tituloCategoria }}</strong>.</p>
-                        <a href="{{ route('catalog') }}" class="btn btn-primary mt-3">
+                        <a href="{{ route('catalog') }}" class="btn btn-brand mt-3">
                             Ver todo el catálogo
                         </a>
                     </div>

@@ -345,3 +345,14 @@ footer {
     margin-bottom: 2rem;
     transition: border-color 0.3s ease;
 }
+
+/* Decorado sencillo para el resto de botones */
+.btn-brand {
+    background-color: var(--color-dos);
+    color: var(--color-uno); /* o el color de contraste */
+}
+
+.btn-brand:hover {
+    background-color: var(--color-cinco);
+    color: white;
+}
