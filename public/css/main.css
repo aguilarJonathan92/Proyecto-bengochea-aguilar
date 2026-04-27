@@ -1,0 +1,41 @@
+@import url('product.css');
+@import url('header.css');
+@import url('checkout.css');
+@import url('contact.css');
+
+/* ----- PALETA DE COLORES ----- */
+:root {
+    --color-uno: #1A1A1A;
+    --color-dos: #d4a017;
+    --color-tres: #F5F5F0;
+    --color-cuatro: #1C1C24;
+    --color-cinco: #E8C547;
+    --color-seis: #C0392B;
+}
+
+/* ----- RESETEO INICIAL DE ESTILOS PREDETERMINADOS ----- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ESTILOS GENERALES */
+.fondo {
+    background: var(--color-uno);
+}
+
+.texto-rojo {
+    color: var(--color-seis) !important;
+}
+
+/* ----- DECORADO SENCILLO PARA BOTONES SIN ESTILOS ESPECIFICOS ----- */
+.btn-brand {
+    background-color: var(--color-dos);
+    color: var(--color-uno); /* o el color de contraste */
+}
+
+.btn-brand:hover {
+    background-color: var(--color-cinco);
+    color: white;
+}
