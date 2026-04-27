@@ -2,33 +2,32 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PrincipalController;
 use App\Http\Controllers\QueriesController;
-use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [PrincipalController::class, 'index'])->name('home');
 
-Route::get('/comercializacion', [PrincipalController::class, 'marketing'])->name('marketing');
+//Rutas de PrincipalController
+Route::controller(PrincipalController::class)->group(function(){
+    Route::get('/', 'index')->name('home');
+    Route::get('/comercializacion', 'marketing')->name('marketing');
+    Route::get('/terminos', 'terms')->name('terms');
+    Route::get('/acerca-de', 'about')->name('about');
+    Route::get('/contacto', 'contact')->name('contact');
+    Route::get('/checkout', 'checkout')->name('checkout');
+});
 
-Route::get('/terminos', [PrincipalController::class, 'terms'])->name('terms');
+//Rutas de CatalogController
+Route::controller(CatalogController::class)->group(function(){
+    Route::get('/catalogo/{categoria?}', 'index')->name('catalog');
+    Route::get('/producto-detalles', 'details')->name('product-details');
+});
 
-Route::get('/acerca-de', [PrincipalController::class, 'about'])->name('about');
+//Rutas de AuthController
+Route::controller(AuthController::class)->group(function(){
+    Route::get('/login', 'login')->name('login');
+    Route::get('/signup', 'signup')->name('signup');
+});
 
+//Rutas de QueriesController
 Route::get('/consultas', [QueriesController::class, 'index'])->name('queries');
-
-Route::get('/catalogo/{categoria?}', [CatalogController::class, 'index'])->name('catalog');
-
-Route::get('/contacto', [PrincipalController::class, 'contact'])->name('contact');
-
-Route::get('/producto-detalles', [CatalogController::class, 'details'])->name('product-details');
-
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-
-Route::get('/signup', [AuthController::class, 'signup'])->name('signup');
-
-//falta crear el controlador para poner esta ruta
-Route::get('/checkout', function () {
-    return view('pages.checkout');
-})->name('checkout');

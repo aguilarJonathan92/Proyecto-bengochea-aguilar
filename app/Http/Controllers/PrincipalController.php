@@ -197,4 +197,8 @@ class PrincipalController extends Controller
     public function contact(){
         return view('pages.contact');
     }
+
+    public function checkout(){
+        return view('pages.checkout');
+    }
 }
