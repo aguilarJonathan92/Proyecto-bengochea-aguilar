@@ -36,7 +36,30 @@
                         <li class="mb-2">
                             <i class="bi bi-geo-alt me-2"></i>
                             <strong>Dirección:</strong>
-                            <a href="https://maps.app.goo.gl/yhESDqhKsFdvNLtk6" class="text-white text-decoration-none"> 9 de Julio 1449 (Corrientes, Argentina)</a>
+                            <a href="https://maps.app.goo.gl/yhESDqhKsFdvNLtk6" class="text-white text-decoration-none">
+                                9 de Julio 1449 (Corrientes, Argentina)</a>
+                        </li>
+                        <!-- Redes -->
+                        <li class="mb-2 pt-2">
+                            <div class="d-flex justify-content-center justify-content-md-start gap-3">
+                                <a href="https://wa.me/5493795372819"
+                                    class="btn btn-outline-light btn-sm rounded-circle"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-whatsapp fs-5"></i>
+                                </a>
+                                <a href="https://instagram.com" class="btn btn-outline-light btn-sm rounded-circle"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-instagram fs-5"></i>
+                                </a>
+                                <a href="https://facebook.com" class="btn btn-outline-light btn-sm rounded-circle"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-facebook fs-5"></i>
+                                </a>
+                                <a href="https://tiktok.com" class="btn btn-outline-light btn-sm rounded-circle"
+                                    style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-tiktok fs-5"></i>
+                                </a>
+                            </div>
                         </li>
                     </ul>
 

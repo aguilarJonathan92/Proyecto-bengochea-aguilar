@@ -39,7 +39,7 @@
         $secciones = [
             ['titulo' => 'Novedades', 'icon' => 'bi-stars', 'datos' => $novedades],
             ['titulo' => 'Ofertas imperdibles', 'icon' => 'bi-tag-fill', 'datos' => $ofertas_home],
-            ['titulo' => 'Más visitados', 'icon' => 'bi-graph-up', 'datos' => $mas_visitados],
+            ['titulo' => 'Los más vistos', 'icon' => 'bi-graph-up', 'datos' => $mas_vistos],
         ];
     @endphp
 

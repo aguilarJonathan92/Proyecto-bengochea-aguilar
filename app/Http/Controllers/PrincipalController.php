@@ -68,7 +68,7 @@ class PrincipalController extends Controller
                 : $product['price'];
         }
 
-        $mas_visitados = [
+        $mas_vistos = [
             [
                 "id" => 8,
                 "image" => "images/piano-casio.webp",
@@ -176,7 +176,7 @@ class PrincipalController extends Controller
                 "discount" => 0
             ]
         ];
-        return view('pages.home', compact('ofertas_home', 'mas_visitados', 'novedades'));
+        return view('pages.home', compact('ofertas_home', 'mas_vistos', 'novedades'));
     }
 
     public function terms()
@@ -188,7 +188,7 @@ class PrincipalController extends Controller
     {
         return view('pages.about');
     }
-    
+
     public function marketing()
     {
         return view('pages.marketing');

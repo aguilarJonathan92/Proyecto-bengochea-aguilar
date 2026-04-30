@@ -459,3 +459,10 @@ footer {
     background-color: var(--color-cinco);
     color: white;
 }
+
+/* Decorado de botones redes pie de página */
+.social-icon-hover:hover {
+    color: var(--color-seis) !important; /* O tu variable de 'texto-rojo' */
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+}

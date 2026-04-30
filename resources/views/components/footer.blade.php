@@ -3,8 +3,8 @@
         <div class="row align-items-start py-4">
             {{-- Categorías --}}
             <div class="col-12 col-md-4 mb-4 mb-md-0">
-                <h5 class="texto-rojo text-uppercase mb-3 small fw-bold text-md-center">Categorías</h5>
-                <ul class="list-unstyled text-md-center">
+                <h5 class="texto-rojo text-uppercase mb-3 small fw-bold text-center">Categorías</h5>
+                <ul class="list-unstyled text-center">
                     <li class="mb-2"><a class="link-secondary text-decoration-none"
                             href="{{ route('catalog', 'Audio') }}">Audio</a></li>
                     <li class="mb-2"><a class="link-secondary text-decoration-none"
@@ -24,8 +24,8 @@
 
             {{-- Navegación --}}
             <div class="col-12 col-md-4 mb-4 mb-md-0">
-                <h5 class="texto-rojo text-uppercase mb-3 small fw-bold text-md-center">Navegación</h5>
-                <ul class="list-unstyled text-md-center">
+                <h5 class="texto-rojo text-uppercase mb-3 small fw-bold text-center">Navegación</h5>
+                <ul class="list-unstyled text-center">
                     <li class="mb-2"><a class="link-secondary text-decoration-none"
                             href="{{ route('home') }}">Principal</a></li>
                     <li class="mb-2"><a class="link-secondary text-decoration-none"
@@ -36,24 +36,22 @@
                             href="{{ route('contact') }}">Contacto</a></li>
                     <li class="mb-2"><a class="link-secondary text-decoration-none"
                             href="{{ route('terms') }}">Términos de Uso</a></li>
+                    <li class="mb-2"><a class="link-secondary text-decoration-none"
+                            href="{{ route('catalog') }}">Nuestro Catálogo</a></li>
                     <li><a class="link-secondary text-decoration-none" href="{{ route('queries') }}">Consultas</a></li>
                 </ul>
             </div>
 
             {{-- Contacto --}}
             <div class="col-12 col-md-4">
-                <h5 class="texto-rojo text-uppercase mb-3 small fw-bold text-md-center">Contactanos</h5>
-                <ul class="list-unstyled text-md-center">
+                <h5 class="texto-rojo text-uppercase mb-3 small fw-bold text-center">Contactanos</h5>
+                <ul class="list-unstyled text-center">
                     <li class="mb-2 text-secondary">
                         <a href="tel:+543795372819" class="link-secondary text-decoration-none">
                             <i class="bi bi-telephone me-2 texto-rojo"></i> 379 537-2819
                         </a>
                     </li>
-                    <li class="mb-2">
-                        <a class="link-secondary text-decoration-none" href="https://wa.me/5493795372819">
-                            <i class="bi bi-whatsapp me-2 text-success"></i> 379 537-2819
-                        </a>
-                    </li>
+
                     <li class="mb-2">
                         <a class="link-secondary text-decoration-none" href="mailto:info@soundwavestore.com">
                             <i class="bi bi-envelope me-2 texto-rojo"></i> info@sw-store.com
@@ -65,6 +63,22 @@
                         </a>
                     </li>
                 </ul>
+                {{-- Redes Sociales --}}
+                <div class="d-flex justify-content-center gap-3 mt-2">
+                    <a href="https://wa.me/5493795372819" class="link-secondary fs-5 social-icon-hover"
+                        title="Whatsapp">
+                        <i class="bi bi-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com" class="link-secondary fs-5 social-icon-hover" title="Instagram">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="https://facebook.com" class="link-secondary fs-5 social-icon-hover" title="Facebook">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="https://tiktok.com" class="link-secondary fs-5 social-icon-hover" title="TikTok">
+                        <i class="bi bi-tiktok"></i>
+                    </a>
+                </div>
             </div>
         </div>
 
