@@ -1,8 +1,8 @@
 <x-layout>
     <x-slot name="title">Principal</x-slot>
 
-    {{-- Carrusel --}}
-    <div id="carouselExampleIndicators" class="carousel slide mb-3" data-bs-ride="carousel">
+    {{-- Carrusel Adaptativo --}}
+    <div id="carouselExampleIndicators" class="carousel slide mb-3 shadow-sm custom-carousel" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
                 aria-current="true" aria-label="Slide 1"></button>
@@ -45,7 +45,8 @@
 
     @foreach ($secciones as $seccion)
         <div class="container pt-2 pb-5">
-            <h3 class="mb-4 text-center text-white border-bottom border-secondary pb-3">
+            {{-- Título de sección adaptativo: quitamos text-white y border-secondary --}}
+            <h3 class="mb-4 text-center color-adaptativo border-bottom border-ui-adaptativa pb-3 text-uppercase fw-bold" style="letter-spacing: 1px;">
                 <i class="bi {{ $seccion['icon'] }} texto-rojo me-2"></i> {{ $seccion['titulo'] }}
             </h3>
             <div class="row justify-content-center g-4 px-2">

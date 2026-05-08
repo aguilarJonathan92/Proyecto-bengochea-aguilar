@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class CatalogController extends Controller
 {
-    public function index($categoria = null)
+    private function getProducts()
     {
         $json = '[
             {
@@ -294,11 +294,17 @@ class CatalogController extends Controller
                 "brand": "Yamaha",
                 "on_sale": false,
                 "discount": 0
-            }]';
+            }]'; // Aquí pegas todo tu string JSON
+        return json_decode($json, true);
+    }
+
+    public function index($categoria = null)
+    {
 
 
-        // 1. Convertimos el JSON a un array de PHP
-        $productsRaw = json_decode($json, true);
+
+        // 1. Guardamos en una variable el array recibido
+        $productsRaw = $this->getProducts();
 
         // 2. Procesamos el array para inyectar el precio final
         // Usamos & para modificar el elemento original del array por referencia
@@ -335,11 +341,26 @@ class CatalogController extends Controller
             $products = $collection;
         }
 
-        return view('pages.catalog', compact('products','tituloCategoria', 'categoria'));
+        return view('pages.catalog', compact('products', 'tituloCategoria', 'categoria'));
     }
 
-    public function details()
+    public function details(int $id)
     {
-        return view('pages.product-details');
+
+
+        $productsRaw = $this->getProducts();
+
+        foreach ($productsRaw as &$product) {
+            $product['final_price'] = $product['on_sale']
+                ? $product['price'] - ($product['price'] * $product['discount'] / 100)
+                : $product['price'];
+        }
+
+        $product = collect($productsRaw)->firstWhere('id', $id);
+        if (!$product) {
+            abort(404, 'Producto no encontrado');
+        }
+
+        return view('pages.product-details', compact('product'));
     }
 }

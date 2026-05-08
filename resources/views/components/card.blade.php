@@ -1,36 +1,41 @@
 @props(['card'])
 
 <div class="card product-card h-100 m-1">
-    {{-- Badge de descuento con z-index alto para estar sobre el link invisible --}}
+    {{-- Badge de descuento --}}
     @if ($card['on_sale'])
         <div class="badge-producto" style="z-index: 3;">
-            -{{ $card['discount'] }}%
+            {{ $card['discount'] }}% OFF
         </div>
     @endif
 
-    {{-- Imagen: El CSS se encarga de que todas midan lo mismo --}}
+    {{-- Imagen --}}
     <img src="{{ asset($card['image']) }}" class="card-img-top" alt="Imagen de {{ $card['title'] }}" loading="lazy">
 
     <div class="card-body">
-        {{-- El CSS limitará esto a 2 líneas y mantendrá la altura --}}
         <h5 class="card-title">{{ $card['title'] }}</h5>
+        {{-- Cambié card-subtitle para que use la variable de texto muted del CSS --}}
         <p class="card-subtitle">{{ $card['subtitle'] }}</p>
 
-        {{-- Este div mt-auto es el que empuja todo hacia abajo --}}
         <div class="mt-auto">
-            @if ($card['on_sale'])
-                <p class="precio-descuento">
-                    ${{ number_format($card['final_price'], 2, ',', '.') }}
-                    <span class="descuento-label badge bg-success">{{ $card['discount'] }}% OFF</span>
-                </p>
-                <p class="precio-original">
-                    ${{ number_format($card['price'], 2, ',', '.') }}
-                </p>
-            @else
-                <p class="precio">
-                    ${{ number_format($card['price'], 2, ',', '.') }}
-                </p>
-            @endif
+            <div class="price-container">
+                @if ($card['on_sale'])
+                    <div class="d-flex align-items-baseline gap-2">
+                        <p class="precio-descuento mb-0">
+                            ${{ number_format($card['final_price'], 2, ',', '.') }}
+                        </p>
+                        <span class="descuento-tag">{{ $card['discount'] }}% OFF</span>
+                    </div>
+                    <p class="precio-original mb-0">
+                        ${{ number_format($card['price'], 2, ',', '.') }}
+                    </p>
+                @else
+                    <div class="d-flex align-items-baseline">
+                        <p class="precio mb-0">
+                            ${{ number_format($card['price'], 2, ',', '.') }}
+                        </p>
+                    </div>
+                @endif
+            </div>
 
             <p class="cuotas">
                 {{ $card['installments'] }} x ${{ number_format($card['installment_price'], 2, ',', '.') }}
@@ -39,11 +44,11 @@
 
             <p class="envio"><i class="bi bi-truck"></i> Envío gratis</p>
 
-            {{-- Stretched link: Hace que TODA la card sea clickeable sin romper el layout --}}
+            {{-- Stretched link --}}
             <a href="{{ route('product-details', ['id' => $card['id']]) }}" class="stretched-link"></a>
 
-            {{-- Botón con z-index para que sea clickeable INDEPENDIENTE del stretched link --}}
-            <button type="button" class="btn btn-agregar position-relative" style="z-index: 2;">
+            {{-- Botón: Ahora usa la clase btn-agregar que ya tiene el hover y colores en el CSS --}}
+            <button type="button" class="btn-agregar position-relative" style="z-index: 2;">
                 Añadir al carrito
             </button>
         </div>

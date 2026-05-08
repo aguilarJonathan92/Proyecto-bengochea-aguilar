@@ -4,10 +4,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\QueriesController;
+use App\Http\Requests\QueriesRequest;
 use Illuminate\Support\Facades\Route;
 
 
-//Rutas de MainController
+//Rutas de PrincipalController
 Route::controller(MainController::class)->group(function(){
     Route::get('/', 'index')->name('home');
     Route::get('/comercializacion', 'marketing')->name('marketing');
@@ -20,7 +21,7 @@ Route::controller(MainController::class)->group(function(){
 //Rutas de CatalogController
 Route::controller(CatalogController::class)->group(function(){
     Route::get('/catalogo/{categoria?}', 'index')->name('catalog');
-    Route::get('/producto-detalles', 'details')->name('product-details');
+    Route::get('/producto-detalles/{id}', 'details')->name('product-details');
 });
 
 //Rutas de AuthController
@@ -31,3 +32,4 @@ Route::controller(AuthController::class)->group(function(){
 
 //Rutas de QueriesController
 Route::get('/consultas', [QueriesController::class, 'index'])->name('queries');
+Route::post('/enviar-consulta',[QueriesController::class, 'query_store']) ->name('queries.send');
