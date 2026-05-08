@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\PrincipalController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\QueriesController;
 use Illuminate\Support\Facades\Route;
 
 
-//Rutas de PrincipalController
-Route::controller(PrincipalController::class)->group(function(){
+//Rutas de MainController
+Route::controller(MainController::class)->group(function(){
     Route::get('/', 'index')->name('home');
     Route::get('/comercializacion', 'marketing')->name('marketing');
     Route::get('/terminos', 'terms')->name('terms');
