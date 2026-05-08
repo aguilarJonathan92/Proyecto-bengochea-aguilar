@@ -33,3 +33,8 @@ Route::controller(AuthController::class)->group(function(){
 //Rutas de QueriesController
 Route::get('/consultas', [QueriesController::class, 'index'])->name('queries');
 Route::post('/enviar-consulta',[QueriesController::class, 'query_store']) ->name('queries.send');
+
+// Ruta de prueba improvisada
+Route::get('/test-dashboard', function () {
+    return view('Admin.Dashboard');
+});
