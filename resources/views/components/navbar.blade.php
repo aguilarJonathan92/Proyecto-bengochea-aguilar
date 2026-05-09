@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg border-bottom nav-custom">
     <div class="container-fluid">
         {{-- Buscador Móvil --}}
-        <div class="d-flex d-lg-none flex-grow-1 px-4">
+        <div class="d-flex d-lg-none grow px-4">
             <form class="d-flex w-100">
                 <input class="form-control form-control-sm rounded-start-pill" type="search" placeholder="Buscar...">
                 <button class="btn btn-outline-secondary btn-sm rounded-end-pill" type="submit">
@@ -70,8 +70,8 @@
                                 <a @class([
                                     'dropdown-item',
                                     'item-catalogo',
-                                    'item-catalogo-active' => request()->route('categoria') == $cat,
-                                ]) href="{{ route('catalog', $cat) }}">
+                                    'item-catalogo-active' => request()->query('categoria') == $cat,
+                                ]) href="{{ route('catalog', ['categoria' => $cat]) }}">
                                 {{-- Opcional a operador ternario anidado --}}
                                     {{ strtoupper(
                                         match ($cat) {

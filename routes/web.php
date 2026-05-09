@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QueriesController;
 use App\Http\Requests\QueriesRequest;
 use Illuminate\Support\Facades\Route;
@@ -18,9 +19,14 @@ Route::controller(MainController::class)->group(function(){
     Route::get('/checkout', 'checkout')->name('checkout');
 });
 
+//Rutas para ProductController
+Route::controller(ProductController::class)->group(function(){
+    Route::get('/catalogo', 'index')->name('catalog');
+});
+
 //Rutas de CatalogController
 Route::controller(CatalogController::class)->group(function(){
-    Route::get('/catalogo/{categoria?}', 'index')->name('catalog');
+    //Route::get('/catalogo/{categoria?}', 'index')->name('catalog');
     Route::get('/producto-detalles/{id}', 'details')->name('product-details');
 });
 
