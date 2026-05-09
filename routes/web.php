@@ -28,13 +28,21 @@ Route::controller(CatalogController::class)->group(function(){
 Route::controller(AuthController::class)->group(function(){
     Route::get('/login', 'login')->name('login');
     Route::get('/signup', 'signup')->name('signup');
+
+    Route::post('/login', 'loginPost')->name('login.post');
+    Route::post('/signup', 'signupPost')->name('signup.post');
+    Route::post('/logout', 'logout')->name('logout');
 });
 
 //Rutas de QueriesController
 Route::get('/consultas', [QueriesController::class, 'index'])->name('queries');
 Route::post('/enviar-consulta',[QueriesController::class, 'query_store']) ->name('queries.send');
 
-// Ruta de prueba improvisada
-Route::get('/test-dashboard', function () {
-    return view('Admin.Dashboard');
+//ruta filtrada por el middleware
+Route::middleware(['auth', 'es_admin'])->prefix('admin')->group(function () {
+    
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
 });

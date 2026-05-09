@@ -7,15 +7,16 @@
             <p class="small text-muted-adaptativo">Ingresa tus credenciales para continuar</p>
         </div>
 
-        <form>
+        <form action="{{ url('/login') }}" method="POST">
+            @csrf
             <div class="mb-3">
                 <label for="emailLogin" class="form-label color-adaptativo">Correo electrónico</label>
                 {{-- La clase form-control ya es adaptativa en tu styles.css --}}
-                <input type="email" class="form-control" id="emailLogin" placeholder="ejemplo@correo.com" required>
+                <input type="email" name="email" class="form-control" id="emailLogin" placeholder="ejemplo@correo.com" required>
             </div>
             <div class="mb-3">
                 <label for="passwordLogin" class="form-label color-adaptativo">Contraseña</label>
-                <input type="password" class="form-control" id="passwordLogin" placeholder="********" required>
+                <input type="password" name="password" class="form-control" id="passwordLogin" placeholder="********" required>
             </div>
 
             <div class="d-grid mt-4">

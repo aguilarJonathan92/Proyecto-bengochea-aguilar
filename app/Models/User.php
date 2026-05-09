@@ -2,16 +2,51 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User;
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Rol extends Model
+#[Fillable(['name', 'email', 'password'])]
+#[Hidden(['password', 'remember_token'])]
+class User extends Authenticatable
 {
-    protected $table = 'roles';
+    /** @use HasFactory<UserFactory> */
+    use HasFactory, Notifiable;
 
-    //un rol pueden tener muchos usuarios
-    public function Usuarios(): HasMany{
-        return $this->hasMany(User::class, 'rol_id');
+    protected $table = 'users';
+
+    protected $fillable = [
+        'firstName',
+        'lastName',
+        'email',
+        'password',
+        'rol_id'
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    //un usuario solo tiene un rol
+    public function rol(): BelongsTo{
+        return $this->belongsTo(Rol::class, 'rol_id');
+    }
+    
+    public function perfil(): HasOne{
+        return $this->hasOne(ProfileUser::class, 'user_id');
+    }
+    //esto todavia no lo uso, lo deje aca porque me creó el comando
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 }

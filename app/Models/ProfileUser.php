@@ -4,21 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Foundation\Auth\User;
 
-class UsuarioPerfil extends Model
+
+class ProfileUser extends Model
 {
-    protected $table = 'usuario_perfil';
+    protected $table = 'profile_user';
 
     protected $fillable = [
-        'usuario_id',
-        'telefono',
-        'direccion',
+        'user_id',
+        'phone',
+        'address',
     ];
 
     //Un perfil solo pertenece a un usuario
     public function usuario(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'usuario_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

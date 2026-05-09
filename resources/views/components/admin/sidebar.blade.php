@@ -74,7 +74,7 @@
 
     {{-- Botón Logout --}}
     <div class="p-3 pt-0">
-        <form>  {{-- method="POST" action="{{ route('logout') }}" --}}
+        <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="btn-logout-sidebar" title="Cerrar Sesión">
                 <i class="fas fa-sign-out-alt"></i>

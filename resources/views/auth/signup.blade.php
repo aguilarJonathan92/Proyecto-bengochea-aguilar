@@ -7,27 +7,32 @@
             <p class="small text-muted-adaptativo">Únete a la comunidad de Soundwave Store</p>
         </div>
 
-        <form>
+        <form action="{{ url('/signup') }}" method="POST">
+            @csrf
             <div class="row">
                 <div class="col-12 mb-3">
-                    <label for="nameSignup" class="form-label color-adaptativo">Nombre completo</label>
-                    <input type="text" class="form-control" id="nameSignup" placeholder="Juan Pérez" required>
+                    <label for="nameSignup" class="form-label color-adaptativo">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" id="nameSignup" placeholder="Juan" required>
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="nameSignup" class="form-label color-adaptativo">Apellido</label>
+                    <input type="text" name="apellido" class="form-control" id="nameSignup" placeholder="Pérez" required>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="emailSignup" class="form-label color-adaptativo">Correo electrónico</label>
-                <input type="email" class="form-control" id="emailSignup" placeholder="ejemplo@correo.com" required>
+                <input type="email" name="email" class="form-control" id="emailSignup" placeholder="ejemplo@correo.com" required>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="passwordSignup" class="form-label color-adaptativo">Contraseña</label>
-                    <input type="password" class="form-control" id="passwordSignup" placeholder="********" required>
+                    <input type="password" name="password" class="form-control" id="passwordSignup" placeholder="********" required>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="passwordConfirmSignup" class="form-label color-adaptativo">Confirmar</label>
-                    <input type="password" class="form-control" id="passwordConfirmSignup" placeholder="********" required>
+                    <input type="password" name="password_confirmation" class="form-control" id="passwordConfirmSignup" placeholder="********" required>
                 </div>
             </div>
 
