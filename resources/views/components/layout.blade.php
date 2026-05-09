@@ -45,7 +45,7 @@
 
     <x-navbar />
 
-    <main class="flex-grow-1">
+    <main class="grow">
         {{ $slot }}
     </main>
 

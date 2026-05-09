@@ -24,7 +24,13 @@
 </head>
 <body>
     <div class="admin-wrapper d-flex">
-        
+        {{-- Switch de Tema --}}
+        <button id="theme-toggle" class="btn-brand shadow-lg" title="Cambiar modo">
+            <!-- Icono Sol: Se muestra cuando estamos en modo oscuro (porque el botón cambiará a claro) -->
+            <span id="theme-toggle-light-icon" class="hidden"><i class="fa-solid fa-sun"></i></span>
+            <!-- Icono Luna: Se muestra cuando estamos en modo claro -->
+            <span id="theme-toggle-dark-icon" class="hidden"><i class="fa-solid fa-moon"></i></span>
+        </button>
         <x-admin.sidebar />
 
         {{-- El contenido principal debe tener un margen izquierdo igual al ancho del sidebar --}}
@@ -35,6 +41,7 @@
     </div>
     
     <script src="{{ asset('js/admin.js') }}"></script>
+    <script src="{{ asset('js/theme-toggle.js') }}"></script>
     <script src="{{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

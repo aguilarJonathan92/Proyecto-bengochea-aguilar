@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User;
 
 class Rol extends Model
 {
-    protected $table = 'roles';
+    protected $table = 'rols';
 
     //un rol pueden tener muchos usuarios
     public function Usuarios(): HasMany{
