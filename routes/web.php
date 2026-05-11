@@ -22,12 +22,13 @@ Route::controller(MainController::class)->group(function(){
 //Rutas para ProductController
 Route::controller(ProductController::class)->group(function(){
     Route::get('/catalogo', 'index')->name('catalog');
+    Route::get('/producto-detalles/{id}', 'show')->name('product-details');
 });
 
 //Rutas de CatalogController
 Route::controller(CatalogController::class)->group(function(){
     //Route::get('/catalogo/{categoria?}', 'index')->name('catalog');
-    Route::get('/producto-detalles/{id}', 'details')->name('product-details');
+    //Route::get('/producto-detalles/{id}', 'details')->name('product-details');
 });
 
 //Rutas de AuthController

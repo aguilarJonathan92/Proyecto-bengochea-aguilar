@@ -21,21 +21,27 @@
                 <div class="row g-2">
                     <div class="col-2">
                         <div class="d-flex flex-column gap-2">
-                            <div class="thumb-container active">
-                                <img src="{{ asset('images/piano-casio.webp') }}" class="img-fluid">
-                            </div>
-                            <div class="thumb-container">
-                                <img src="{{ asset('images/microfono-1.webp') }}" class="img-fluid">
-                            </div>
-                            <div class="thumb-container">
-                                <img src="{{ asset('images/microfono-2.webp') }}" class="img-fluid">
-                            </div>
+                            @if($product->image_1)
+                                <div class="thumb-container active" onclick="cambiarImagen(this, '{{ asset($product->image_1) }}')">
+                                    <img src="{{ asset($product->image_1) }}" class="img-fluid">
+                                </div>
+                            @endif
+                            @if($product->image_2)
+                                <div class="thumb-container" onclick="cambiarImagen(this, '{{ asset($product->image_2) }}')">
+                                    <img src="{{ asset($product->image_2) }}" class="img-fluid">
+                                </div>
+                            @endif
+                            @if($product->image_3)
+                                <div class="thumb-container" onclick="cambiarImagen(this, '{{ asset($product->image_3) }}')">
+                                    <img src="{{ asset($product->image_3) }}" class="img-fluid">
+                                </div>
+                            @endif
                         </div>
                     </div>
 
                     <div class="col-10">
                         <div class="product-main-image-card p-3 shadow-lg">
-                            <img src="{{ asset($product['image']) }}" class="img-fluid w-100 rounded"
+                            <img id="imagen-principal" src="{{ asset($product->image_1) }}" class="img-fluid w-100 rounded"
                                 alt="Imagen principal">
                         </div>
                     </div>
@@ -152,4 +158,18 @@
             </div>
         </div>
     </div>
+
+    {{-- Creo este codigo para probar que funcione, luego lo muevo donde corresponde --}}
+    @push('scripts')
+    <script>
+        function cambiarImagen(thumb, nuevaUrl) {
+            // Cambiar imagen principal
+            document.getElementById('imagen-principal').src = nuevaUrl;
+
+            // Mover clase active al thumb clickeado
+            document.querySelectorAll('.thumb-container').forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+        }
+    </script>
+    @endpush
 </x-layout>

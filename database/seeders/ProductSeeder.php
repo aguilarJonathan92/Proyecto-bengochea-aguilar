@@ -138,7 +138,7 @@ class ProductSeeder extends Seeder
                 'discount'          => 10,
                 'active'            => true,
                 'image_1'           => 'images/piano-yamaha.webp',
-                'image_2'           => null,
+                'image_2'           => 'images/piano-casio.webp',
                 'image_3'           => null,
                 'specs'             => ['Marca' => 'Yamaha', 'Modelo' => 'P-45', 'Teclas' => '88', 'Conectividad' => 'USB, Jack 6.35mm', 'Peso' => '11.5kg'],
             ],
