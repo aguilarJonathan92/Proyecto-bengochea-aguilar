@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('brand_id')->constrained('brands');
             $table->string('title', 200);
             $table->string('subtitle', 200);
-            $table->text('descripcion');
+            $table->text('description');
             $table->integer('stock');
             $table->decimal('price', 10, 2);
             $table->integer('installments');
@@ -26,9 +26,9 @@ return new class extends Migration
             $table->integer('discount');
             $table->boolean('active')->default(true);
             $table->json('specs')->nullable();
-            $table->string('image_1');        // obligatoria
-            $table->string('image_2')->nullable(); // opcional
-            $table->string('image_3')->nullable(); // opcional
+            $table->string('image_1');              // obligatoria
+            $table->string('image_2')->nullable();  // opcional
+            $table->string('image_3')->nullable();  // opcional
             $table->timestamps();
         });
     }

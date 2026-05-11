@@ -72,25 +72,87 @@ class ProductController extends Controller
     // --------------------------------------
 
     /**
-     * Show the form for creating a new resource.
+     *  GET /admin/productos
      */
-    public function create()
+    public function adminIndex()
     {
-        //
+        $products = Product::with(['category', 'brand'])->paginate(15);
+        return view('admin.products.index', compact('products'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     *  GET /admin/productos/crear
+     */
+    public function create()
+    {
+        $categories = Category::where('active', true)->get();
+        $brands     = Brand::where('activo', true)->get();
+        return view('admin.products.create', compact('categories', 'brands'));
+    }
+
+    /**
+     *  POST /admin/productos.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'category_id'       => 'required|exists:categories,id',
+            'brand_id'          => 'required|exists:brands,id',
+            'title'             => 'required|string|max:200',
+            'subtitle'          => 'required|string|max:200',
+            'descripcion'       => 'required|string',
+            'stock'             => 'required|integer|min:0',
+            'price'             => 'required|numeric|min:0',
+            'installments'      => 'required|integer|min:1',
+            'installment_price' => 'required|numeric|min:0',
+            'on_sale'           => 'boolean',
+            'discount'          => 'integer|min:0|max:100',
+            'image_1'           => 'required|image|max:2048',
+            'image_2'           => 'nullable|image|max:2048',
+            'image_3'           => 'nullable|image|max:2048',
+        ]);
+
+        // Subida de imágenes
+        $image1 = $request->file('image_1')->store('products', 'public');
+        $image2 = $request->hasFile('image_2') ? $request->file('image_2')->store('products', 'public') : null;
+        $image3 = $request->hasFile('image_3') ? $request->file('image_3')->store('products', 'public') : null;
+
+        // Specs desde campos dinámicos
+        $specs = null;
+        if ($request->has('specs')) {
+            $specs = collect($request->specs)
+                ->filter(fn($s) => !empty($s['nombre']) && !empty($s['valor']))
+                ->mapWithKeys(fn($s) => [$s['nombre'] => $s['valor']])
+                ->toArray();
+        }
+
+        Product::create([
+            'category_id'       => $request->category_id,
+            'brand_id'          => $request->brand_id,
+            'title'             => $request->title,
+            'subtitle'          => $request->subtitle,
+            'descripcion'       => $request->descripcion,
+            'stock'             => $request->stock,
+            'price'             => $request->price,
+            'installments'      => $request->installments,
+            'installment_price' => $request->installment_price,
+            'on_sale'           => $request->boolean('on_sale'),
+            'discount'          => $request->discount ?? 0,
+            'active'            => true,
+            'specs'             => $specs,
+            'image_1'           => $image1,
+            'image_2'           => $image2,
+            'image_3'           => $image3,
+        ]);
+
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Producto creado correctamente.');
     }
 
    
 
     /**
-     * GET -- Product: EDIT
+     * GET -- Product: EDIT /admin/productos/{id}/editar
      */
     public function edit(string $id)
     {
@@ -101,11 +163,70 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * PUT /admin/productos/{id}
      */
     public function update(Request $request, string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        $request->validate([
+            'category_id'       => 'required|exists:categories,id',
+            'brand_id'          => 'required|exists:brands,id',
+            'title'             => 'required|string|max:200',
+            'subtitle'          => 'required|string|max:200',
+            'descripcion'       => 'required|string',
+            'stock'             => 'required|integer|min:0',
+            'price'             => 'required|numeric|min:0',
+            'installments'      => 'required|integer|min:1',
+            'installment_price' => 'required|numeric|min:0',
+            'on_sale'           => 'boolean',
+            'discount'          => 'integer|min:0|max:100',
+            'image_1'           => 'nullable|image|max:2048',
+            'image_2'           => 'nullable|image|max:2048',
+            'image_3'           => 'nullable|image|max:2048',
+        ]);
+
+        // Solo reemplaza la imagen si se sube una nueva
+        $image1 = $request->hasFile('image_1')
+            ? $request->file('image_1')->store('products', 'public')
+            : $product->image_1;
+
+        $image2 = $request->hasFile('image_2')
+            ? $request->file('image_2')->store('products', 'public')
+            : $product->image_2;
+
+        $image3 = $request->hasFile('image_3')
+            ? $request->file('image_3')->store('products', 'public')
+            : $product->image_3;
+
+        $specs = $product->specs;
+        if ($request->has('specs')) {
+            $specs = collect($request->specs)
+                ->filter(fn($s) => !empty($s['nombre']) && !empty($s['valor']))
+                ->mapWithKeys(fn($s) => [$s['nombre'] => $s['valor']])
+                ->toArray();
+        }
+
+        $product->update([
+            'category_id'       => $request->category_id,
+            'brand_id'          => $request->brand_id,
+            'title'             => $request->title,
+            'subtitle'          => $request->subtitle,
+            'descripcion'       => $request->descripcion,
+            'stock'             => $request->stock,
+            'price'             => $request->price,
+            'installments'      => $request->installments,
+            'installment_price' => $request->installment_price,
+            'on_sale'           => $request->boolean('on_sale'),
+            'discount'          => $request->discount ?? 0,
+            'specs'             => $specs,
+            'image_1'           => $image1,
+            'image_2'           => $image2,
+            'image_3'           => $image3,
+        ]);
+
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Producto actualizado correctamente.');
     }
 
     /**
