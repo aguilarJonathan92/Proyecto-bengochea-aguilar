@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -19,7 +18,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Guitarra eléctrica versátil',
                 'subtitle'          => 'PRS SE 24-08 Standard Tobacco Sunburst',
-                'descripcion'       => 'Guitarra eléctrica de doble pastilla con cuerpo de caoba y mástil de arce. Ideal para rock, blues y metal.',
+                'description'       => 'Guitarra eléctrica de doble pastilla con cuerpo de caoba y mástil de arce. Ideal para rock, blues y metal.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'PRS',
                 'stock'             => 10,
@@ -37,7 +36,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Guitarra electroacústica dreadnought con cutaway',
                 'subtitle'          => 'Fender Redondo™ Player',
-                'descripcion'       => 'Guitarra electroacústica con tapa de abeto y sistema de pastilla integrado. Perfecta para tocar enchufada o acústica.',
+                'description'       => 'Guitarra electroacústica con tapa de abeto y sistema de pastilla integrado. Perfecta para tocar enchufada o acústica.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Fender',
                 'stock'             => 5,
@@ -55,7 +54,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Guitarra eléctrica tipo Stratocaster',
                 'subtitle'          => 'Benson HD 901 BK',
-                'descripcion'       => 'Guitarra eléctrica tipo Stratocaster con tres pastillas single-coil y cuerpo de tilo. Excelente para principiantes.',
+                'description'       => 'Guitarra eléctrica tipo Stratocaster con tres pastillas single-coil y cuerpo de tilo. Excelente para principiantes.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Benson',
                 'stock'             => 8,
@@ -73,7 +72,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Guitarra acústica concierto',
                 'subtitle'          => 'Cort AD810M Mahogany',
-                'descripcion'       => 'Guitarra acústica con cuerpo de caoba, ideal para estudiantes que buscan un sonido cálido y proyección equilibrada.',
+                'description'       => 'Guitarra acústica con cuerpo de caoba, ideal para estudiantes que buscan un sonido cálido y proyección equilibrada.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Cort',
                 'stock'             => 12,
@@ -91,7 +90,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Guitarra electroacústica dreadnought',
                 'subtitle'          => 'Cort AD810E',
-                'descripcion'       => 'Guitarra electroacústica dreadnought con previo integrado y afinador incorporado. Lista para el escenario.',
+                'description'       => 'Guitarra electroacústica dreadnought con previo integrado y afinador incorporado. Lista para el escenario.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Cort',
                 'stock'             => 7,
@@ -109,7 +108,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Guitarra eléctrica double cutaway',
                 'subtitle'          => 'PRS SE Custom 24-08',
-                'descripcion'       => 'La PRS SE Custom 24-08 ofrece versatilidad tonal con sus pastillas de bobina dividida. Cuerpo de caoba con tapa de arce.',
+                'description'       => 'La PRS SE Custom 24-08 ofrece versatilidad tonal con sus pastillas de bobina dividida. Cuerpo de caoba con tapa de arce.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'PRS',
                 'stock'             => 4,
@@ -127,7 +126,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Piano digital compacto',
                 'subtitle'          => 'Yamaha P-45',
-                'descripcion'       => 'Piano digital con 88 teclas contrapesadas y acción de martillo graduada. Sonido auténtico de cola Yamaha.',
+                'description'       => 'Piano digital con 88 teclas contrapesadas y acción de martillo graduada. Sonido auténtico de cola Yamaha.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Yamaha',
                 'stock'             => 6,
@@ -145,7 +144,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Piano digital profesional',
                 'subtitle'          => 'Casio Privia PX-160',
-                'descripcion'       => 'Piano digital con tecnología de teclado de acción de martillo tri-sensor. Ideal para pianistas exigentes.',
+                'description'       => 'Piano digital con tecnología de teclado de acción de martillo tri-sensor. Ideal para pianistas exigentes.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Casio',
                 'stock'             => 3,
@@ -163,7 +162,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Clarinete Sib estudio',
                 'subtitle'          => 'Yamaha YCL-255',
-                'descripcion'       => 'Clarinete en Sib ideal para estudiantes. Cuerpo de ABS resistente con llaves niqueladas de alta durabilidad.',
+                'description'       => 'Clarinete en Sib ideal para estudiantes. Cuerpo de ABS resistente con llaves niqueladas de alta durabilidad.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Yamaha',
                 'stock'             => 9,
@@ -181,7 +180,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Clarinete profesional',
                 'subtitle'          => 'Buffet Crampon E11',
-                'descripcion'       => 'Clarinete profesional de madera grenadilla con mecanismo plateado. Respuesta precisa y timbre cálido en todos los registros.',
+                'description'       => 'Clarinete profesional de madera grenadilla con mecanismo plateado. Respuesta precisa y timbre cálido en todos los registros.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Buffet',
                 'stock'             => 2,
@@ -199,7 +198,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Auriculares de estudio',
                 'subtitle'          => 'Audio-Technica ATH-M20X',
-                'descripcion'       => 'Auriculares circumaurales cerrados para monitoreo de estudio. Respuesta de frecuencia extendida y graves profundos.',
+                'description'       => 'Auriculares circumaurales cerrados para monitoreo de estudio. Respuesta de frecuencia extendida y graves profundos.',
                 'category'          => 'Audio',
                 'brand'             => 'Audio-Technica',
                 'stock'             => 15,
@@ -217,7 +216,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Auriculares profesionales',
                 'subtitle'          => 'Sony MDR-7506',
-                'descripcion'       => 'Auriculares de referencia utilizados en estudios de grabación profesionales en todo el mundo. Plegables y livianos.',
+                'description'       => 'Auriculares de referencia utilizados en estudios de grabación profesionales en todo el mundo. Plegables y livianos.',
                 'category'          => 'Audio',
                 'brand'             => 'Sony',
                 'stock'             => 11,
@@ -235,7 +234,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Atril plegable',
                 'subtitle'          => 'Hamilton KB100',
-                'descripcion'       => 'Atril de música plegable y liviano, ideal para uso en casa o en giras. Regulable en altura y ángulo.',
+                'description'       => 'Atril de música plegable y liviano, ideal para uso en casa o en giras. Regulable en altura y ángulo.',
                 'category'          => 'Soportes',
                 'brand'             => 'Hamilton',
                 'stock'             => 20,
@@ -253,7 +252,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Atril reforzado',
                 'subtitle'          => 'K&M 101',
-                'descripcion'       => 'Atril profesional de acero reforzado con bandeja amplia. Resistente y estable para partituras de gran formato.',
+                'description'       => 'Atril profesional de acero reforzado con bandeja amplia. Resistente y estable para partituras de gran formato.',
                 'category'          => 'Soportes',
                 'brand'             => 'K&M',
                 'stock'             => 14,
@@ -271,7 +270,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Flauta traversa estudio',
                 'subtitle'          => 'Yamaha YFL-222',
-                'descripcion'       => 'Flauta traversa en Do para estudiantes. Cuerpo de alpaca plateado con mecanismo de llaves precisas y ergonómicas.',
+                'description'       => 'Flauta traversa en Do para estudiantes. Cuerpo de alpaca plateado con mecanismo de llaves precisas y ergonómicas.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Yamaha',
                 'stock'             => 6,
@@ -289,7 +288,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Flauta traversa profesional',
                 'subtitle'          => 'Gemeinhardt 2SP',
-                'descripcion'       => 'Flauta traversa plateada con cabeza de plata sólida. Respuesta rápida y timbre brillante para músicos avanzados.',
+                'description'       => 'Flauta traversa plateada con cabeza de plata sólida. Respuesta rápida y timbre brillante para músicos avanzados.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Gemeinhardt',
                 'stock'             => 3,
@@ -307,7 +306,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Bajo eléctrico activo',
                 'subtitle'          => 'Ibanez GSR200',
-                'descripcion'       => 'Bajo eléctrico con electrónica activa y ecualizador de 2 bandas. Cuerpo de tilo liviano con mástil de arce.',
+                'description'       => 'Bajo eléctrico con electrónica activa y ecualizador de 2 bandas. Cuerpo de tilo liviano con mástil de arce.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Ibanez',
                 'stock'             => 7,
@@ -325,7 +324,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Bajo eléctrico clásico',
                 'subtitle'          => 'Fender Precision Bass',
-                'descripcion'       => 'El Fender Precision Bass es el bajo eléctrico de referencia mundial. Sonido potente y definido, perfecto para cualquier género.',
+                'description'       => 'El Fender Precision Bass es el bajo eléctrico de referencia mundial. Sonido potente y definido, perfecto para cualquier género.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Fender',
                 'stock'             => 4,
@@ -343,7 +342,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Micrófono dinámico',
                 'subtitle'          => 'Shure SM58',
-                'descripcion'       => 'El micrófono vocal más popular del mundo. Patrón cardioide, filtro antipop integrado y construcción indestructible.',
+                'description'       => 'El micrófono vocal más popular del mundo. Patrón cardioide, filtro antipop integrado y construcción indestructible.',
                 'category'          => 'Audio',
                 'brand'             => 'Shure',
                 'stock'             => 18,
@@ -361,7 +360,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Micrófono condensador',
                 'subtitle'          => 'AKG P120',
-                'descripcion'       => 'Micrófono condensador de diafragma grande para grabación de voces e instrumentos acústicos en estudio.',
+                'description'       => 'Micrófono condensador de diafragma grande para grabación de voces e instrumentos acústicos en estudio.',
                 'category'          => 'Audio',
                 'brand'             => 'AKG',
                 'stock'             => 9,
@@ -379,7 +378,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Teclado portátil',
                 'subtitle'          => 'Casio CTK-3500',
-                'descripcion'       => 'Teclado portátil con 61 teclas, 400 tonos y ritmos integrados. Ideal para comenzar a estudiar música.',
+                'description'       => 'Teclado portátil con 61 teclas, 400 tonos y ritmos integrados. Ideal para comenzar a estudiar música.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Casio',
                 'stock'             => 13,
@@ -397,7 +396,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Teclado profesional',
                 'subtitle'          => 'Yamaha PSR-E373',
-                'descripcion'       => 'Teclado con 61 teclas sensitivas, 622 voces y función de lección integrada. Conexión USB y salida de auriculares.',
+                'description'       => 'Teclado con 61 teclas sensitivas, 622 voces y función de lección integrada. Conexión USB y salida de auriculares.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Yamaha',
                 'stock'             => 8,
@@ -415,7 +414,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Batería acústica completa',
                 'subtitle'          => 'Pearl Export EXX',
-                'descripcion'       => 'Kit de batería acústica de 5 piezas con platillos incluidos. Cuerpos de álamo para un sonido potente y equilibrado.',
+                'description'       => 'Kit de batería acústica de 5 piezas con platillos incluidos. Cuerpos de álamo para un sonido potente y equilibrado.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Pearl',
                 'stock'             => 3,
@@ -433,7 +432,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Batería electrónica',
                 'subtitle'          => 'Roland TD-1DMK',
-                'descripcion'       => 'Batería electrónica silenciosa con pads de malla. Ideal para practicar en casa sin molestar a los vecinos.',
+                'description'       => 'Batería electrónica silenciosa con pads de malla. Ideal para practicar en casa sin molestar a los vecinos.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Roland',
                 'stock'             => 5,
@@ -451,7 +450,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Violín de estudio',
                 'subtitle'          => 'Stentor Student II 4/4',
-                'descripcion'       => 'Violín de tamaño completo para estudiantes con tapa de abeto sólido y costillas de arce. Incluye arco y estuche.',
+                'description'       => 'Violín de tamaño completo para estudiantes con tapa de abeto sólido y costillas de arce. Incluye arco y estuche.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Stentor',
                 'stock'             => 10,
@@ -469,7 +468,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Violín profesional',
                 'subtitle'          => 'Yamaha V7SG 4/4',
-                'descripcion'       => 'Violín profesional con tapa de abeto sólido y costillas de arce flameado. Acabado brillante y sonido proyectado.',
+                'description'       => 'Violín profesional con tapa de abeto sólido y costillas de arce flameado. Acabado brillante y sonido proyectado.',
                 'category'          => 'Instrumentos',
                 'brand'             => 'Yamaha',
                 'stock'             => 4,
@@ -487,7 +486,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Interface de audio USB',
                 'subtitle'          => 'Focusrite Scarlett Solo 3ra Gen',
-                'descripcion'       => 'Interface de audio de 2 entradas y 2 salidas con previo de micrófono de alta calidad. Plug and play en Windows y Mac.',
+                'description'       => 'Interface de audio de 2 entradas y 2 salidas con previo de micrófono de alta calidad. Plug and play en Windows y Mac.',
                 'category'          => 'Audio',
                 'brand'             => 'Focusrite',
                 'stock'             => 16,
@@ -505,7 +504,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Soporte para guitarra',
                 'subtitle'          => 'Hercules GS412B',
-                'descripcion'       => 'Soporte de guitarra con sistema de cierre automático. Compatible con guitarras eléctricas, acústicas y bajos.',
+                'description'       => 'Soporte de guitarra con sistema de cierre automático. Compatible con guitarras eléctricas, acústicas y bajos.',
                 'category'          => 'Soportes',
                 'brand'             => 'Hercules',
                 'stock'             => 22,
@@ -523,7 +522,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Cable de instrumento',
                 'subtitle'          => 'Monster Standard 100',
-                'descripcion'       => 'Cable de instrumento de 3 metros con conectores de 6.35mm en ángulo recto. Blindado para eliminar el ruido.',
+                'description'       => 'Cable de instrumento de 3 metros con conectores de 6.35mm en ángulo recto. Blindado para eliminar el ruido.',
                 'category'          => 'Accesorios',
                 'brand'             => 'Monster',
                 'stock'             => 30,
@@ -541,7 +540,7 @@ class ProductSeeder extends Seeder
             [
                 'title'             => 'Afinador cromático digital',
                 'subtitle'          => 'Korg CA-50',
-                'descripcion'       => 'Afinador cromático para todos los instrumentos. Pantalla LCD con aguja analógica simulada y salida de sonido de referencia.',
+                'description'       => 'Afinador cromático para todos los instrumentos. Pantalla LCD con aguja analógica simulada y salida de sonido de referencia.',
                 'category'          => 'Accesorios',
                 'brand'             => 'Korg',
                 'stock'             => 25,
@@ -578,7 +577,7 @@ class ProductSeeder extends Seeder
                 'brand_id'          => $brand->id,
                 'title'             => $data['title'],
                 'subtitle'          => $data['subtitle'],
-                'descripcion'       => $data['descripcion'],
+                'description'       => $data['description'],
                 'stock'             => $data['stock'],
                 'price'             => $data['price'],
                 'installments'      => $data['installments'],

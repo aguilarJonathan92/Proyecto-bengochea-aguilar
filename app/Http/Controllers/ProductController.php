@@ -131,7 +131,7 @@ class ProductController extends Controller
             'brand_id'          => $request->brand_id,
             'title'             => $request->title,
             'subtitle'          => $request->subtitle,
-            'descripcion'       => $request->descripcion,
+            'description'       => $request->descripcion,
             'stock'             => $request->stock,
             'price'             => $request->price,
             'installments'      => $request->installments,
