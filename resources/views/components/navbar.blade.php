@@ -1,13 +1,18 @@
 <nav class="navbar navbar-expand-lg border-bottom nav-custom">
     <div class="container-fluid">
         {{-- Buscador Móvil --}}
-        <div class="d-flex d-lg-none grow px-4">
-            <form class="d-flex w-100">
-                <input class="form-control form-control-sm rounded-start-pill" type="search" placeholder="Buscar...">
+        <div class="d-flex d-lg-none flex-grow-1 px-4 position-relative">
+            <form class="d-flex w-100" action="{{ route('search') }}" method="GET">
+                <input id="mobile-search" class="form-control form-control-sm rounded-start-pill" type="search"
+                    name="query" placeholder="Buscar..." value="{{ request('query') }}" autocomplete="off">
                 <button class="btn btn-outline-secondary btn-sm rounded-end-pill" type="submit">
                     <img src="{{ asset('icons/svg/buscar.svg') }}" alt="buscar" width="16" class="icon-adaptive">
                 </button>
             </form>
+            {{-- Contenedor de sugerencias móvil --}}
+            <div id="mobile-search-suggestions" class="list-group position-absolute w-100 shadow d-none"
+                style="z-index: 1050; top: 100%; left: 0; padding: 0 1.5rem;">
+            </div>
         </div>
 
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
@@ -49,38 +54,33 @@
                         CATÁLOGO
                     </a>
                     <ul class="dropdown-menu pages-decoration">
-                        <li><a @class(['dropdown-item', 'item-catalogo']) href="{{ route('catalog') }}">VER TODO</a></li>
+                        <li><a @class([
+                            'dropdown-item',
+                            'item-catalogo',
+                            'text-center',
+                            'text-lg-start',
+                        ]) href="{{ route('catalog') }}">VER TODO</a></li>
                         <li>
-                            <hr class="dropdown-divider ">
+                            <hr class="dropdown-divider">
                         </li>
-                        {{-- Categorías --}}
-                        @php
-                            $categorias = [
-                                'Audio',
-                                'Instrumentos',
-                                'Fotografia',
-                                'Iluminacion',
-                                'Bolsos',
-                                'Soportes',
-                                'Outlet',
-                            ];
-                        @endphp
-                        @foreach ($categorias as $cat)
+
+                        {{-- Categorías desde la Base de Datos --}}
+                        @foreach ($categorias as $categoria)
                             <li>
                                 <a @class([
                                     'dropdown-item',
                                     'item-catalogo',
-                                    'item-catalogo-active' => request()->query('categoria') == $cat,
-                                ]) href="{{ route('catalog', ['categoria' => $cat]) }}">
-                                {{-- Opcional a operador ternario anidado --}}
-                                    {{ strtoupper(
-                                        match ($cat) {
-                                            'Soportes' => 'TRÍPODES y Soportes',
-                                            'Iluminacion' => 'ILUMINACIÓN y Estudio',
-                                            'Fotografia' => 'FOTOGRAFÍA',
-                                            default => $cat,
-                                        },
-                                    ) }}
+                                    'text-center',
+                                    'text-lg-start',
+                                    'overflow-hidden',
+                                    // Si en la URL usas el ID o el slug
+                                    'item-catalogo-active' => request()->route('categoria') == $categoria->id,
+                                ]) href="{{ route('catalog', $categoria->id) }}">
+
+                                    {{-- Imprime el nombre directo de la BD en mayúsculas --}}
+                                    {{-- Str::upper($categoria->name) --}}
+                                    {{ Str::upper($categoria->display_title) }}
+
                                 </a>
                             </li>
                         @endforeach

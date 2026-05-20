@@ -1,4 +1,5 @@
-<div class="offcanvas offcanvas-end border-0 shadow cart-custom" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+<div class="offcanvas offcanvas-end border-0 shadow cart-custom" tabindex="-1" id="offcanvasCart"
+    aria-labelledby="offcanvasCartLabel">
     <div class="offcanvas-header header-cart-custom">
         <h5 class="offcanvas-title fw-bold" id="offcanvasCartLabel">
             <i class="bi bi-cart3 me-2"></i>TU CARRITO
@@ -15,7 +16,8 @@
                 </div>
                 <div class="col-8">
                     <div class="card-body py-2">
-                        <h6 class="card-title mb-0 fw-bold text-uppercase color-adaptativo" style="font-size: 0.85rem;">Piano Casio Privia</h6>
+                        <h6 class="card-title mb-0 fw-bold text-uppercase color-adaptativo" style="font-size: 0.85rem;">
+                            Piano Casio Privia</h6>
                         <small class="text-muted-adaptativo d-block mb-2">Cantidad: 1</small>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="fw-bold color-dorado-adaptativo">$250.000</span>
@@ -45,10 +47,11 @@
             </div>
 
             <div class="d-grid gap-2">
-               <a href="{{ route('checkout') }}" class="btn-brand text-uppercase py-3 text-decoration-none">
+                <a href="{{ route('checkout') }}" class="btn-brand text-uppercase py-3 text-decoration-none">
                     Iniciar Compra
                 </a>
-                <button class="btn btn-link text-muted-adaptativo text-decoration-none text-uppercase" data-bs-dismiss="offcanvas" style="font-size: 0.8rem;">
+                <button class="btn btn-link text-muted-adaptativo text-decoration-none text-uppercase"
+                    data-bs-dismiss="offcanvas" style="font-size: 0.8rem;">
                     Continuar comprando
                 </button>
             </div>

@@ -11,5 +11,4 @@
             Volver al inicio
         </a>
     </div>
-
 </x-layout>

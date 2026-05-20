@@ -45,7 +45,7 @@
             <p class="envio"><i class="bi bi-truck"></i> Envío gratis</p>
 
             {{-- Stretched link --}}
-            <a href="{{ route('product-details', ['id' => $card->id]) }}" class="stretched-link"></a>
+            <a href="{{ route('product-details', ['id' => $card->id ]) }}" class="stretched-link"></a>
 
             {{-- Botón: Ahora usa la clase btn-agregar que ya tiene el hover y colores en el CSS --}}
             <button type="button" class="btn-agregar position-relative" style="z-index: 2;">

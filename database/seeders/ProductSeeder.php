@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -24,7 +25,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 10,
                 'price'             => 2474529,
                 'installments'      => 3,
-                'installment_price' => 824843,
+                'installment_price' => 769853.46,
                 'on_sale'           => true,
                 'discount'          => 15,
                 'active'            => true,
@@ -60,7 +61,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 8,
                 'price'             => 609709,
                 'installments'      => 3,
-                'installment_price' => 203236,
+                'installment_price' => 182912.7,
                 'on_sale'           => true,
                 'discount'          => 10,
                 'active'            => true,
@@ -114,7 +115,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 4,
                 'price'             => 3219129,
                 'installments'      => 3,
-                'installment_price' => 1073043,
+                'installment_price' => 858434.4,
                 'on_sale'           => true,
                 'discount'          => 20,
                 'active'            => true,
@@ -132,12 +133,12 @@ class ProductSeeder extends Seeder
                 'stock'             => 6,
                 'price'             => 1850000,
                 'installments'      => 3,
-                'installment_price' => 616666,
+                'installment_price' => 555000,
                 'on_sale'           => true,
                 'discount'          => 10,
                 'active'            => true,
                 'image_1'           => 'images/piano-yamaha.webp',
-                'image_2'           => 'images/piano-casio.webp',
+                'image_2'           => null,
                 'image_3'           => null,
                 'specs'             => ['Marca' => 'Yamaha', 'Modelo' => 'P-45', 'Teclas' => '88', 'Conectividad' => 'USB, Jack 6.35mm', 'Peso' => '11.5kg'],
             ],
@@ -168,7 +169,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 9,
                 'price'             => 950000,
                 'installments'      => 3,
-                'installment_price' => 316666,
+                'installment_price' => 278666.66,
                 'on_sale'           => true,
                 'discount'          => 12,
                 'active'            => true,
@@ -204,7 +205,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 15,
                 'price'             => 180000,
                 'installments'      => 3,
-                'installment_price' => 60000,
+                'installment_price' => 48000,
                 'on_sale'           => true,
                 'discount'          => 20,
                 'active'            => true,
@@ -240,7 +241,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 20,
                 'price'             => 45000,
                 'installments'      => 3,
-                'installment_price' => 15000,
+                'installment_price' => 14250,
                 'on_sale'           => true,
                 'discount'          => 5,
                 'active'            => true,
@@ -276,7 +277,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 6,
                 'price'             => 780000,
                 'installments'      => 3,
-                'installment_price' => 260000,
+                'installment_price' => 239200,
                 'on_sale'           => true,
                 'discount'          => 8,
                 'active'            => true,
@@ -312,7 +313,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 7,
                 'price'             => 890000,
                 'installments'      => 3,
-                'installment_price' => 296666,
+                'installment_price' => 252166.66,
                 'on_sale'           => true,
                 'discount'          => 15,
                 'active'            => true,
@@ -348,7 +349,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 18,
                 'price'             => 320000,
                 'installments'      => 3,
-                'installment_price' => 106666,
+                'installment_price' => 96000,
                 'on_sale'           => true,
                 'discount'          => 10,
                 'active'            => true,
@@ -384,7 +385,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 13,
                 'price'             => 480000,
                 'installments'      => 3,
-                'installment_price' => 160000,
+                'installment_price' => 131200,
                 'on_sale'           => true,
                 'discount'          => 18,
                 'active'            => true,
@@ -420,7 +421,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 3,
                 'price'             => 3800000,
                 'installments'      => 3,
-                'installment_price' => 1266666,
+                'installment_price' => 1114666.66,
                 'on_sale'           => true,
                 'discount'          => 12,
                 'active'            => true,
@@ -456,7 +457,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 10,
                 'price'             => 520000,
                 'installments'      => 3,
-                'installment_price' => 173333,
+                'installment_price' => 156000,
                 'on_sale'           => true,
                 'discount'          => 10,
                 'active'            => true,
@@ -492,7 +493,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 16,
                 'price'             => 380000,
                 'installments'      => 3,
-                'installment_price' => 126666,
+                'installment_price' => 116533.33,
                 'on_sale'           => true,
                 'discount'          => 8,
                 'active'            => true,
@@ -528,7 +529,7 @@ class ProductSeeder extends Seeder
                 'stock'             => 30,
                 'price'             => 18000,
                 'installments'      => 3,
-                'installment_price' => 6000,
+                'installment_price' => 5900,
                 'on_sale'           => true,
                 'discount'          => 5,
                 'active'            => true,
@@ -568,7 +569,7 @@ class ProductSeeder extends Seeder
             // Busca la marca o la crea si no existe
             $brand = Brand::firstOrCreate(
                 ['name' => $data['brand']],
-                ['activo' => true]
+                ['active' => true]
             );
 
             // Crea el producto

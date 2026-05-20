@@ -7,15 +7,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Brand extends Model
 {
-    protected $table = 'brands'; // esto es tabla de marcas
-
     protected $fillable = [
         'name',
-        'activo',
+        'active',
     ];
 
-    //una categoria puede tener muchos productos
-    public function productos(): HasMany{
+    //una marca puede tener muchos productos
+    public function products(): HasMany
+    {
         return $this->hasMany(Product::class, 'brand_id');
     }
 }

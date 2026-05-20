@@ -7,16 +7,32 @@
             <p class="small text-muted-adaptativo">Ingresa tus credenciales para continuar</p>
         </div>
 
-        <form action="{{ url('/login') }}" method="POST">
+        <form action="{{ route('login.authenticate') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="emailLogin" class="form-label color-adaptativo">Correo electrónico</label>
                 {{-- La clase form-control ya es adaptativa en tu styles.css --}}
-                <input type="email" name="email" class="form-control" id="emailLogin" placeholder="ejemplo@correo.com" required>
+                <input type="email" class="form-control" name="email" value="{{ old('email') }}" id="emailLogin"
+                    placeholder="ejemplo@correo.com" required>
+                @error('email')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="mb-3">
                 <label for="passwordLogin" class="form-label color-adaptativo">Contraseña</label>
-                <input type="password" name="password" class="form-control" id="passwordLogin" placeholder="********" required>
+                <div class="position-relative d-flex align-items-center">
+                    <input type="password" class="form-control pe-5" name="password" id="passwordLogin"
+                        placeholder="********" required>
+
+                    <button type="button" id="togglePassword"
+                        class="btn position-absolute end-0 me-2 border-0 p-0 shadow-none"
+                        style="background: none; color: var(--text-muted-adaptativo); height: 100%; z-index: 5;">
+                        <i class="bi bi-eye" id="eyeIcon"></i>
+                    </button>
+                </div>
+                @error('password')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
 
             <div class="d-grid mt-4">
@@ -28,7 +44,7 @@
         </form>
 
         <div class="mt-4 text-center">
-            <a href="{{ route('signup') }}" class="text-decoration-none small color-dorado-adaptativo fw-bold">
+            <a href="{{ route('signup.create') }}" class="text-decoration-none small color-dorado-adaptativo fw-bold">
                 ¿No tienes cuenta? Regístrate
             </a>
             <br>
@@ -44,4 +60,5 @@
             </a>
         </div>
     </div>
+    <script src="{{ asset('js/show-pass.js') }}"></script>
 </x-auth>

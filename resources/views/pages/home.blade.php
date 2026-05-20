@@ -46,7 +46,8 @@
     @foreach ($secciones as $seccion)
         <div class="container pt-2 pb-5">
             {{-- Título de sección adaptativo: quitamos text-white y border-secondary --}}
-            <h3 class="mb-4 text-center color-adaptativo border-bottom border-ui-adaptativa pb-3 text-uppercase fw-bold" style="letter-spacing: 1px;">
+            <h3 class="mb-4 text-center color-adaptativo border-bottom border-ui-adaptativa pb-3 text-uppercase fw-bold"
+                style="letter-spacing: 1px;">
                 <i class="bi {{ $seccion['icon'] }} texto-rojo me-2"></i> {{ $seccion['titulo'] }}
             </h3>
             <div class="row justify-content-center g-4 px-2">

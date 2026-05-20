@@ -9,37 +9,13 @@ class MainController extends Controller
 {
     public function index()
     {
-        // Novedades — últimos 4 productos agregados
-        $novedades = Product::with(['category', 'brand'])
-            ->where('active', true)
-            ->latest()
-            ->take(4)
-            ->get();
+        // Asegúrate de que Product esté importado arriba: use App\Models\Product;
+        $ofertas_home = Product::query()->where('on_sale', true)->take(4)->get();
+        $novedades    = Product::query()->latest()->take(4)->get();
+        $mas_vistos   = Product::query()->inRandomOrder('')->take(4)->get();
 
-        // Ofertas — productos con descuento
-        $ofertas_home = Product::with(['category', 'brand'])
-            ->where('active', true)
-            ->where('on_sale', true)
-            ->take(4)
-            ->get();
-
-        // Más vistos — por ahora los primeros 4 (después podés agregar un campo visits)
-        $mas_vistos = Product::with(['category', 'brand'])
-            ->where('active', true)
-            ->take(4)
-            ->get();
-
-        // Calculamos final_price en los tres grupos
-        foreach ([$novedades, $ofertas_home, $mas_vistos] as $grupo) {
-        $grupo->transform(function ($product) {
-            $product->final_price = $product->on_sale
-                ? $product->price - ($product->price * $product->discount / 100)
-                : $product->price;
-            return $product;
-        });
-    }
-
-    return view('pages.home', compact('novedades', 'ofertas_home', 'mas_vistos'));
+        // Verifica que los nombres en compact coincidan exactamente con las variables
+        return view('pages.home', compact('ofertas_home', 'novedades', 'mas_vistos'));
     }
 
     public function terms()
@@ -57,11 +33,17 @@ class MainController extends Controller
         return view('pages.marketing');
     }
 
-    public function contact(){
+    public function contact()
+    {
         return view('pages.contact');
     }
 
-    public function checkout(){
+    public function checkout()
+    {
         return view('pages.checkout');
+    }
+    public function userPanel()
+    {
+        return view('pages.user-panel');
     }
 }

@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot name='title'>{{ $product->title}}</x-slot>
+    <x-slot name='title'>{{ $product->title }}</x-slot>
     <div class="container py-5">
         {{-- Navegación superior adaptativa --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -21,19 +21,22 @@
                 <div class="row g-2">
                     <div class="col-2">
                         <div class="d-flex flex-column gap-2">
-                            @if($product->image_1)
-                                <div class="thumb-container active" onclick="cambiarImagen(this, '{{ asset($product->image_1) }}')">
-                                    <img src="{{ asset($product->image_1) }}" class="img-fluid">
+                            @if ($product->image_1)
+                                <div class="thumb-container active">
+                                    <img onclick="changeMainImage(this)" src="{{ asset($product->image_1) }}"
+                                        class="img-fluid">
                                 </div>
                             @endif
-                            @if($product->image_2)
-                                <div class="thumb-container" onclick="cambiarImagen(this, '{{ asset($product->image_2) }}')">
-                                    <img src="{{ asset($product->image_2) }}" class="img-fluid">
+                            @if ($product->image_2)
+                                <div class="thumb-container">
+                                    <img onclick="changeMainImage(this)" src="{{ asset($product->image_2) }}"
+                                        class="img-fluid">
                                 </div>
                             @endif
-                            @if($product->image_3)
-                                <div class="thumb-container" onclick="cambiarImagen(this, '{{ asset($product->image_3) }}')">
-                                    <img src="{{ asset($product->image_3) }}" class="img-fluid">
+                            @if ($product->image_3)
+                                <div class="thumb-container">
+                                    <img onclick="changeMainImage(this)" src="{{ asset($product->image_3) }}"
+                                        class="img-fluid">
                                 </div>
                             @endif
                         </div>
@@ -41,7 +44,7 @@
 
                     <div class="col-10">
                         <div class="product-main-image-card p-3 shadow-lg">
-                            <img id="imagen-principal" src="{{ asset($product->image_1) }}" class="img-fluid w-100 rounded"
+                            <img id="mainImage" src="{{ asset($product->image_1) }}" class="img-fluid w-100 rounded"
                                 alt="Imagen principal">
                         </div>
                     </div>
@@ -120,18 +123,26 @@
                             <div class="table-responsive">
                                 <table class="table custom-table">
                                     <tbody>
-                                        @if($product->specs)
-                                            @foreach($product->specs as $nombre => $valor)
-                                                <tr>
-                                                    <th scope="row">{{ $nombre }}</th>
-                                                    <td>{{ $valor }}</td>
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="2" class="text-muted">Sin especificaciones disponibles</td>
-                                            </tr>
-                                        @endif
+                                        <tr>
+                                            <th scope="row">Marca</th>
+                                            <td>{{ $product->brand->name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Modelo</th>
+                                            <td>{{ $product->subtitle }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Cantidad de llaves</th>
+                                            <td>No aplica</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Conectividad</th>
+                                            <td>Sin información disponible</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Peso</th>
+                                            <td>Sin información disponible</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -150,18 +161,20 @@
             </div>
         </div>
     </div>
-
-    {{-- Creo este codigo para probar que funcione, luego lo muevo donde corresponde --}}
-    @push('scripts')
     <script>
-        function cambiarImagen(thumb, nuevaUrl) {
-            // Cambiar imagen principal
-            document.getElementById('imagen-principal').src = nuevaUrl;
+        function changeMainImage(thumbnail) {
+            // 1. Cambiar el SRC de la imagen principal
+            const mainImage = document.getElementById('mainImage');
+            mainImage.src = thumbnail.src;
 
-            // Mover clase active al thumb clickeado
-            document.querySelectorAll('.thumb-container').forEach(t => t.classList.remove('active'));
-            thumb.classList.add('active');
+            // 2. (Opcional) Gestionar la clase 'active' para el borde resaltado
+            // Quitamos la clase 'active' de todos los contenedores
+            document.querySelectorAll('.thumb-container').forEach(container => {
+                container.classList.remove('active');
+            });
+
+            // Agregamos la clase 'active' al contenedor del clic actual
+            thumbnail.parentElement.classList.add('active');
         }
     </script>
-    @endpush
 </x-layout>

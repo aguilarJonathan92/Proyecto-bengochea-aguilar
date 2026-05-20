@@ -2,80 +2,82 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\SignUpRequest;
 use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use SweetAlert2\Laravel\Swal;
 
 class AuthController extends Controller
 {
-    //muestra la vista de login
-    public function login(){
-        return view('auth.login');
-    }
-
-    //procesa los datos enviados desde el formulario
-    public function loginPost(Request $request){
-        $credenciales = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
-        if(Auth::attempt($credenciales)){
-            $request->session()->regenerate();
-
-            $user = Auth::user();
-
-            if(in_array($user->rol->name, ['admin', 'superadmin'])){
-                return redirect()->intended('/admin/dashboard');
-            }
-            return redirect()->intended('/'); //si son clientes, van a la pantalla principal
-        }
-
-        return back()->withErrors([
-            'email' => 'Las credenciales no son correctas.',
-        ]);
-    }
-
-    //muestra la vista de registro
-    public function signup(){
+    //FUNCIONES ASOCIADAS AL FORMULARIO DE REGISTRO Y CREACIÓN DE CUENTA
+    public function create()
+    {
         return view('auth.signup');
     }
+    public function store(SignUpRequest $request)
+    {
 
-    //Para registrar el nuevo usuario
-    public function signupPost(Request $request){
+        $validated = $request->validated();
 
-        //valido los datos antes de hacer el registro definitivo
-        $request->validate([
-            'nombre' => ['required', 'string', 'max:100'],
-            'apellido' => ['required', 'string', 'max:100'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:8', 'confirmed'],
+        // Aseguramos que el role_id sea 2 y la contraseña esté encriptada
+        $validated['role_id'] = 2;
+        $validated['password'] = Hash::make($validated['password']);
+
+        // Creando el usuario
+        User::create($validated);
+        Swal::success([
+            'title' => '!Hecho!',
+            'text' => '¡La cuenta ha sido creada'
         ]);
-
-        $rolCliente = Rol::where('name', 'cliente')->first();
-
-        $usuario = User::create([
-            'firstName' => $request->nombre,
-            'lastName' => $request->apellido,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'rol_id'   => $rolCliente->id,
-        ]);
-
-        $usuario->perfil()->create();
-
-        Auth::login($usuario);
-
-        return redirect('/');
+        return redirect()->back()->with('success', 'Se ha creado la cuenta de usuario exitosamente');
     }
 
-    //para cerrar las sesion
-    public function logout(Request $request){
+    //FUNCIONES ASOCIADAS AL LOGIN
+    public function show()
+    {
+        return view('auth.login');
+    }
+    public function authenticate(LoginRequest $request)
+    {
+        $credentials = $request->validated();
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            $user = Auth::user();
+
+            // 1. Si es Admin, permitimos que 'intended' lo lleve a donde quería (ej. Filament)
+            if ($user->role_id === 1) {
+                return redirect()->intended('/admin');
+            }
+
+            // 2. Si es Cliente, forzamos la ruta y LIMPIAMOS la intención previa
+            if ($user->role_id === 2) {
+                $request->session()->forget('url.intended'); // <--- Esto evita el error 403
+                return redirect('/panel-usuario');
+            }
+
+            // 3. Fallback para otros casos
+            return redirect('/');
+        }
+
+        return back()->withErrors(['email' => 'Credenciales incorrectas.']);
+    }
+    public function logout(Request $request)
+    {
+        // 1. Cerramos la sesión en el "Guard" de Laravel
         Auth::logout();
+
+        // 2. Invalidamos la sesión del usuario en el servidor
         $request->session()->invalidate();
+
+        // 3. Regeneramos el token CSRF para la siguiente visita
         $request->session()->regenerateToken();
-        return redirect('/');
+
+        // 4. Redirigimos a la página principal o al login
+        return redirect('/')->with('success', 'Sesión cerrada correctamente.');
     }
 }

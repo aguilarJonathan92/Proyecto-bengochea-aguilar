@@ -3,25 +3,32 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ asset('icons/ico/icono-soundWave.ico') }}">
-    <title>{{ $title ?? 'Identificación' }} - SoundWave</title>
-
-    {{-- Script Anti-Parpadeo (Crucial para que no se vea blanco un segundo al cargar) --}}
+    <!-- SCRIPT ANTI-PARPADEO -->
     <script>
         (function() {
-            const theme = localStorage.getItem('theme');
-            if (theme === 'light') {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            // Si no hay nada guardado, usamos el sistema. Si hay, usamos lo guardado.
+            const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+
+            if (theme === 'dark') {
+                document.documentElement.classList.remove('light');
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+            } else {
                 document.documentElement.classList.add('light');
+                document.documentElement.setAttribute('data-bs-theme', 'light');
             }
         })();
     </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ asset('icons/ico/icono-soundWave.ico') }}">
+    <title>{{ $title ?? 'Identificación' }} - SoundWave</title>
     <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 </head>
 
 <body class="fondo d-flex align-items-center justify-content-center" style="min-height: 100vh; overflow-x: hidden;">
@@ -56,6 +63,7 @@
     </div>
     <script src="{{ asset('js/theme-toggle.js') }}"></script>
     <script src="{{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
+    @include('sweetalert2::index')
 </body>
 
 </html>

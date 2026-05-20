@@ -5,20 +5,9 @@
             <div class="col-12 col-md-4 mb-4 mb-md-0">
                 <h5 class="texto-rojo text-uppercase mb-3 small fw-bold text-center">Categorías</h5>
                 <ul class="list-unstyled text-center">
-                    @php
-                        $footerCats = [
-                            'Audio' => 'Audio',
-                            'Instrumentos' => 'Instrumentos Musicales',
-                            'Fotografia' => 'Fotografía',
-                            'Iluminacion' => 'Iluminación y Estudio',
-                            'Bolsos' => 'Bolsos y Mochilas',
-                            'Soportes' => 'Trípodes y Soportes',
-                            'Outlet' => 'Outlet'
-                        ];
-                    @endphp
-                    @foreach($footerCats as $slug => $name)
+                    @foreach ($categorias as $categoria)
                         <li class="mb-2">
-                            <a class="footer-link text-decoration-none" href="{{ route('catalog', $slug) }}">{{ $name }}</a>
+                            <a class="footer-link text-decoration-none" href="{{ route('catalog', $categoria->id) }}">{{ $categoria->display_title }}</a>
                         </li>
                     @endforeach
                 </ul>

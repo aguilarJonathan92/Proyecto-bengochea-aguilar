@@ -3,11 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ asset('icons/ico/icono-soundWave.ico') }}">
-    <title>{{ $title ?? 'Inicio' }}</title>
-
-    <!-- SCRIPT ANTI-PARPADEO (Debe ir aquí arriba) -->
+    <!-- SCRIPT ANTI-PARPADEO -->
     <script>
         (function() {
             const savedTheme = localStorage.getItem('theme');
@@ -25,7 +21,9 @@
             }
         })();
     </script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ asset('icons/ico/icono-soundWave.ico') }}">
+    <title>{{ $title ?? 'Inicio' }}</title>
     <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -45,7 +43,7 @@
 
     <x-navbar />
 
-    <main class="grow">
+    <main class="flex-grow-1">
         {{ $slot }}
     </main>
 
@@ -53,8 +51,8 @@
     <x-footer />
     <script src="{{ asset('js/theme-toggle.js') }}"></script>
     <script src="{{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
-    @include('sweetalert2::index');
-    @stack('scripts') {{-- Agrego esta linea para que funcione el script de products-details --}}
+    <script src="{{ asset('js/search.js') }}"></script>
+    @include('sweetalert2::index')
 </body>
 
 </html>

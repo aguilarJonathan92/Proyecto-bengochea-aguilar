@@ -2,51 +2,49 @@
 
 namespace App\Models;
 
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\FilamentUser; // La interfaz
+use Filament\Panel;                         // La clase Panel que espera el método
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['last_name', 'first_name', 'email', 'password', 'role_id'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    protected $table = 'users';
-
-    protected $fillable = [
-        'firstName',
-        'lastName',
-        'email',
-        'password',
-        'rol_id'
-    ];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    //un usuario solo tiene un rol
-    public function rol(): BelongsTo{
-        return $this->belongsTo(Rol::class, 'rol_id');
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // Solo el role_id 1 tiene permiso de entrar a /admin
+        return $this->role && $this->role->name === 'admin';
     }
-    
-    public function perfil(): HasOne{
-        return $this->hasOne(ProfileUser::class, 'user_id');
-    }
-    //esto todavia no lo uso, lo deje aca porque me creó el comando
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    //Necesario ya que filament usa 'name' y en la bd no uso ese
+    public function getNameAttribute(): string
+    {
+        return "{$this->last_name} {$this->first_name}";
     }
 }
