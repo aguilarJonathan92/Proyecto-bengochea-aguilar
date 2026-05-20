@@ -78,6 +78,6 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         // 4. Redirigimos a la página principal o al login
-        return redirect('/')->with('success', 'Sesión cerrada correctamente.');
+        return redirect()->route('home')->with('success', 'Sesión cerrada correctamente.');
     }
 }
