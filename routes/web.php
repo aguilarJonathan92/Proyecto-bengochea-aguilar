@@ -5,6 +5,7 @@ use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\QueriesController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 //RUTAS ACCESIBLES A TODOS
@@ -45,6 +46,8 @@ Route::middleware('guest')->controller(AuthController::class)->group(function ()
 Route::middleware('auth')->group(function () {
     // Admin y Cliente pueden hacer logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/panel-usuario',[UserController::class, 'index'])->name('panel-usuario');
+
     // EXCLUSIVO PARA CLIENTES (redirige a administradores)
     Route::middleware('no.admin')->group(function () {
         Route::get('/panel-cliente', [MainController::class, 'userPanel']);
