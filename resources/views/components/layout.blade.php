@@ -33,12 +33,12 @@
 
 <body class="fondo d-flex flex-column min-vh-100">
     <x-header />
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
+    @if(session('success') || session('error'))
+        <div id="flash-message" class="alert {{ session('success') ? 'alert-success' : 'alert-danger' }} 
+            position-fixed bottom-0 inset-e-0 m-3 shadow" 
+            style="z-index: 9999; min-width: 250px;">
+            {{ session('success') ?? session('error') }}
+        </div>
     @endif
     <button id="theme-toggle" class="btn-brand shadow-lg" title="Cambiar modo">
         <!-- Icono Sol: Se muestra cuando estamos en modo oscuro (porque el botón cambiará a claro) -->
@@ -58,6 +58,7 @@
     <script src="{{ asset('js/theme-toggle.js') }}"></script>
     <script src="{{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/search.js') }}"></script>
+    <script src="{{ asset('js/flash-message.js') }}"></script>
     @include('sweetalert2::index')
 </body>
 
