@@ -44,9 +44,13 @@ Route::middleware('guest')->controller(AuthController::class)->group(function ()
 
 //RUTAS PROTEGIDAS - Inicio de sesión requerido
 Route::middleware('auth')->group(function () {
+
     // Admin y Cliente pueden hacer logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    //Panel de Usuario y actualizacion de datos, deben tener todos los usuarios
     Route::get('/panel-usuario',[UserController::class, 'index'])->name('panel-usuario');
+    Route::put('/panel-usuario',[UserController::class, 'update'])->name('panel-usuario.update');
 
     // EXCLUSIVO PARA CLIENTES (redirige a administradores)
     Route::middleware('no.admin')->group(function () {

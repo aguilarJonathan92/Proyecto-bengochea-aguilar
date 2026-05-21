@@ -76,7 +76,7 @@
 
                     <div class="card-body p-4">
                         <div class="product-item d-flex align-items-center mb-3">
-                            <div class="product-info flex-grow-1">
+                            <div class="product-info grow">
                                 <h6 class="product-name color-adaptativo mb-0 fw-bold">Piano Casio Privia</h6>
                                 <small class="text-muted-adaptativo">Instrumento de teclado</small>
                             </div>
