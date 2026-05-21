@@ -33,7 +33,13 @@
 
 <body class="fondo d-flex flex-column min-vh-100">
     <x-header />
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
     <button id="theme-toggle" class="btn-brand shadow-lg" title="Cambiar modo">
         <!-- Icono Sol: Se muestra cuando estamos en modo oscuro (porque el botón cambiará a claro) -->
         <span id="theme-toggle-light-icon" class="hidden"><i class="fa-solid fa-sun"></i></span>
@@ -43,7 +49,7 @@
 
     <x-navbar />
 
-    <main class="flex-grow-1">
+    <main class="grow">
         {{ $slot }}
     </main>
 

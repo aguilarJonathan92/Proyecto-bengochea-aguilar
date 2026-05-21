@@ -22,7 +22,6 @@ return new class extends Migration
             $table->unsignedInteger('quantity');
             $table->decimal('price', 10, 2); // Precio congelado del momento de la compra
             $table->timestamps();
-            $table->timestamps();
         });
     }
 

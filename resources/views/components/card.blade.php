@@ -47,10 +47,18 @@
             {{-- Stretched link --}}
             <a href="{{ route('product-details', ['id' => $card->id ]) }}" class="stretched-link"></a>
 
-            {{-- Botón: Ahora usa la clase btn-agregar que ya tiene el hover y colores en el CSS --}}
-            <button type="button" class="btn-agregar position-relative" style="z-index: 2;">
-                Añadir al carrito
-            </button>
+            {{-- FORMULARIO ADAPTADO PARA AGREGAR AL CARRITO --}}
+            <form action="{{ route('cart.add') }}" method="POST" class="position-relative" style="z-index: 4;">
+                @csrf
+                {{-- Enviamos los campos que el CartController espera validar --}}
+                <input type="hidden" name="product_id" value="{{ $card->id }}">
+                <input type="hidden" name="quantity" value="1">
+
+                {{-- Botón cambiado a type="submit" --}}
+                <button type="submit" class="btn-agregar w-100">
+                    Añadir al carrito
+                </button>
+            </form>
         </div>
     </div>
 </div>

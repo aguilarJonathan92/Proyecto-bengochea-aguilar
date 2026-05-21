@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\QueriesController;
@@ -51,6 +52,12 @@ Route::middleware('auth')->group(function () {
     //Panel de Usuario y actualizacion de datos, deben tener todos los usuarios
     Route::get('/panel-usuario',[UserController::class, 'index'])->name('panel-usuario');
     Route::put('/panel-usuario',[UserController::class, 'update'])->name('panel-usuario.update');
+
+    //rutas para el carrito de compra. Solo funciona logueado
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.list');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::put('/cart/update/{itemId}', [CartController::class, 'updateQuantity'])->name('cart.update');
+    Route::delete('/cart/remove/{itemId}', [CartController::class, 'removeItem'])->name('cart.remove');
 
     // EXCLUSIVO PARA CLIENTES (redirige a administradores)
     Route::middleware('no.admin')->group(function () {

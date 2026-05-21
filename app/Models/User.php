@@ -10,6 +10,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 #[Fillable(['last_name', 'first_name', 'email', 'password', 'role_id'])]
@@ -17,7 +18,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -41,6 +42,14 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->belongsTo(Role::class);
     }
+
+    //Un usuario se relaciona con un carrito
+    public function cart(){
+        return $this->hasOne(Cart::class);
+    }
+
+    //Un usuario puede tener muchas ordenes (falta el modelo)
+    public function order(){}
 
     //Necesario ya que filament usa 'name' y en la bd no uso ese
     public function getNameAttribute(): string

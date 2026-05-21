@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use HasFactory, SoftDeletes;
+
     protected static function booted()
     {
         static::addGlobalScope('active', function ($builder) {
@@ -33,6 +37,7 @@ class Product extends Model
     ];
     protected $casts = [
         'specs' => 'array',  // para no hacer json_decode a mano
+        'price' => 'decimal:2',
         'on_sale' => 'boolean',
         'active' => 'boolean',
     ];
@@ -45,6 +50,16 @@ class Product extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    // Un producto solo se relaciona con un item del carrito
+    public function cartItem(){
+        return $this->belongsTo(CartItem::class);
+    }
+
+    //Esto falta crear los modelos aun
+    public function orderItem(){
+        
     }
     public function getFinalPriceAttribute()
     {

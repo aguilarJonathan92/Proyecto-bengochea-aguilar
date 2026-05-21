@@ -2,9 +2,119 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CartItem;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    //
+    /**
+     * Muestra los productos que el usuario tiene en su carrito.
+     */
+    public function index(Request $request)
+    {
+        // Traemos el carrito del usuario con sus ítems y los datos del producto cargados (Eager Loading)
+        $cart = $request->user()->cart()->with('items.product')->first();
+
+        if (!$cart || $cart->items->isEmpty()) {
+            return back()->with([
+                'message' => 'Tu carrito está vacío',
+                'items' => []
+            ]);
+        }
+
+        return back()->with([
+            'cart_id' => $cart->id,
+            'items' => $cart->items
+        ]);
+    }
+
+    /**
+     * Agrega un producto al carrito o incrementa su cantidad si ya existe.
+     */
+
+    public function add(Request $request){
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1' 
+        ]);
+
+        $user = $request->user();
+        $product = Product::findOrFail($request->product_id);
+
+        //Valida que tenga suficiente stock para ingresar al carrito
+        if($product->stock < $request ->quantity){
+            return back()->with('error', 'No hay stock suficiente del producto.');
+        }
+
+        //Obtiene el carrito. Si no existe, lo crea
+        $cart = $user->cart()->firstOrCreate(
+            ['user_id' => $user->id], // Condición de búsqueda
+            ['user_id' => $user->id]  // Datos para insertar si no existe
+        );
+
+        //Buscamos si el producto esta en el carrito
+        $cartItem = $cart->items()->where('product_id', $product->id)->first();
+
+        if($cartItem){
+            //Al existir, se valida stock y se acumula
+            if ($product->stock < ($cartItem->quantity + $request->quantity)) {
+                // CAMBIADO: También redirige hacia atrás con error si supera el stock acumulado
+                return back()->with('error', 'No puedes agregar más de este producto, supera el stock disponible.');
+            }
+            $cartItem->increment('quantity', $request->quantity);
+        }else{
+            // Si es nuevo, lo creamos
+            $cart->items()->create([
+                'product_id' => $product->id,
+                'quantity' => $request->quantity
+            ]);
+        }
+
+        // Redirecciona a la misma página donde estaba el usuario y envía un mensaje de éxito
+        return back()->with('success', 'Producto añadido al carrito.');
+    }
+
+    /**
+     * Actualiza la cantidad exacta de un artículo en el carrito.
+     */
+    public function updateQuantity(Request $request, int $itemId){
+
+        $request->validate([
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        // Buscamos el ítem asegurándonos de que pertenezca al carrito del usuario logueado
+        $cartItem = CartItem::whereHas('cart', function ($query) use ($request) {
+            $query->where('user_id', $request->user()->id);
+        })->findOrFail($itemId);
+
+        // Validar stock del producto con la nueva cantidad solicitada
+        if ($cartItem->product->stock < $request->quantity) {
+            return back()->with(['error' => 'No puedes actualizar a esa cantidad, supera el stock disponible.'], 422);
+        }
+
+        $cartItem->update([
+            'quantity' => $request->quantity
+        ]);
+
+        return back()->with(['message' => 'Cantidad actualizada correctamente.']);
+    }
+
+    /**
+     * Elimina por completo un producto del carrito.
+     */
+
+    public function removeItem(Request $request, int $itemId)
+    {
+        // Buscamos el ítem protegiendo que sea del usuario logueado
+        $cartItem = CartItem::whereHas('cart', function ($query) use ($request) {
+            $query->where('user_id', $request->user()->id);
+        })->findOrFail($itemId);
+
+        $cartItem->delete();
+
+        // Regresa a la pantalla anterior actualizando el carrito
+        return back()->with('success', 'Producto removido del carrito.');
+    }
 }
