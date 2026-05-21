@@ -9,7 +9,7 @@ class CreateCategory extends CreateRecord
 {
     protected static string $resource = CategoryResource::class;
     // Cambiar el título de la página
-    protected ?string $heading = 'Registrar Nueva Cateogría';
+    protected ?string $heading = 'Registrar Nueva Categoría';
 
     // Personalizar el texto del botón principal
     protected static ?string $title = 'Crear Categoría';

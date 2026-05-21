@@ -18,7 +18,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $recordTitleAttribute = 'first_name'; //Para el buscador
+    protected static ?string $recordTitleAttribute = 'last_name'; //Para el buscador
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
