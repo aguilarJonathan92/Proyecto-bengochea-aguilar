@@ -14,7 +14,8 @@ class CartItem extends Model
         'subtotal',
     ];
 
+    //Un item de carrito solo se relaciona con un carrito
     public function cart(){
-        return $this->hasMany(Cart::class);
+        return $this->belongsTo(Cart::class);
     }
 }

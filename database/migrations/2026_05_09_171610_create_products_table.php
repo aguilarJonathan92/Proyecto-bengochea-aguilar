@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('image_2')->nullable(); // opcional
             $table->string('image_3')->nullable(); // opcional
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

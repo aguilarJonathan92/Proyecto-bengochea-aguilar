@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cart_id')->constrained('carts');
             $table->foreignId('product_id')->constrained('products');
-            $table->integer('quantity');
-            $table->decimal('unit_price', 10, 2);
-            $table->decimal('subtotal', 10, 2);
+            $table->integer('quantity')->default(1);
             $table->timestamps();
+
+            //Esto es para que no se dupliquen filas del mismo producto en el mismo carrito
+            $table->unique(['cart_id', 'product_id']);
         });
     }
 

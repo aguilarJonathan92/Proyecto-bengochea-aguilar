@@ -10,8 +10,13 @@ class Cart extends Model
         'user_id',
     ];
 
+    //Un carrito se relaciona con un usuario
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 
+    //Un carrito puede tener muchos items
     public function cartItem(){
-        return $this->belongsTo(CartItem::class);
+        return $this->hasMany(CartItem::class);
     }
 }
