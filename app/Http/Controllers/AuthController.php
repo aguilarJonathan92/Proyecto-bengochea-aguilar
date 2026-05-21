@@ -57,10 +57,10 @@ class AuthController extends Controller
             // 2. Si es Cliente, forzamos la ruta y LIMPIAMOS la intención previa
             if ($user->role_id === 2) {
                 $request->session()->forget('url.intended'); // <--- Esto evita el error 403
-                return redirect('/panel-usuario');
+                return redirect('/');
             }
 
-            // 3. Fallback para otros casos
+            // 3. Fallback para otros casos (dejo esto por ahora, parece que no es necesario)
             return redirect('/');
         }
 
