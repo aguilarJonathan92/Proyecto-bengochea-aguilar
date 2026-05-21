@@ -83,10 +83,13 @@
             <a href="#" class="text-decoration-none px-2 position-relative" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasCart">
                 <img src="{{ asset('icons/svg/carrito.svg') }}" alt="carrito" class="icon-adaptive">
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style="font-size: 0.5rem;">
-                    1
-                </span>
+                
+                @if($cartCount > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                        style="font-size: 0.5rem;">
+                        {{ $cartCount }}
+                    </span>
+                @endif
             </a>
         </div>
     </div>

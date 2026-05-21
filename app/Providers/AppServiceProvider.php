@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         // cuando Laravel realmente vaya a renderizar una vista de Blade.
         View::composer('*', function ($view) {
             $cart = null;
+            $cartCount = 0;
 
             // Al ser exclusivo para usuarios logueados, validamos la sesión
             if (Auth::check()) {
@@ -34,10 +35,13 @@ class AppServiceProvider extends ServiceProvider
                 $cart = Cart::where('user_id', Auth::id())
                             ->with('items.product')
                             ->first();
+
+                $cartCount = $cart?->items->sum('quantity') ?? 0;
             }
 
             // Compartimos la variable $cart con TODAS las vistas de Blade
             $view->with('cart', $cart);
+            $view->with('cartCount', $cartCount);
         });
         
         Paginator::useBootstrapFive();
