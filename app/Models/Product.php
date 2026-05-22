@@ -41,7 +41,7 @@ class Product extends Model
         'on_sale' => 'boolean',
         'active' => 'boolean',
     ];
-    
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -59,14 +59,22 @@ class Product extends Model
 
     //Esto falta crear los modelos aun
     public function orderItem(){
-        
+
     }
+    
+    //Accesador para  $product->final_price
     public function getFinalPriceAttribute()
     {
-        if ($this->on_sale) {
-            return $this->price - ($this->price * $this->discount / 100);
-        }
-
-        return $this->price;
+        return self::calculateFinalPrice($this->price, $this->on_sale, $this->discount);
     }
+
+    //Método para calcular precio final . Sirve para el modelo y para filament
+    public static function calculateFinalPrice(float $price, bool $onSale, float $discount):float
+    {
+        if($onSale && $discount>0){
+            return $price - ($price * ($discount/100));
+        }
+        return $price;
+    }
+
 }

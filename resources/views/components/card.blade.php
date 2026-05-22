@@ -9,7 +9,7 @@
     @endif
 
     {{-- Imagen --}}
-    <img src="{{ asset($card->image_1) }}" class="card-img-top" alt="Imagen de {{ $card->title }}" loading="lazy">
+    <img src="{{ Storage::url($card->image_1) }}" class="card-img-top" alt="Imagen de {{ $card->title }}" loading="lazy">
 
     <div class="card-body">
         <h5 class="card-title">{{ $card->title }}</h5>

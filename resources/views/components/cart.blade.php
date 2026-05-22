@@ -14,10 +14,10 @@
             $subtotal = 0;
         @endphp
         {{-- Validamos si el usuario tiene un carrito y si este contiene artículos --}}
-        @if($cart && $cart->items->count() > 0)
-            
+        @if ($cart && $cart->items->count() > 0)
+
             {{-- Bucle para iterar los productos reales del carrito --}}
-            @foreach($cart->items as $item)
+            @foreach ($cart->items as $item)
                 @php
                     // Sumamos el precio del producto multiplicado por la cantidad elegida
                     $itemTotal = $item->product->price * $item->quantity;
@@ -29,25 +29,29 @@
                     <div class="row g-0 align-items-center">
                         <div class="col-4 cart-img-container d-flex align-items-center justify-content-center p-2">
                             {{-- Mostramos la imagen real del producto si tiene una columna 'image', sino dejamos la que tenías por defecto --}}
-                            <img src="{{ $item->product->image_1 ? asset('storage/' . $item->product->image_1) : asset('images/piano-casio.webp') }}" 
-                                 class="img-fluid" 
-                                 alt="{{ $item->product->title }}">
+                            <img src="{{ $item->product->image_1 ? asset('storage/' . $item->product->image_1) : asset('images/piano-casio.webp') }}"
+                                class="img-fluid" alt="{{ $item->product->title }}">
                         </div>
                         <div class="col-8">
                             <div class="card-body py-2">
-                                <h6 class="card-title mb-0 fw-bold text-uppercase color-adaptativo" style="font-size: 0.85rem;">
+                                <h6 class="card-title mb-0 fw-bold text-uppercase color-adaptativo"
+                                    style="font-size: 0.85rem;">
                                     {{ $item->product->title }}
                                 </h6>
-                                <small class="text-muted-adaptativo d-block mb-2">Cantidad: {{ $item->quantity }}</small>
+                                <small class="text-muted-adaptativo d-block mb-2">Cantidad:
+                                    {{ $item->quantity }}</small>
                                 <div class="d-flex justify-content-between align-items-center">
                                     {{-- Formateamos el precio real a moneda local ($) --}}
-                                    <span class="fw-bold color-dorado-adaptativo">${{ number_format($itemTotal, 0, ',', '.') }}</span>
-                                    
+                                    <span
+                                        class="fw-bold color-dorado-adaptativo">${{ number_format($itemTotal, 0, ',', '.') }}</span>
+
                                     {{-- Formulario para eliminar el producto de forma segura vía POST/DELETE --}}
-                                    <form action="{{ route('cart.remove', $item->id) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('cart.remove', $item->id) }}" method="POST"
+                                        class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn p-0 text-danger border-0 bg-transparent texto-rojo">
+                                        <button type="submit"
+                                            class="btn p-0 text-danger border-0 bg-transparent texto-rojo">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
@@ -77,7 +81,8 @@
                 </div>
 
                 <div class="d-grid gap-2">
-                    <a href="{{ route('checkout') }}" class="btn-brand text-uppercase py-3 text-decoration-none text-center">
+                    <a href="{{ route('checkout') }}"
+                        class="btn-brand text-uppercase py-3 text-decoration-none text-center">
                         Iniciar Compra
                     </a>
                     <button class="btn btn-link text-muted-adaptativo text-decoration-none text-uppercase"
@@ -86,7 +91,6 @@
                     </button>
                 </div>
             </div>
-
         @else
             {{-- Estado Vacío por si no hay productos agregados --}}
             <div class="text-center py-5">

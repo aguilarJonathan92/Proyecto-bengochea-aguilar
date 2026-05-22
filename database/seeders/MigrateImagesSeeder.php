@@ -21,7 +21,7 @@ class MigrateImagesSeeder extends Seeder
                 if (!$oldPath) continue;
 
                 $filename    = basename($oldPath);           // "guitarra-prs.webp"
-                $newPath     = 'products/' . $filename;      // path relativo en storage
+                $newPath     = 'products/images/' . $filename;      // path relativo en storage
                 $sourceFile  = $sourceDir . '/' . $filename; // ruta absoluta origen
 
                 if (File::exists($sourceFile)) {

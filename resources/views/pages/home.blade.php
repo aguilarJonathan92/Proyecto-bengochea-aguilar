@@ -1,6 +1,8 @@
 <x-layout>
     <x-slot name="title">Principal</x-slot>
-
+    @if (session('success'))
+        <div class="alert alert-success border-0 shadow-sm text-center">{{ session('success') }}</div>
+    @endif
     {{-- Carrusel Adaptativo --}}
     <div id="carouselExampleIndicators" class="carousel slide mb-3 shadow-sm custom-carousel" data-bs-ride="carousel">
         <div class="carousel-indicators">

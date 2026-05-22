@@ -13,6 +13,7 @@ use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
+use Illuminate\Support\Facades\Storage;
 
 class ProductsTable
 {
@@ -21,10 +22,11 @@ class ProductsTable
         return $table
             ->columns([
                 ImageColumn::make('image_1')
-                ->url(fn ($record)=>asset($record->image_1))
-                ->getStateUsing(fn($record)=>asset($record->image_1))
-                ->circular()
-                ->label('Imagen'),
+                    ->label('Imagen')
+                    ->disk('public')
+                    ->circular()
+                    //Abrir imagen en tamaño normal en una pestaña nueva
+                    ->url(fn($record) => $record->image_1 ? Storage::url($record->image_1) : null, shouldOpenInNewTab: true),
 
                 // Información principal
                 TextColumn::make('title')
@@ -33,14 +35,14 @@ class ProductsTable
                     ->sortable()
                     ->weight('bold'),
 
-                TextColumn::make('category.name') // Asumiendo que Category tiene 'name'
+                TextColumn::make('category.name') // Category tiene 'name'
                     ->label('Categoría')
                     ->searchable()
                     ->sortable()
                     ->badge()
                     ->color('gray'),
 
-                TextColumn::make('brand.name') // Asumiendo que Brand tiene 'name'
+                TextColumn::make('brand.name') // Atributo 'name' de Brand
                     ->label('Marca')
                     ->searchable()
                     ->sortable(),
@@ -48,7 +50,7 @@ class ProductsTable
                 // Precios y Stock
                 TextColumn::make('price')
                     ->label('Precio')
-                    ->money('ARS') // Cambia a tu moneda local
+                    ->money('ARS') // Moneda Local
                     ->sortable(),
 
                 TextColumn::make('stock')
@@ -83,14 +85,14 @@ class ProductsTable
                 // FILTRO DE RELACIÓN: Categoría
                 SelectFilter::make('category_id')
                     ->label('ID De Categoría')
-                    ->relationship('category', 'name') // 'category' es el método en tu modelo Product
+                    ->relationship('category', 'name') // 'category' es el método en modelo Product
                     ->label('Filtrar por Categoría')
                     ->preload()
                     ->searchable(),
 
                 // FILTRO DE RELACIÓN: Marca
                 SelectFilter::make('brand_id')
-                    ->relationship('brand', 'name') // Ajusta 'title' por 'name' según tu DB
+                    ->relationship('brand', 'name')
                     ->label('Filtrar por Marca')
                     ->preload(),
 

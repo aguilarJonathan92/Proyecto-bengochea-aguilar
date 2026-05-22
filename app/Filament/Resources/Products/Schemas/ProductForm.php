@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
+use App\Models\Product;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
@@ -19,35 +21,40 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductForm
 {
+
     public static function updatePrices(Get $get, Set $set): void
     {
         $basePrice = (float) $get('price');
         $onSale = (bool) $get('on_sale');
-        $discount = (float) $get('discount'); // Verifica que el nombre sea 'discount'
-        $installments = (int) $get('installments') ?: 1;
+        $discount = (float) $get('discount');
+        $installments = (int) $get('installments') ?: 1; //cuotas. Si no se especifica: 1.
 
-        $finalPrice = $basePrice;
-
-        if ($onSale && $discount > 0) {
-            $finalPrice = $basePrice * (1 - ($discount / 100));
-        }
+        //Utilización del método del modelo para la obtención del precio
+        $finalPrice = Product::calculateFinalPrice($basePrice, $onSale, $discount);
 
         // Actualizamos el campo visual del precio de oferta
         $set('sale_price', round($finalPrice, 2));
 
-        // Actualizamos el valor de la cuota
+        // Actualizamos el valor de la cuota en base al descuento.
         $installmentValue = $finalPrice / $installments;
         $set('installment_price', round($installmentValue, 2));
     }
     public static function configure(Schema $schema): Schema
     {
+        //Instanciación del request para traer las reglas y mensajes
+        $request = new ProductRequest();
+        $rules = $request->rules();
+        $messages = $request->messages();
+
         return $schema
             ->schema([
+                // SECCIÓN 1 : Detalles del producto
                 Section::make('Información del Instrumento')
                     ->description('Detalles principales del producto')
                     ->schema([
                         Select::make('brand_id')
                             ->label('Marca')
+                            ->required()
                             ->relationship(
                                 'brand',
                                 'name',
@@ -72,41 +79,51 @@ class ProductForm
                             )
                             ->searchable()
                             ->preload()
-                            ->required(),
+                            ->required(), //Para que filament mantenga el asterisco en el campo
                         TextInput::make('title')
+                            ->label('Título')
                             ->required()
-                            ->label('Título'),
+                            ->rules($rules['title'])
+                            ->validationMessages($messages),
                         TextInput::make('subtitle') // <--- Debe ser 'subtitle'
                             ->label('Subtítulo')
-                            ->maxLength(255),
+                            ->rules($rules['subtitle']),
 
                         Select::make('category_id')
                             ->relationship('category', 'name')
+                            ->label('Categoría')
                             ->required()
-                            ->label('Categoría'),
+                            ->rules($rules['category_id']),
 
                         Textarea::make('description')
-                            ->rows(5),
+                            ->label('Descripción')
+                            ->rows(5)
+                            ->rules($rules['description']),
                     ])->columns(2),
-                // Aquí añades el resto de tus campos (price, stock, image_1, etc.)
-                // SECCIÓN 2: PRECIOS Y ESTADO
+
+                // SECCIÓN 2: Precio, financiación y disponibilidad
                 Section::make('Precios,Financiación Y Disponibilidad')
                     ->schema([
                         TextInput::make('stock')
                             ->label('Stock Del Producto')
-                            ->numeric(),
+                            ->numeric()
+                            ->rules($rules['stock']),
+
                         TextInput::make('price')
                             ->label('Precio Base')
                             ->numeric()
                             ->prefix('$')
                             ->required()
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn(Get $get, Set $set) => self::updatePrices($get, $set)),
+                            ->afterStateUpdated(fn(Get $get, Set $set) => self::updatePrices($get, $set))
+                            ->rules($rules['price'])
+                            ->validationMessages($messages),
 
                         Toggle::make('on_sale')
                             ->label('¿En oferta?')
                             ->live()
-                            ->afterStateUpdated(fn(Get $get, Set $set) => self::updatePrices($get, $set)),
+                            ->afterStateUpdated(fn(Get $get, Set $set) => self::updatePrices($get, $set))
+                            ->rules($rules['on_sale']),
 
                         TextInput::make('discount')
                             ->label('% Descuento')
@@ -114,7 +131,9 @@ class ProductForm
                             ->suffix('%')
                             ->visible(fn(Get $get) => $get('on_sale'))
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn(Get $get, Set $set) => self::updatePrices($get, $set)),
+                            ->afterStateUpdated(fn(Get $get, Set $set) => self::updatePrices($get, $set))
+                            ->rules($rules['discount'])
+                            ->validationMessages($messages),
 
                         TextInput::make('sale_price')
                             ->placeholder(function (Get $get) {
@@ -124,61 +143,72 @@ class ProductForm
                                     return '$' . number_format($price * (1 - ($discount / 100)), 2);
                                 }
                                 return 'N/A';
-                            }),
+                            })
+                            ->rules($rules['sale_price']),
+
                         TextInput::make('installments')
                             ->label('Cantidad de Cuotas')
                             ->numeric()
                             ->default(1)
                             ->live()
-                            ->afterStateUpdated(fn(Get $get, Set $set) => self::updatePrices($get, $set)),
+                            ->afterStateUpdated(fn(Get $get, Set $set) => self::updatePrices($get, $set))
+                            ->rules($rules['installments']),
 
                         TextInput::make('installment_price')
                             ->label('Valor de cada Cuota')
                             ->numeric()
                             ->prefix('$')
                             ->readOnly()
-                            ->extraAttributes(['class' => 'bg-gray-50']),
+                            ->extraAttributes(['class' => 'bg-gray-50'])
+                            ->rules($rules['installment_price']),
                     ])->columns(3),
 
-                // SECCIÓN 3: MULTIMEDIA (Ajustado a tu carpeta /public/images)
+                // SECCIÓN 3: MULTIMEDIA
                 Section::make('Imágenes del Producto')
                     ->schema([
                         FileUpload::make('image_1')
                             ->label('Imagen Principal')
                             ->image()
-                            ->disk('public_root')
-                            ->directory('images')
+                            //Si no hay registro, la hago obligatoria
+                            ->required(fn($record) => $record === null)
+                            ->maxSize(2048) //Seteando un tamaño máximo permitido
+                            ->disk('public')
+                            ->directory('products/images') // Se guardará en products/images/ del storage/app
                             ->visibility('public')
-                            ->preserveFilenames()
+                            ->preserveFilenames() // Opcional: mantiene el nombre original del archivo
                             ->imageEditor(),
 
                         FileUpload::make('image_2')
                             ->label('Imagen Extra')
                             ->image()
-                            ->disk('public_root') // Usamos el disco que creamos arriba
-                            ->directory('images') // Se guardará en public/images/
+                            ->maxSize(2048)
+                            ->disk('public')
+                            ->directory('products/images')
                             ->visibility('public')
-                            ->preserveFilenames() // Opcional: mantiene el nombre original del archivo
+                            ->preserveFilenames()
                             ->imageEditor(),
+
                         FileUpload::make('image_3')
                             ->label('Imagen Extra 2')
                             ->image()
-                            ->disk('public_root') // Usamos el disco que creamos arriba
-                            ->directory('images') // Se guardará en public/images/
+                            ->maxSize(2048)
+                            ->disk('public')
+                            ->directory('products/images')
                             ->visibility('public')
-                            ->preserveFilenames() // Opcional: mantiene el nombre original del archivo
+                            ->preserveFilenames()
                             ->imageEditor(),
                     ])->columns(3),
 
-                // SECCIÓN 4: ESPECIFICACIONES TÉCNICAS (JSON)
+                // SECCIÓN 4: Especificaciones técnicas (JSON)
                 Section::make('Especificaciones')
                     ->schema([
-                        // Como en tu modelo tienes 'specs' => 'array'
+                        // Como en el modelo está como 'specs' => 'array'
                         KeyValue::make('specs')
                             ->label('Características Técnicas')
                             ->keyLabel('Propiedad (ej: Trastes)')
                             ->valueLabel('Valor (ej: 22)')
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->rules($rules['specs']),
                     ]),
             ]);
     }

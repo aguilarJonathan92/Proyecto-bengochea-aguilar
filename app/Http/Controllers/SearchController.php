@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SearchRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SearchController extends Controller
 {
@@ -36,7 +37,7 @@ class SearchController extends Controller
                 $url = route('product-details', ['id' => $product->id]);
                 $html .= "
                 <a href='{$url}' class='list-group-item list-group-item-action d-flex align-items-center'>
-                    <img src='" . asset($product->image_1) . "' style='width: 40px; height: 40px; object-fit: cover;' class='me-2 rounded'>
+                    <img src='" . Storage::url($product->image_1) . "' style='width: 40px; height: 40px; object-fit: cover;' class='me-2 rounded'>
                     <div>
                         <div class='fw-bold' style='font-size: 0.9rem;'>{$product->title}</div>
                         <small class='text-muted'>{$product->brand->name}</small>
