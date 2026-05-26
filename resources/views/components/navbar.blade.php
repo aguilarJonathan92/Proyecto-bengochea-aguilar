@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg border-bottom nav-custom">
-    <div class="container-fluid">
-        {{-- Buscador Móvil --}}
-        <div class="d-flex d-lg-none flex-grow-1 px-4 position-relative">
+    <div class="container-fluid d-flex flex-row align-items-center justify-content-between flex-nowrap">
+
+        {{-- Buscador Móvil (Contenedor ajustado) --}}
+        <div class="d-flex d-lg-none flex-grow-1 pe-2 position-relative" style="min-width: 0;">
             <form class="d-flex w-100" action="{{ route('search') }}" method="GET">
                 <input id="mobile-search" class="form-control form-control-sm rounded-start-pill" type="search"
                     name="query" placeholder="Buscar..." value="{{ request('query') }}" autocomplete="off">
@@ -11,19 +12,20 @@
             </form>
             {{-- Contenedor de sugerencias móvil --}}
             <div id="mobile-search-suggestions" class="list-group position-absolute w-100 shadow d-none"
-                style="z-index: 1050; top: 100%; left: 0; padding: 0 1.5rem;">
+                style="z-index: 1050; top: 100%; left: 0; padding: 0 1rem;">
             </div>
         </div>
 
-        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+        {{-- Botón Hamburguesa --}}
+        <button class="navbar-toggler flex-shrink-0" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
             aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        {{-- Menú Desplegable --}}
+        <div class="collapse navbar-collapse w-100" id="navbarNavDropdown">
             <ul class="navbar-nav mx-auto py-2 text-center">
-                {{-- Los enlaces ahora usan una clase personalizada 'nav-link-custom' --}}
                 <li class="nav-item">
                     <a class="nav-link nav-link-custom {{ request()->routeIs('home') ? 'active fw-bold' : '' }}"
                         href="{{ route('home') }}">PRINCIPAL</a>
@@ -60,11 +62,8 @@
                             'text-center',
                             'text-lg-start',
                         ]) href="{{ route('catalog') }}">VER TODO</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
+                        <li><hr class="dropdown-divider"></li>
 
-                        {{-- Categorías desde la Base de Datos --}}
                         @foreach ($categorias as $categoria)
                             <li>
                                 <a @class([
@@ -73,14 +72,9 @@
                                     'text-center',
                                     'text-lg-start',
                                     'overflow-hidden',
-                                    // Si en la URL usas el ID o el slug
                                     'item-catalogo-active' => request()->route('categoria') == $categoria->id,
                                 ]) href="{{ route('catalog', $categoria->id) }}">
-
-                                    {{-- Imprime el nombre directo de la BD en mayúsculas --}}
-                                    {{-- Str::upper($categoria->name) --}}
                                     {{ Str::upper($categoria->display_title) }}
-
                                 </a>
                             </li>
                         @endforeach
