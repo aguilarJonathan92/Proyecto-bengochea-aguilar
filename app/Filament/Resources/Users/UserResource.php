@@ -44,7 +44,7 @@ class UserResource extends Resource
         return [
             'index' => ListUsers::route('/'),
             'create' => CreateUser::route('/create'),
-            //'edit' => EditUser::route('/{record}/edit'),  //DESACTIVANDO PAGINA DE EDICION DE USUARIO
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 

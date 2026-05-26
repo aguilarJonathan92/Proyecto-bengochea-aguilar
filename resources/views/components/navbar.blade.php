@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg border-bottom nav-custom">
     <div class="container-fluid">
         {{-- Buscador Móvil --}}
-        <div class="d-flex d-lg-none grow px-4 position-relative">
+        <div class="d-flex d-lg-none flex-grow-1 px-4 position-relative">
             <form class="d-flex w-100" action="{{ route('search') }}" method="GET">
                 <input id="mobile-search" class="form-control form-control-sm rounded-start-pill" type="search"
                     name="query" placeholder="Buscar..." value="{{ request('query') }}" autocomplete="off">
