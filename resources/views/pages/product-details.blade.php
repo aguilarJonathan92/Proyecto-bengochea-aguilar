@@ -123,26 +123,12 @@
                             <div class="table-responsive">
                                 <table class="table custom-table">
                                     <tbody>
+                                        @forEach($product->specs as $title=>$value)
                                         <tr>
-                                            <th scope="row">Marca</th>
-                                            <td>{{ $product->brand->name }}</td>
+                                            <th scope="row">{{ $title}}</th>
+                                            <td>{{ $value }}</td>
                                         </tr>
-                                        <tr>
-                                            <th scope="row">Modelo</th>
-                                            <td>{{ $product->subtitle }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Cantidad de llaves</th>
-                                            <td>No aplica</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Conectividad</th>
-                                            <td>Sin información disponible</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Peso</th>
-                                            <td>Sin información disponible</td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
