@@ -48,10 +48,13 @@ class UsersTable
             ->recordActions([
                 EditAction::make(),
             ])
+
             ->toolbarActions([
-                BulkActionGroup::make([
+                //Quitada la opción de borrar en grupo: ignora la política de usuario
+               /* BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                ]),
+                ]), */
+
             ]);
     }
 }

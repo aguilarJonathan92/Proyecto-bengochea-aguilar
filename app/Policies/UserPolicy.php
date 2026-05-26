@@ -34,9 +34,9 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $model): bool //Recibe al usuario autenticado $user y el que se intenta editar $model
+   public function update(User $user, User $model): bool //Recibe al usuario autenticado $user y el que se intenta editar $model
     {
-        return $user->id === $model->id; //si se añade solo el admin puede editar perfiles: $user->role_id === 1
+        return $user->role_id === $model->role_id && $user->role->name != 'admin'; // El admin no puede editar el perfil de un usuario
     }
 
     /**
