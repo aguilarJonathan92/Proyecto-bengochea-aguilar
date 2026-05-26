@@ -934,6 +934,99 @@ footer {
 }
 
 /* ==========================================================================
+   PERFIL DEL USUARIO
+   ========================================================================== */
+
+
+.perfil-header {
+    padding: 1.25rem 1.5rem;
+    background-color: var(--color-cuatro);
+    border: 1px solid var(--border-ui);
+    border-radius: 12px;
+}
+ 
+.perfil-avatar {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 50%;
+    background-color: rgba(212, 160, 23, 0.15);
+    border: 2px solid var(--color-dos);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-dos);
+    letter-spacing: 1px;
+}
+
+.perfil-nombre {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-texto);
+}
+
+.perfil-email {
+    font-size: 0.85rem;
+    color: var(--color-texto-muted);
+}
+
+.perfil-campo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.perfil-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-texto-muted);
+    font-weight: 500;
+}
+
+.perfil-valor {
+    font-size: 0.95rem;
+    color: var(--color-texto);
+    font-weight: 500;
+}
+
+.btn-editar {
+    background: transparent;
+    border: 1px solid var(--color-dos);
+    color: var(--color-dos);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-editar:hover {
+    background-color: var(--color-dos);
+    color: var(--color-uno);
+}
+
+.btn-cancelar {
+    background: transparent;
+    border: 1px solid var(--border-ui);
+    color: var(--color-texto-muted);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cancelar:hover {
+    border-color: var(--color-seis);
+    color: var(--color-seis);
+}
+
+/* ==========================================================================
    UTILIDADES Y CLASES ADAPTATIVAS
    ========================================================================== */
 
