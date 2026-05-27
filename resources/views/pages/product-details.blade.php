@@ -91,10 +91,18 @@
                     </div>
 
                     <div class="d-grid gap-3">
-                        <button class="btn-add-cart text-uppercase py-3">
-                            Añadir al Carrito
-                        </button>
-                        <a href="{{ route('checkout') }}" class="btn-outline-adaptativo text-uppercase py-3">
+                        {{-- Formulario tradicional para añadir al carrito --}}
+                        <form action="{{ route('cart.add') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" value="1"> {{-- Por ahora fijo en 1 --}}
+                            
+                            <button type="submit" class="btn-add-cart text-uppercase py-3 w-100">
+                                Añadir al Carrito
+                            </button>
+                        </form>
+
+                        <a href="{{ route('checkout') }}" class="btn-outline-adaptativo text-uppercase py-3 text-center text-decoration-none">
                             Finalizar Compra
                         </a>
                     </div>

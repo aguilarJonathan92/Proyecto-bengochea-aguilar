@@ -35,8 +35,9 @@
     <x-header />
     @if(session('success') || session('error'))
         <div id="flash-message" class="alert {{ session('success') ? 'alert-success' : 'alert-danger' }} 
-            position-fixed bottom-0 inset-e-0 m-3 shadow" 
+            position-fixed bottom-0 end-0 m-3 shadow animate__animated animate__fadeInUp" 
             style="z-index: 9999; min-width: 250px;">
+            <i class="bi {{ session('success') ? 'bi-cart-check-fill' : 'bi-exclamation-triangle-fill' }} me-2"></i>
             {{ session('success') ?? session('error') }}
         </div>
     @endif
