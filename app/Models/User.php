@@ -10,6 +10,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
@@ -41,6 +42,16 @@ class User extends Authenticatable implements FilamentUser
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    //un usuario tiene un perfil
+    public function profile(){
+        return $this->hasOne(UserProfile::class);
+    }
+    
+    // Un usuario puede tener muchas direcciones
+    public function addresses(){
+        return $this->hasMany(UserAddress::class);
     }
 
     //Un usuario se relaciona con un carrito
