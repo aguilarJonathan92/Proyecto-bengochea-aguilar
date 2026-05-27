@@ -76,7 +76,7 @@ Route::middleware('auth')->group(function () {
     // EXCLUSIVO PARA CLIENTES (redirige a administradores)
     Route::middleware('no.admin')->group(function () {
         Route::get('/panel-cliente', [MainController::class, 'userPanel']);
-        Route::get('/checkout', [MainController::class, 'checkout'])->name('checkout');
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
         // Procesar el formulario de compra
         Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
         

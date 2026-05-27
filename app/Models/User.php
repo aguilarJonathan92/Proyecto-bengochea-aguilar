@@ -51,7 +51,7 @@ class User extends Authenticatable implements FilamentUser
     
     // Un usuario puede tener muchas direcciones
     public function addresses(){
-        return $this->hasMany(UserAddress::class);
+        return $this->hasMany(UserAddress::class, 'user_id');
     }
 
     //Un usuario se relaciona con un carrito

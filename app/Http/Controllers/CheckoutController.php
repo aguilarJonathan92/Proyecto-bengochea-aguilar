@@ -20,8 +20,14 @@ class CheckoutController extends Controller
             return redirect()->route('catalog')->with('error', 'Tu carrito está vacío. Añade productos antes de finalizar la compra.');
         }
 
+        $direcciones = \App\Models\UserAddress::where('user_id', $request->user()->id)
+        ->with('city.province')
+        ->get();
+        
+        // Cargamos todas las provincias por si quiere agregar una nueva dirección en el momento
+        $provincias = \App\Models\Province::orderBy('name')->get();
         // Retornamos la vista checkout.blade.php pasándole el carrito
-        return view('checkout', compact('cart'));
+        return view('pages.checkout', compact('cart', 'direcciones', 'provincias'));
     }
 
     public function store(Request $request){
@@ -30,12 +36,42 @@ class CheckoutController extends Controller
             'customer_name'     => 'required|string|max:255',
             'customer_lastname' => 'required|string|max:255',
             'customer_email'    => 'required|email|max:255',
-            'delivery_street'   => 'required|string|max:255',
-            'paymentMethod'     => 'required|string|in:credit,transfer',
-            'delivery_city_id'  => 'required|exists:cities,id',
-            'delivery_postal_code' => 'required|string|max:10',
+            'paymentMethod'     => 'required|string|in:credit,transfer_bank,transfer_mp',
+
+            // Estas reglas solo se activan si eligió registrar una nueva dirección
+        'delivery_street'      => 'required_if:user_address_id,nueva_direccion|nullable|string|max:255',
+        'delivery_postal_code' => 'required_if:user_address_id,nueva_direccion|nullable|string|max:10',
+        'delivery_city_id'     => 'required_if:user_address_id,nueva_direccion|nullable|exists:cities,id',
         ]);
 
+        $user = $request->user();
+    
+        // Variables donde guardaremos la info final del envío
+        $calleEnvio = '';
+        $cpEnvio = '';
+        $ciudadEnvioId = null;
+
+        if ($request->user_address_id === 'nueva_direccion') {
+            // 1. Es una dirección nueva: La guardamos en su cuenta para el futuro
+            $nuevaDireccion = $user->addresses()->create([
+                'alias'       => $request->delivery_alias ?? 'Dirección de Compra',
+                'street'      => $request->delivery_street,
+                'postal_code' => $request->delivery_postal_code,
+                'city_id'     => $request->delivery_city_id,
+                'is_default'  => $user->addresses()->count() === 0 // Si es la primera, queda default
+            ]);
+
+            $calleEnvio    = $nuevaDireccion->street;
+            $cpEnvio       = $nuevaDireccion->postal_code;
+            $ciudadEnvioId = $nuevaDireccion->city_id;
+        } else {
+            // 2. Eligió una dirección existente: Buscamos el registro
+            $direccionExistente = $user->addresses()->findOrFail($request->user_address_id);
+            
+            $calleEnvio    = $direccionExistente->street;
+            $cpEnvio       = $direccionExistente->postal_code;
+            $ciudadEnvioId = $direccionExistente->city_id;
+        }
         // Obtener el carrito del usuario con sus productos
         $cart = $request->user()->cart()->with('items.product')->first();
 
@@ -86,9 +122,9 @@ class CheckoutController extends Controller
                 'customer_name'        => $request->customer_name,
                 'customer_lastname'    => $request->customer_lastname,
                 'customer_email'       => $request->customer_email,
-                'delivery_street'      => $request->delivery_street,
-                'delivery_postal_code' => $request->delivery_postal_code,
-                'delivery_city_id'     => $request->delivery_city_id,
+                'delivery_street'      => $calleEnvio,
+                'delivery_postal_code' => $cpEnvio,
+                'delivery_city_id'     => $ciudadEnvioId,
             ]);
 
             // 5. Crear los ítems de la orden y restar stock de los productos

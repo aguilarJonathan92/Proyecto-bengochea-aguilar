@@ -38,10 +38,6 @@ class MainController extends Controller
         return view('pages.contact');
     }
 
-    public function checkout()
-    {
-        return view('pages.checkout');
-    }
     public function userPanel()
     {
         return view('pages.user-panel');
