@@ -20,7 +20,8 @@
             @foreach ($cart->items as $item)
                 @php
                     // Sumamos el precio del producto multiplicado por la cantidad elegida
-                    $itemTotal = $item->product->price * $item->quantity;
+                    $precioUnitarioReal = $item->product->final_price;
+                    $itemTotal = $precioUnitarioReal * $item->quantity;
                     $subtotal += $itemTotal;
                 @endphp
 
@@ -38,8 +39,19 @@
                                     style="font-size: 0.85rem;">
                                     {{ $item->product->title }}
                                 </h6>
-                                <small class="text-muted-adaptativo d-block mb-2">Cantidad:
-                                    {{ $item->quantity }}</small>
+
+                                {{-- DETALLE DE PRECIOS SI TIENE DESCUENTO --}}
+                                <div class="small my-1">
+                                    @if($item->product->on_sale && $item->product->discount > 0)
+                                        <span class="text-decoration-line-through text-muted-adaptativo me-1" style="font-size: 0.75rem;">
+                                            ${{ number_format($item->product->price, 0, ',', '.') }}
+                                        </span>
+                                        <span class="badge bg-danger-subtle text-danger fw-normal" style="font-size: 0.65rem;">
+                                            {{ $item->product->discount }}% OFF
+                                        </span>
+                                    @endif
+                                    <small class="text-muted-adaptativo d-block">Cantidad: {{ $item->quantity }}</small>
+                                </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     {{-- Formateamos el precio real a moneda local ($) --}}
                                     <span
