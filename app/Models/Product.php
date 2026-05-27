@@ -57,9 +57,9 @@ class Product extends Model
         return $this->belongsTo(CartItem::class);
     }
 
-    //Esto falta crear los modelos aun
+    //Un producto puede figurar en muchos ítems de pedidos históricos
     public function orderItem(){
-
+        return $this->hasMany(OrderItem::class);
     }
     
     //Accesador para  $product->final_price
