@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             UpdateCategoryDisplayTitlesSeeder::class,
             MigrateImagesSeeder::class,
+            ProvinciasCiudadesSeeder::class,
         ]);
     }
 }
