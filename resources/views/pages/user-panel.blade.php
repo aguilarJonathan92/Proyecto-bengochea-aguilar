@@ -2,6 +2,23 @@
     <x-slot name='title'>Mi Perfil — {{ auth()->user()->first_name }}</x-slot>
  
     <div class="container py-5" id="perfil-app" data-tiene-errores="{{ $errors->any() ? 'true' : 'false' }}">
+        @if (session('success'))
+            <div class="alert alert-success text-center mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger mb-4">
+                <p class="text-center fw-bold mb-1">Hubo errores al guardar los cambios. Revisa los campos:</p>
+                <ul class="mb-0 small">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        
         <div class="row justify-content-center">
             <div class="col-lg-7 col-xl-6">
  
@@ -47,6 +64,36 @@
                             <span class="perfil-label">Contraseña</span>
                             <span class="perfil-valor text-muted-adaptativo">••••••••</span>
                         </div>
+                        <hr class="checkout-separator my-3">
+                        <div class="perfil-campo">
+                            <span class="perfil-label">Teléfono</span>
+                            <span class="perfil-valor">
+                                {{ $user->profile?->phone ?? 'No registrado' }}
+                            </span>
+                        </div>
+                       <hr class="checkout-separator my-3">
+                       <h5 class="checkout-title color-adaptativo mb-3 mt-4">Mis direcciones</h5>
+                        @if($user->addresses->isNotEmpty())
+                            @foreach($user->addresses as $address)
+                                <div class="perfil-campo mb-3">
+                                    <span class="perfil-label">{{ $address->alias }}</span>
+                                    <span class="perfil-valor">
+                                        {{ $address->street }},
+                                        {{ $address->city?->name }},
+                                        {{ $address->city?->province?->name }}
+                                        (CP {{ $address->postal_code }})
+                                    </span>
+                                    @if($address->is_default)
+                                        <span class="badge bg-success ms-2">Predeterminada</span>
+                                    @endif
+                                </div>
+                                <hr class="checkout-separator my-3">
+                            @endforeach
+                        @else
+                            <div class="text-center text-muted-adaptativo p-3 border rounded">
+                                No tienes direcciones registradas.
+                            </div>
+                        @endif
                     </div>
                 </div>
  
@@ -101,7 +148,30 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="col-12">
+                                <label class="form-label color-adaptativo">Teléfono</label>
+                                <input type="text" name="phone"
+                                    class="form-control checkout-input @error('phone') is-invalid @enderror"
+                                    placeholder="Ej: +54 379 1234567"
+                                    value="{{ old('phone', $user->profile?->phone) }}">
+                                @error('phone')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
  
+                            {{-- SECCIÓN SELECCIONABLE DE DIRECCIONES DINÁMICAS --}}
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="checkout-title color-adaptativo mb-0">Mis Direcciones</h6>
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="agregarDireccion()">
+                                    <i class="bi bi-plus-lg"></i> Añadir dirección
+                                </button>
+                            </div>
+
+                            <div id="contenedor-direcciones">
+                                {{-- Aquí se cargarán las direcciones mediante JS --}}
+                            </div>
+
                             <hr class="checkout-separator">
  
                             <h6 class="checkout-title color-adaptativo mb-3" style="font-size: 0.85rem;">
@@ -141,6 +211,56 @@
             </div>
         </div>
     </div> 
+
+    {{-- TEMPLATE HTML OCULTO PARA JAVASCRIPT (Súper limpio) --}}
+    <template id="template-direccion">
+        <div class="card p-3 mb-3 posicion-direccion border-light shadow-sm" data-index="{index}">
+            <input type="hidden" name="addresses[{index}][id]" value="{id}">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-bold text-secondary small">Dirección #{numero}</span>
+                <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="eliminarDireccionElemento(this)">
+                    <i class="bi bi-trash"></i> Quitar
+                </button>
+            </div>
+            <div class="row g-2">
+                <div class="col-sm-6">
+                    <input type="text" name="addresses[{index}][alias]" class="form-control form-control-sm" placeholder="Alias (Ej: Casa, Trabajo)" value="{alias}" required>
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" name="addresses[{index}][postal_code]" class="form-control form-control-sm" placeholder="Cód. Postal" value="{postal_code}" required>
+                </div>
+                <div class="col-12">
+                    <input type="text" name="addresses[{index}][street]" class="form-control form-control-sm" placeholder="Calle, número, piso/depto" value="{street}" required>
+                </div>
+                {{-- SELECT DE PROVINCIAS --}}
+                <div class="col-sm-6">
+                    <select class="form-select form-select-sm select-provincia" onchange="cargarCiudadesDinamico(this)" required>
+                        <option value="" disabled selected>Selecciona Provincia...</option>
+                        @foreach($provincias as $provincia)
+                            <option value="{{ $provincia->id }}">{{ $provincia->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- SELECT DE CIUDADES (Dependiente) --}}
+                <div class="col-sm-6">
+                    <select name="addresses[{index}][city_id]" class="form-select form-select-sm select-ciudad" required disabled>
+                        <option value="" disabled selected>Selecciona Ciudad...</option>
+                    </select>
+                </div>
+                <div class="col-12 mt-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="addresses[{index}][is_default]" value="1" id="def-{index}" {checked}>
+                        <label class="form-check-label small" for="def-{index}">Establecer como predeterminada</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+        // Compartimos las direcciones del usuario autenticado de Laravel hacia Javascript de manera segura
+        const direccionesIniciales = @json($user->addresses()->with('city.province')->get());
+    </script>
     <script src="{{ asset('js/activar-editar.js') }}"></script>
 </x-layout>
  

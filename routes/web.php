@@ -9,7 +9,14 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-//RUTAS ACCESIBLES A TODOS
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// --- RUTAS PÚBLICAS / ACCESIBLES A TODOS ---
+
 // Accesos sencillos
 Route::controller(MainController::class)->group(function () {
     Route::get('/', 'index')->name('home');
@@ -26,8 +33,10 @@ Route::controller(CatalogController::class)->group(function () {
 });
 
 // Formulario de Consultas
-Route::get('/consultas', [QueriesController::class, 'create'])->name('queries');
-Route::post('/enviar-consulta', [QueriesController::class, 'store'])->name('queries.send');
+Route::controller(QueriesController::class)->group(function () {
+    Route::get('/consultas', 'create')->name('queries');
+    Route::post('/enviar-consulta', 'store')->name('queries.send');
+});
 
 // Búsquedas
 Route::get('/search', [SearchController::class, 'index'])->name('search');
@@ -46,18 +55,22 @@ Route::middleware('guest')->controller(AuthController::class)->group(function ()
 //RUTAS PROTEGIDAS - Inicio de sesión requerido
 Route::middleware('auth')->group(function () {
 
-    // Admin y Cliente pueden hacer logout
+    // Auth General
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     //Panel de Usuario y actualizacion de datos, deben tener todos los usuarios
-    Route::get('/panel-usuario',[UserController::class, 'index'])->name('panel-usuario');
-    Route::put('/panel-usuario',[UserController::class, 'update'])->name('panel-usuario.update');
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/panel-usuario', 'index')->name('panel-usuario');
+        Route::put('/panel-usuario', 'update')->name('panel-usuario.update');
+    });
 
     //rutas para el carrito de compra. Solo funciona logueado
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.list');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::put('/cart/update/{itemId}', [CartController::class, 'updateQuantity'])->name('cart.update');
-    Route::delete('/cart/remove/{itemId}', [CartController::class, 'removeItem'])->name('cart.remove');
+    Route::controller(CartController::class)->prefix('cart')->name('cart.')->group(function () {
+        Route::get('/', 'index')->name('list');
+        Route::post('/add', 'add')->name('add');
+        Route::put('/update/{itemId}', 'updateQuantity')->name('update');
+        Route::delete('/remove/{itemId}', 'removeItem')->name('remove');
+    });
 
     // EXCLUSIVO PARA CLIENTES (redirige a administradores)
     Route::middleware('no.admin')->group(function () {
@@ -65,6 +78,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/checkout', [MainController::class, 'checkout'])->name('checkout');
     });
 });
+
+// --- endpoints / API INTERNA (Para peticiones asíncronas de JavaScript) ---
+Route::get('/api/provincias/{province}/ciudades', [UserController::class, 'getCitiesByProvince'])->name('api.ciudades');
 
 // 3. FALLBACK (404 personalizado)=
 Route::fallback(function () {

@@ -62,6 +62,12 @@ class User extends Authenticatable implements FilamentUser
     //Un usuario puede tener muchas ordenes (falta el modelo)
     public function order(){}
 
+    // Devuelve solo la dirección marcada como predeterminada
+    public function defaultAddress()
+    {
+        return $this->hasOne(UserAddress::class)->where('is_default', true);
+    }
+
     //Necesario ya que filament usa 'name' y en la bd no uso ese
     public function getNameAttribute(): string
     {
