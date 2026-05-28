@@ -5,13 +5,9 @@ namespace App\Filament\Resources\Queries\Tables;
 use Filament\Actions\BulkActionGroup as ActionsBulkActionGroup;
 use Filament\Actions\DeleteBulkAction as ActionsDeleteBulkAction;
 use Filament\Actions\ViewAction as ActionsViewAction;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-
 
 class QueriesTable
 {
@@ -42,7 +38,7 @@ class QueriesTable
                     ->label('Fecha de Recepción')
                     ->dateTime('d/m/Y H:i', 'America/Argentina/Buenos_Aires')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true), // Mantenido tal cual lo definiste originalmente
+                    ->toggleable(isToggledHiddenByDefault: true), // Se mantiene
                 TextColumn::make('updated_at')
                     ->label('Fecha de Actualización')
                     ->dateTime('d/m/Y H:i', 'America/Argentina/Buenos_Aires')
@@ -82,7 +78,7 @@ class QueriesTable
                 ActionsViewAction::make(),
             ])
 
-            // Corregido el método y namespaces nativos para acciones por lotes en tablas
+            // Para acciones por lotes en tablas
             ->toolbarActions([
                 ActionsBulkActionGroup::make([
                     ActionsDeleteBulkAction::make(),
