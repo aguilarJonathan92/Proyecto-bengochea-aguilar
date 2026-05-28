@@ -71,6 +71,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/add', 'add')->name('add');
         Route::put('/update/{itemId}', 'updateQuantity')->name('update');
         Route::delete('/remove/{itemId}', 'removeItem')->name('remove');
+        Route::delete('/cart/clear', 'clear')->name('clear');
     });
 
     // EXCLUSIVO PARA CLIENTES (redirige a administradores)

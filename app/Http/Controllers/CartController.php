@@ -44,7 +44,7 @@ class CartController extends Controller
 
         //Valida que tenga suficiente stock para ingresar al carrito
         if($product->stock < $request ->quantity){
-            return back()->with('error', 'No hay stock suficiente del producto.');
+            return back()->with('cart_error', 'No hay stock suficiente del producto.');
         }
 
         //Obtiene el carrito. Si no existe, lo crea
@@ -60,7 +60,7 @@ class CartController extends Controller
             //Al existir, se valida stock y se acumula
             if ($product->stock < ($cartItem->quantity + $request->quantity)) {
                 // CAMBIADO: También redirige hacia atrás con error si supera el stock acumulado
-                return back()->with('error', 'No puedes agregar más de este producto, supera el stock disponible.');
+                return back()->with('cart_error', 'No puedes agregar el producto, supera el stock disponible.');
             }
             $cartItem->increment('quantity', $request->quantity);
         }else{
@@ -72,7 +72,7 @@ class CartController extends Controller
         }
 
         // Redirecciona a la misma página donde estaba el usuario y envía un mensaje de éxito
-        return back()->with('success', 'Producto añadido al carrito.');
+        return back()->with('cart_success', 'Producto añadido al carrito.');
     }
 
     /**
@@ -91,14 +91,14 @@ class CartController extends Controller
 
         // Validar stock del producto con la nueva cantidad solicitada
         if ($cartItem->product->stock < $request->quantity) {
-            return back()->with(['error' => 'No puedes actualizar a esa cantidad, supera el stock disponible.'], 422);
+            return back()->with('cart_error', 'No puedes actualizar a esa cantidad, supera el stock disponible.');
         }
 
         $cartItem->update([
             'quantity' => $request->quantity
         ]);
 
-        return back()->with(['message' => 'Cantidad actualizada correctamente.']);
+        return back()->with('cart_success', 'Cantidad actualizada correctamente.');
     }
 
     /**
@@ -115,6 +115,17 @@ class CartController extends Controller
         $cartItem->delete();
 
         // Regresa a la pantalla anterior actualizando el carrito
-        return back()->with('success', 'Producto removido del carrito.');
+        return back()->with('cart_success', 'Producto removido del carrito.');
+    }
+
+    public function clear(Request $request){
+        $cart = $request->user()->cart()->first();
+
+        if ($cart) {
+            // Elimina todos los ítems vinculados a este carrito
+            $cart->items()->delete();
+        }
+
+        return back()->with('cart_success', 'El carrito se ha vaciado por completo.');
     }
 }

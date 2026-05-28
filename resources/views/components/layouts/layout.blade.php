@@ -29,16 +29,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="fondo d-flex flex-column min-vh-100">
     <x-header />
-    @if(session('success') || session('error'))
-        <div id="flash-message" class="alert {{ session('success') ? 'alert-success' : 'alert-danger' }} 
+    {{-- ALERTA FLOTANTE EXCLUSIVA PARA EL CARRITO --}}
+    @if(session('cart_success') || session('cart_error'))
+        <div id="flash-message" class="alert {{ session('cart_success') ? 'alert-success' : 'alert-danger' }} 
             position-fixed bottom-0 start-0 m-3 shadow animate__animated animate__fadeInUp" 
             style="z-index: 9999; min-width: 250px;">
-            <i class="bi {{ session('success') ? 'bi-cart-check-fill' : 'bi-exclamation-triangle-fill' }} me-2"></i>
-            {{ session('success') ?? session('error') }}
+            <i class="bi {{ session('cart_success') ? 'bi-cart-check-fill' : 'bi-exclamation-triangle-fill' }} me-2"></i>
+            {{ session('cart_success') ?? session('cart_error') }}
         </div>
     @endif
     <button id="theme-toggle" class="btn-brand shadow-lg" title="Cambiar modo">
@@ -56,11 +58,11 @@
 
     <x-cart />
     <x-footer />
+    @include('sweetalert2::index')
     <script src="{{ asset('js/theme-toggle.js') }}"></script>
     <script src="{{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/search.js') }}"></script>
     <script src="{{ asset('js/flash-message.js') }}"></script>
-    @include('sweetalert2::index')
 </body>
 
 </html>

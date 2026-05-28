@@ -97,6 +97,14 @@
                         class="btn-brand text-uppercase py-3 text-decoration-none text-center">
                         Iniciar Compra
                     </a>
+                    {{-- FORMULARIO Y BOTÓN PARA VACIAR EL CARRITO --}}
+                    <form id="form-vaciar-carrito" action="{{ route('cart.clear') }}" method="POST" class="d-grid">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" id="btn-vaciar-carrito" class="btn btn-outline-danger text-uppercase py-2" style="font-size: 0.85rem;">
+                            <i class="bi bi-trash3 me-1"></i> Vaciar Carrito
+                        </button>
+                    </form>
                     <a href="{{ route('catalog') }}" class="btn btn-link text-muted-adaptativo text-decoration-none text-uppercase"
                     style="font-size: 0.8rem;">
                         Continuar comprando
