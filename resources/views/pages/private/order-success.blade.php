@@ -65,7 +65,7 @@
                         <a href="{{ route('catalog') }}" class="btn-brand py-3 text-uppercase text-decoration-none fw-bold">
                             <i class="bi bi-bag-fill me-2"></i> Seguir Comprando
                         </a>
-                        <a href="{{ route('panel-usuario') }}" class="btn-outline-adaptativo py-2 text-uppercase text-decoration-none small">
+                        <a href="{{ route('mis-pedidos') }}" class="btn-outline-adaptativo py-2 text-uppercase text-decoration-none small">
                             Ver mis pedidos
                         </a>
                     </div>

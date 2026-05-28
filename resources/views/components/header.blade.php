@@ -64,7 +64,7 @@
                                     Mis Datos
                                 </a>
                                 <a class="dropdown-item"
-                                    href="{{ auth()->user()->role_id === 1 ? url('/admin') : url('/panel-usuario') }}">
+                                    href="{{ auth()->user()->role_id === 1 ? url('/admin') : url('/mis-pedidos') }}">
                                     Mis Pedidos
                                 </a> {{-- Debo cambiar la ruta de este enlace --}}
                             </li>

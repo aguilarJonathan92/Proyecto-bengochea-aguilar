@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\QueriesController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
@@ -78,11 +79,15 @@ Route::middleware('auth')->group(function () {
     Route::middleware('no.admin')->group(function () {
         Route::get('/panel-cliente', [MainController::class, 'userPanel']);
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+
         // Procesar el formulario de compra
         Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
         
         // Ruta de éxito
         Route::get('/pedido-exitoso/{order}', [CheckoutController::class, 'success'])->name('orders.success');
+
+        //Listado de compras realizadas
+        Route::get('/mis-pedidos', [OrderController::class, 'index'])->name('mis-pedidos');
     });
 });
 

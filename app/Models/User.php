@@ -60,7 +60,9 @@ class User extends Authenticatable implements FilamentUser
     }
 
     //Un usuario puede tener muchas ordenes (falta el modelo)
-    public function order(){}
+    public function orders(){
+        return $this->hasMany(Order::class);
+    }
 
     // Devuelve solo la dirección marcada como predeterminada
     public function defaultAddress()
