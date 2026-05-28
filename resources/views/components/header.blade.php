@@ -61,8 +61,12 @@
                             <li>
                                 <a class="dropdown-item"
                                     href="{{ auth()->user()->role_id === 1 ? url('/admin') : url('/panel-usuario') }}">
-                                    Ir al Panel
+                                    Mis Datos
                                 </a>
+                                <a class="dropdown-item"
+                                    href="{{ auth()->user()->role_id === 1 ? url('/admin') : url('/panel-usuario') }}">
+                                    Mis Pedidos
+                                </a> {{-- Debo cambiar la ruta de este enlace --}}
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
