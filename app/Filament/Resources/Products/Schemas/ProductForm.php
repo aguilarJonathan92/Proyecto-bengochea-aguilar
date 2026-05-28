@@ -19,6 +19,9 @@ use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+
 class ProductForm
 {
 
@@ -170,14 +173,32 @@ class ProductForm
                             ->label('Imagen Principal')
                             ->image()
                             //Si no hay registro, la hago obligatoria
-                            ->required(fn($record) => $record === null)
+                            //->required(fn($record) => $record === null)
+                            // Modificación aquí: Obligatorio si es nuevo, y no permite dejarlo vacío si se edita
+                            ->required()
                             ->maxSize(2048) //Seteando un tamaño máximo permitido
                             ->disk('public')
                             ->directory('products/images') // Se guardará en products/images/ del storage/app
                             ->visibility('public')
                             ->preserveFilenames() // Opcional: mantiene el nombre original del archivo
-                            ->imageEditor(),
+                            ->imageEditor()
+                            // Forzamos el borrado del archivo viejo al subir uno nuevo
+                            ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
+                                // 1. Si estamos editando y ya existía una imagen previa...
+                                if ($record && $record->image_1) {
+                                    // ...la borramos físicamente del disco
+                                    if (Storage::disk('public')->exists($record->image_1)) {
+                                        Storage::disk('public')->delete($record->image_1);
+                                    }
+                                }
 
+                                // 2. Guardamos el nuevo archivo manteniendo configuración
+                                return $file->storeAs(
+                                    'products/images',
+                                    $file->getClientOriginalName(), // Mantiene el nombre original solicitado en preserveFileNames()
+                                    'public'
+                                );
+                            }),
                         FileUpload::make('image_2')
                             ->label('Imagen Extra')
                             ->image()
