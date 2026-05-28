@@ -24,9 +24,9 @@
                     <div class="col-12 col-md-6 mb-3">
                         <label for="nombre" class="form-label color-adaptativo">Nombre *</label>
                         {{-- La clase form-control ya está configurada en el CSS para ser adaptativa --}}
-                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Jonathan"
+                        <input type="text" class="form-control" id="nombre" name="name" placeholder="Jonathan"
                             value="{{ old('nombre') }}">
-                        @error('nombre')
+                        @error('name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
@@ -42,7 +42,7 @@
 
                 <div class="mb-3">
                     <label for="asunto" class="form-label color-adaptativo">Asunto *</label>
-                    <select id="asunto" name="asunto" class="form-select" aria-label="Seleccionar asunto">
+                    <select id="asunto" name="subject" class="form-select" aria-label="Seleccionar asunto">
                         <option value="" disabled {{ old('asunto') == "" ? 'selected' : '' }}>Elija una opción</option>
                         <option value="1" {{ old('asunto') == "1" ? 'selected' : '' }}>Formas de pago</option>
                         <option value="2" {{ old('asunto') == "2" ? 'selected' : '' }}>Modos/costos de envío</option>
@@ -50,18 +50,18 @@
                         <option value="4" {{ old('asunto') == "4" ? 'selected' : '' }}>Cuenta</option>
                         <option value="5" {{ old('asunto') == "5" ? 'selected' : '' }}>Otros</option>
                     </select>
-                    @error('asunto')
+                    @error('subject')
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="mensaje" class="form-label color-adaptativo">Mensaje *</label>
-                    <textarea class="form-control" id="mensaje" maxlength="500" name="mensaje" rows="4" placeholder="Escribe tu consulta aquí...">{{ old('mensaje') }}</textarea>
+                    <textarea class="form-control" id="mensaje" maxlength="500" name="message" rows="4" placeholder="Escribe tu consulta aquí...">{{ old('mensaje') }}</textarea>
                     <div id="contador" style="text-align: right; font-size: 0.9em; color: #666;">
                         0 / 500 caracteres
                     </div>
-                    @error('mensaje')
+                    @error('menssage')
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>

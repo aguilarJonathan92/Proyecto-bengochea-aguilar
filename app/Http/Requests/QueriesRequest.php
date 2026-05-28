@@ -25,24 +25,24 @@ class QueriesRequest extends FormRequest
     {
 
         return [
-            'nombre' => ['required','string','max:255'],
+            'name' => ['required','string','max:255'],
             'email' => ['required', 'email'],
-            'asunto' => ['required'],
-            'mensaje' =>['required','string','min:10','max:500']
+            'subject' => ['required'],
+            'message' =>['required','string','min:10','max:500']
         ];
     }
     #[Override]
     public function messages(): array
     {
         return [
-            'nombre.required' => 'Debe ingresar su nombre.',
-            'nombre.max' => 'Se admiten 255 caracteres como máximo.',
+            'name.required' => 'Debe ingresar su nombre.',
+            'name.max' => 'Se admiten 255 caracteres como máximo.',
             'email.email' => 'Se requiere un email válido.',
             'email.required' => 'Debe ingresar un e-mail de contacto.',
-            'asunto.required'=> 'Debe seleccionar un asunto.',
-            'mensaje.min' => 'El mensaje es muy breve.',
-            'mensaje.max' => 'Se admiten 500 caracteres como máximo.',
-            'mensaje.required' => 'Debe escribir un mensaje.'
+            'subject.required'=> 'Debe seleccionar un asunto.',
+            'message.min' => 'El mensaje es muy breve.',
+            'message.max' => 'Se admiten 500 caracteres como máximo.',
+            'message.required' => 'Debe escribir un mensaje.'
         ];
     }
 }

@@ -8,11 +8,11 @@ use Illuminate\Auth\Access\Response;
 class UserPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Determine whether the user can view any models. (Solo el admin puede ver todos los usuarios)
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->role->name === 'admin';
     }
 
     /**
@@ -20,11 +20,12 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return false;
+        return $user->role->name === 'admin';
     }
 
     /**
      * Determine whether the user can create models.
+     * en true para que los clientes puedan registrarse en la web pública.
      */
     public function create(User $user): bool
     {
@@ -34,9 +35,16 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      */
-   public function update(User $user, User $model): bool //Recibe al usuario autenticado $user y el que se intenta editar $model
+    public function update(User $user, User $model): bool
     {
-        return $user->role_id === $model->role_id && $user->role->name != 'admin'; // El admin no puede editar el perfil de un usuario
+        // 1. Si el usuario que intenta editar no es administrador, se le niega el acceso al panel
+        if ($user->role->name !== 'admin') {
+            return false;
+        }
+
+        // 2. Si es administrador, se le permite abrir el formulario.
+        // Las restricciones de nombre, apellido y correo ya las maneja el UserForm con ->disabled()
+        return true;
     }
 
     /**
@@ -44,7 +52,8 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return false;
+        //El administrador puede eliminar usuarios, excepto a sí mismo para no perder el acceso
+        return $user->role->name === 'admin' && $user->id !== $model->id;
     }
 
     /**

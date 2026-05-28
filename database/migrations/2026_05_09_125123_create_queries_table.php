@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('queries', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
+            $table->string('name');
             $table->string('email');
-            $table->integer('asunto'); // Aquí guardaremos la opción del select
-            $table->text('mensaje'); // Usamos text para permitir hasta 500 caracteres
+            $table->integer('subject'); // Aquí guardaremos la opción del select
+            $table->text('message'); // Usamos text para permitir hasta 500 caracteres
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
