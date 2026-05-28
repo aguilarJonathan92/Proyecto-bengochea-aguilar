@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout>
     <x-slot name='title'>Mi Perfil — {{ auth()->user()->first_name }}</x-slot>
  
     <div class="container py-5" id="perfil-app" data-tiene-errores="{{ $errors->any() ? 'true' : 'false' }}">
@@ -262,5 +262,5 @@
         const direccionesIniciales = @json($user->addresses()->with('city.province')->get());
     </script>
     <script src="{{ asset('js/activar-editar.js') }}"></script>
-</x-layout>
+</x-layouts.layout>
  

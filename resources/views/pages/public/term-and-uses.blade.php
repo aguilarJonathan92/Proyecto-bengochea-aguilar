@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout>
     <x-slot name="title">Términos</x-slot>
     <div class="container p-2 p-md-4 px-lg-5">
         {{-- Quitamos text-light para que el color de texto sea dinámico --}}
@@ -46,4 +46,4 @@
             </div>
         </div>
     </div>
-</x-layout>
+</x-layouts.layout>

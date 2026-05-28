@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout>
     <x-slot name="title">Acerca De</x-slot>
 
     <div class="container p-2 p-md-4 px-lg-5">
@@ -82,4 +82,4 @@
             </div>
         </div>
     </div>
-</x-layout>
+</x-layouts.layout>

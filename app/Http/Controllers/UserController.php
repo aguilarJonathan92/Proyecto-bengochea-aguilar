@@ -17,7 +17,7 @@ class UserController extends Controller
 
         $provincias = Province::orderBy('name')->get(); // Traemos todas las provincias para el primer select
 
-        return view('pages.user-panel', compact('user', 'provincias'));
+        return view('pages.private.user-panel', compact('user', 'provincias'));
     }
 
     public function update(Request $request){

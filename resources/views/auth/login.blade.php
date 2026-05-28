@@ -1,4 +1,4 @@
-<x-auth>
+<x-layouts.auth>
     <x-slot name="title">Iniciar Sesión</x-slot>
 
     <div class="auth-card">
@@ -61,4 +61,4 @@
         </div>
     </div>
     <script src="{{ asset('js/show-pass.js') }}"></script>
-</x-auth>
+</x-layouts.auth>

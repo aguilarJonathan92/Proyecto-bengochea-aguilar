@@ -15,31 +15,26 @@ class MainController extends Controller
         $mas_vistos   = Product::query()->inRandomOrder('')->take(4)->get();
 
         // Verifica que los nombres en compact coincidan exactamente con las variables
-        return view('pages.home', compact('ofertas_home', 'novedades', 'mas_vistos'));
+        return view('pages.public.home', compact('ofertas_home', 'novedades', 'mas_vistos'));
     }
 
     public function terms()
     {
-        return view('pages.term-and-uses');
+        return view('pages.public.term-and-uses');
     }
 
     public function about()
     {
-        return view('pages.about');
+        return view('pages.public.about');
     }
 
     public function marketing()
     {
-        return view('pages.marketing');
+        return view('pages.public.marketing');
     }
 
     public function contact()
     {
-        return view('pages.contact');
-    }
-
-    public function userPanel()
-    {
-        return view('pages.user-panel');
+        return view('pages.public.contact');
     }
 }

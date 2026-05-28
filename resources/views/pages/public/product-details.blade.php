@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout>
     <x-slot name='title'>{{ $product->title }}</x-slot>
     <div class="container py-5">
         {{-- Navegación superior adaptativa --}}
@@ -171,4 +171,4 @@
             thumbnail.parentElement.classList.add('active');
         }
     </script>
-</x-layout>
+</x-layouts.layout>

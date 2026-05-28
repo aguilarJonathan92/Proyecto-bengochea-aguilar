@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout>
     <x-slot name="title">Consultas</x-slot>
     <div class="container p-2 p-md-4 px-lg-5">
         {{-- Eliminamos text-light para que herede var(--color-texto) --}}
@@ -73,4 +73,4 @@
         </div>
     </div>
 <script src="{{ asset('js/text-area.js') }}"></script>
-</x-layout>
+</x-layouts.layout>

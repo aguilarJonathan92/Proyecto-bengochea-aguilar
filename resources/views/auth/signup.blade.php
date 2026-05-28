@@ -1,4 +1,4 @@
-<x-auth>
+<x-layouts.auth>
     <x-slot name="title">Registro</x-slot>
 
     <div class="auth-card">
@@ -89,4 +89,4 @@
         </div>
     </div>
     <script src="{{ asset('js/show-pass-signup.js') }}"></script>
-</x-auth>
+</x-layouts.auth>

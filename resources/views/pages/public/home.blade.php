@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout>
     <x-slot name="title">Principal</x-slot>
     @if (session('success'))
         <div class="alert alert-success border-0 shadow-sm text-center">{{ session('success') }}</div>
@@ -62,4 +62,4 @@
         </div>
     @endforeach
 
-</x-layout>
+</x-layouts.layout>

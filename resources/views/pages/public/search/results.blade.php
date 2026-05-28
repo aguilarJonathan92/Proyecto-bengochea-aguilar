@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout>
     <x-slot name="title">Búsqueda</x-slot>
     <div class="container my-5">
         <h2 class="mb-3 text-muted">Resultados para: "{{ $query }}" 🔍 </h2>
@@ -29,4 +29,4 @@
         @endif
     </div>
     {{-- Paginación {{ $results->links() }} --}}
-</x-layout>
+</x-layouts.layout>

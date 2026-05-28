@@ -50,6 +50,6 @@ class SearchController extends Controller
         // Paginación normal para vista completa
         $results = $resultsQuery->paginate(12)->appends(['query' => $query]);
 
-        return view('search.results', compact('results', 'query'));
+        return view('pages.public.search.results', compact('results', 'query'));
     }
 }

@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout>
     <x-slot name='title'>¡Pedido Recibido! — #{{ $order->id }}</x-slot>
 
     <div class="container py-5">
@@ -75,4 +75,4 @@
             </div>
         </div>
     </div>
-</x-layout>
+</x-layouts.layout>

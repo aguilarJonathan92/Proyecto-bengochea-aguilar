@@ -9,7 +9,7 @@ use App\Models\Query;
 class QueriesController extends Controller
 {
     public function create(){
-        return view('pages.queries');
+        return view('pages.public.queries');
     }
     public function store(QueriesRequest $request){
         $datos = $request->validated();

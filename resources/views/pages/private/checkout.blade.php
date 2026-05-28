@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout>
     <x-slot name='title'>Finalizar Compra</x-slot>
     <div class="container py-5">
         <div class="mb-4 animate__animated animate__fadeIn">
@@ -184,4 +184,4 @@
         </div>
     </div>
     <script src="{{ asset('js/checkout-direcciones.js') }}"></script>
-</x-layout>
+</x-layouts.layout>

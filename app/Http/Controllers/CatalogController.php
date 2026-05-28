@@ -32,7 +32,7 @@ class CatalogController extends Controller
         $products = $query->get();
         $categoria = $categoriaId;
 
-        return view('pages.catalog', compact('products', 'tituloCategoria', 'categoria'));
+        return view('pages.public.catalog', compact('products', 'tituloCategoria', 'categoria'));
     }
 
     public function details(int $id)
@@ -44,6 +44,6 @@ class CatalogController extends Controller
         // No hace falta calcular el final_price aquí,
         // lo invocas directamente en la vista con $product->final_price
 
-        return view('pages.product-details', compact('product'));
+        return view('pages.public.product-details', compact('product'));
     }
 }

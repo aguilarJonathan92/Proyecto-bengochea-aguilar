@@ -1,4 +1,4 @@
-<x-layout>
+<x-layouts.layout>
     <x-slot name="title">Catálogo - {{ $tituloCategoria }}</x-slot>
     <div class="container pt-2 pb-4">
 
@@ -29,4 +29,4 @@
             @endforelse
         </div>
     </div>
-</x-layout>
+</x-layouts.layout>

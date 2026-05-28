@@ -29,7 +29,7 @@ class CheckoutController extends Controller
         // Cargamos todas las provincias por si quiere agregar una nueva dirección en el momento
         $provincias = Province::orderBy('name')->get();
         // Retornamos la vista checkout.blade.php pasándole el carrito
-        return view('pages.checkout', compact('cart', 'direcciones', 'provincias'));
+        return view('pages.private.checkout', compact('cart', 'direcciones', 'provincias'));
     }
 
     public function store(Request $request){
@@ -165,6 +165,6 @@ class CheckoutController extends Controller
             abort(403, 'No tienes permiso para ver este pedido.');
         }
 
-        return view('pages.order-success', compact('order'));
+        return view('pages.private.order-success', compact('order'));
     }
 }
