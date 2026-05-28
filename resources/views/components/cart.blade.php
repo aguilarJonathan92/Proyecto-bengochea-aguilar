@@ -97,10 +97,10 @@
                         class="btn-brand text-uppercase py-3 text-decoration-none text-center">
                         Iniciar Compra
                     </a>
-                    <button class="btn btn-link text-muted-adaptativo text-decoration-none text-uppercase"
-                        data-bs-dismiss="offcanvas" style="font-size: 0.8rem;">
+                    <a href="{{ route('catalog') }}" class="btn btn-link text-muted-adaptativo text-decoration-none text-uppercase"
+                    style="font-size: 0.8rem;">
                         Continuar comprando
-                    </button>
+                    </a>
                 </div>
             </div>
         @else
@@ -108,9 +108,9 @@
             <div class="text-center py-5">
                 <i class="bi bi-cart-x text-muted" style="font-size: 3rem;"></i>
                 <p class="mt-3 text-muted-adaptativo">No tienes productos en tu carrito de compras.</p>
-                <button class="btn btn-outline-secondary btn-sm mt-2" data-bs-dismiss="offcanvas">
-                    Ir a la tienda
-                </button>
+                <a href="{{ route('catalog') }}" class="btn btn-outline-secondary btn-sm mt-2">
+                    Ir a tienda
+                </a>
             </div>
         @endif
     </div>
