@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\Province;
+use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,13 +21,13 @@ class CheckoutController extends Controller
         if (!$cart || $cart->items->isEmpty()) {
             return redirect()->route('catalog')->with('error', 'Tu carrito está vacío. Añade productos antes de finalizar la compra.');
         }
-
-        $direcciones = \App\Models\UserAddress::where('user_id', $request->user()->id)
+        //Quite la ruta completa /App/Models/UserAddress
+        $direcciones = UserAddress::where('user_id', $request->user()->id)
         ->with('city.province')
         ->get();
-        
+
         // Cargamos todas las provincias por si quiere agregar una nueva dirección en el momento
-        $provincias = \App\Models\Province::orderBy('name')->get();
+        $provincias = Province::orderBy('name')->get();
         // Retornamos la vista checkout.blade.php pasándole el carrito
         return view('pages.checkout', compact('cart', 'direcciones', 'provincias'));
     }
@@ -45,7 +47,7 @@ class CheckoutController extends Controller
         ]);
 
         $user = $request->user();
-    
+
         // Variables donde guardaremos la info final del envío
         $calleEnvio = '';
         $cpEnvio = '';
@@ -67,7 +69,7 @@ class CheckoutController extends Controller
         } else {
             // 2. Eligió una dirección existente: Buscamos el registro
             $direccionExistente = $user->addresses()->findOrFail($request->user_address_id);
-            
+
             $calleEnvio    = $direccionExistente->street;
             $cpEnvio       = $direccionExistente->postal_code;
             $ciudadEnvioId = $direccionExistente->city_id;
@@ -118,7 +120,7 @@ class CheckoutController extends Controller
                 'user_id'              => $request->user()->id,
                 'total'                => $subtotal,
                 'payment_method'       => $request->paymentMethod,
-                'status'               => 'en proceso', 
+                'status'               => 'en proceso',
                 'customer_name'        => $request->customer_name,
                 'customer_lastname'    => $request->customer_lastname,
                 'customer_email'       => $request->customer_email,
@@ -152,7 +154,7 @@ class CheckoutController extends Controller
             return redirect()->back()->with('error', 'Ocurrió un error al procesar tu pedido: ' . $e->getMessage());
         }
     }
-    
+
         /**
      * Muestra la pantalla de éxito tras finalizar un pedido.
      */
