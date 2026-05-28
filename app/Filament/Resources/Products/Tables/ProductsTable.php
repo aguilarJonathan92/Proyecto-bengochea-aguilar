@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\Products\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\RestoreAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -13,6 +15,7 @@ use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Filters\TrashedFilter;
 use Illuminate\Support\Facades\Storage;
 
 class ProductsTable
@@ -107,11 +110,23 @@ class ProductsTable
                 TernaryFilter::make('active')
                     ->label('Disponibilidad')
                     ->boolean(),
+
+                //FILTRO ELIMINADOS
+                TrashedFilter::make(),
             ])
 
             ->recordActions([
-                EditAction::make(),
+                // Esta acción se mostrará/ejecutará SOLO si el producto NO está eliminado
+                EditAction::make()
+                    ->visible(fn($record) => ! $record->trashed()),
+
+                // Esta acción se mostrará/ejecutará SOLO si el producto SÍ está eliminado
+                RestoreAction::make()
+                    ->visible(fn($record) => $record->trashed()),
+                DeleteAction::make()
+                    ->visible(fn($record) => !$record->trashed())
             ])
+
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
