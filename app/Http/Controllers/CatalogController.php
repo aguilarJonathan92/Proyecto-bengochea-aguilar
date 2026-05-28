@@ -28,7 +28,7 @@ class CatalogController extends Controller
             $query->where('category_id', $categoriaId);
         }
 
-        // 5. Traemos los productos (recomiendo cambiar get() por paginate(12) en el futuro)
+        // 5. Traemos los productos ( get() o paginate(12))
         $products = $query->get();
         $categoria = $categoriaId;
 
