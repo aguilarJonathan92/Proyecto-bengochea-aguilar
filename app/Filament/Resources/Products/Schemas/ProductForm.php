@@ -172,33 +172,29 @@ class ProductForm
                         FileUpload::make('image_1')
                             ->label('Imagen Principal')
                             ->image()
-                            //Si no hay registro, la hago obligatoria
-                            //->required(fn($record) => $record === null)
-                            // Modificación aquí: Obligatorio si es nuevo, y no permite dejarlo vacío si se edita
                             ->required()
-                            ->maxSize(2048) //Seteando un tamaño máximo permitido
+                            ->maxSize(2048)
                             ->disk('public')
-                            ->directory('products/images') // Se guardará en products/images/ del storage/app
+                            ->directory('products/images')
                             ->visibility('public')
-                            ->preserveFilenames() // Opcional: mantiene el nombre original del archivo
+                            ->preserveFilenames()
                             ->imageEditor()
-                            // Forzamos el borrado del archivo viejo al subir uno nuevo
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
-                                // 1. Si estamos editando y ya existía una imagen previa...
+                                // Limpieza de image_1
                                 if ($record && $record->image_1) {
-                                    // ...la borramos físicamente del disco
                                     if (Storage::disk('public')->exists($record->image_1)) {
                                         Storage::disk('public')->delete($record->image_1);
                                     }
                                 }
-
-                                // 2. Guardamos el nuevo archivo manteniendo configuración
-                                return $file->storeAs(
-                                    'products/images',
-                                    $file->getClientOriginalName(), // Mantiene el nombre original solicitado en preserveFileNames()
-                                    'public'
-                                );
+                                return $file->storeAs('products/images', $file->getClientOriginalName(), 'public');
+                            })
+                            ->getUploadedFileNameForRemovalUsing(function ($state) {
+                                // No borramos el archivo físicamente aquí por seguridad.
+                                // Solo retornamos null para que Filament entienda que el usuario quitó el archivo de la vista
+                                // y lo obligue a subir uno nuevo (ya que el campo es ->required()).
+                                return null;
                             }),
+
                         FileUpload::make('image_2')
                             ->label('Imagen Extra')
                             ->image()
@@ -207,7 +203,22 @@ class ProductForm
                             ->directory('products/images')
                             ->visibility('public')
                             ->preserveFilenames()
-                            ->imageEditor(),
+                            ->imageEditor()
+                            ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
+                                if ($record && $record->image_2) {
+                                    if (Storage::disk('public')->exists($record->image_2)) {
+                                        Storage::disk('public')->delete($record->image_2);
+                                    }
+                                }
+                                return $file->storeAs('products/images', $file->getClientOriginalName(), 'public');
+                            })
+                            ->getUploadedFileNameForRemovalUsing(function ($state) {
+                                // Esto elimina físicamente el archivo del disco cuando se presiona la papelera 'x'
+                                if ($state) {
+                                    Storage::disk('public')->delete($state);
+                                }
+                                return null;
+                            }),
 
                         FileUpload::make('image_3')
                             ->label('Imagen Extra 2')
@@ -217,7 +228,23 @@ class ProductForm
                             ->directory('products/images')
                             ->visibility('public')
                             ->preserveFilenames()
-                            ->imageEditor(),
+                            ->imageEditor()
+                            ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
+                                // Limpieza de image_3
+                                if ($record && $record->image_3) {
+                                    if (Storage::disk('public')->exists($record->image_3)) {
+                                        Storage::disk('public')->delete($record->image_3);
+                                    }
+                                }
+                                return $file->storeAs('products/images', $file->getClientOriginalName(), 'public');
+                            })
+                            ->getUploadedFileNameForRemovalUsing(function ($state) {
+                                // Esto elimina físicamente el archivo del disco cuando se presiona la papelera 'x'
+                                if ($state) {
+                                    Storage::disk('public')->delete($state);
+                                }
+                                return null;
+                            }),
                     ])->columns(3),
 
                 // SECCIÓN 4: Especificaciones técnicas (JSON)
