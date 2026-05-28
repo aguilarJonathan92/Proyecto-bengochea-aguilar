@@ -33,7 +33,7 @@ class AuthController extends Controller
             'title' => '!Hecho!',
             'text' => '¡La cuenta ha sido creada'
         ]);
-        return redirect()->back()->with('success', 'Se ha creado la cuenta de usuario exitosamente');
+        return redirect()->route('login')->with('success', 'Se ha creado la cuenta de usuario exitosamente');
     }
 
     //FUNCIONES ASOCIADAS AL LOGIN
