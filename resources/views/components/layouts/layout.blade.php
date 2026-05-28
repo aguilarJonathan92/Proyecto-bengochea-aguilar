@@ -53,12 +53,23 @@
     <x-navbar />
 
     <main class="grow">
+        {{-- ALERTA TRADICIONAL DEL SISTEMA (Login, Logout, etc.) --}}
+        @if(session('system_success') || session('system_error'))
+            <div class="alert {{ session('system_success') ? 'alert-success' : 'alert-danger' }} alert-dismissible fade show border-0 rounded-0 text-center shadow-sm mb-0 animate__animated animate__fadeIn" role="alert">
+                <i class="bi {{ session('system_success') ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill' }} me-2"></i>
+                {{ session('system_success') ?? session('system_error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         {{ $slot }}
     </main>
 
     <x-cart />
     <x-footer />
-    @include('sweetalert2::index')
+    {{-- EVALUA SI DISPARAR SWEETALERT DE CARGA --}}
+    @if(session('swal_success') || session('swal_error'))
+        @include('sweetalert2::index')
+    @endif
     <script src="{{ asset('js/theme-toggle.js') }}"></script>
     <script src="{{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/search.js') }}"></script>

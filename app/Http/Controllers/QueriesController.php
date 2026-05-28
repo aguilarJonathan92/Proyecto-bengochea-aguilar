@@ -11,6 +11,7 @@ class QueriesController extends Controller
     public function create(){
         return view('pages.public.queries');
     }
+    
     public function store(QueriesRequest $request){
         $datos = $request->validated();
         Query::create($datos);
@@ -18,6 +19,6 @@ class QueriesController extends Controller
             'title' => '!Hecho!',
             'text' => '¡La consulta se ha procesado correctamente!'
         ]);
-        return redirect()->back()->with('success', '¡Recibido! Nos pondremos en contacto a la brevedad.');
+        return redirect()->back()->with('swal_success', '¡Recibido! Nos pondremos en contacto a la brevedad.');
     }
 }

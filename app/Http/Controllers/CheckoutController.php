@@ -19,7 +19,7 @@ class CheckoutController extends Controller
 
         // Si el carrito no existe o no tiene productos, lo mandamos de vuelta al catálogo
         if (!$cart || $cart->items->isEmpty()) {
-            return redirect()->route('catalog')->with('error', 'Tu carrito está vacío. Añade productos antes de finalizar la compra.');
+            return redirect()->route('catalog')->with('swal_error', 'Tu carrito está vacío. Añade productos antes de finalizar la compra.');
         }
         //Quite la ruta completa /App/Models/UserAddress
         $direcciones = UserAddress::where('user_id', $request->user()->id)
@@ -78,7 +78,7 @@ class CheckoutController extends Controller
         $cart = $request->user()->cart()->with('items.product')->first();
 
         if (!$cart || $cart->items->isEmpty()) {
-            return redirect()->route('catalog')->with('error', 'No se pudo procesar la compra porque tu carrito está vacío.');
+            return redirect()->route('catalog')->with('swal_error', 'No se pudo procesar la compra porque tu carrito está vacío.');
         }
 
         // 2. Usamos una Transacción de Base de Datos para asegurarnos de que se guarde TODO o NADA.
@@ -95,7 +95,7 @@ class CheckoutController extends Controller
 
                 // Control de Stock
                 if ($product->stock < $item->quantity) {
-                    return redirect()->back()->with('error', "Lo sentimos, no hay suficiente stock disponible para: {$product->title}. (Stock actual: {$product->stock})");
+                    return redirect()->back()->with('swal_error', "Lo sentimos, no hay suficiente stock disponible para: {$product->title}. (Stock actual: {$product->stock})");
                 }
 
                 // Calcular el precio real (usando tu accesor final_price)
@@ -151,7 +151,7 @@ class CheckoutController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack(); // Si algo falló, deshacemos todos los cambios para no corromper datos
-            return redirect()->back()->with('error', 'Ocurrió un error al procesar tu pedido: ' . $e->getMessage());
+            return redirect()->back()->with('swal_error', 'Ocurrió un error al procesar tu pedido: ' . $e->getMessage());
         }
     }
 

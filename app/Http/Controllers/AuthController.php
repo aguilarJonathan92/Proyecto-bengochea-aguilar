@@ -18,6 +18,7 @@ class AuthController extends Controller
     {
         return view('auth.signup');
     }
+
     public function store(SignUpRequest $request)
     {
 
@@ -33,7 +34,7 @@ class AuthController extends Controller
             'title' => '!Hecho!',
             'text' => '¡La cuenta ha sido creada'
         ]);
-        return redirect()->route('login')->with('success', 'Se ha creado la cuenta de usuario exitosamente');
+        return redirect()->route('login')->with('swal_success', 'Se ha creado la cuenta de usuario exitosamente');
     }
 
     //FUNCIONES ASOCIADAS AL LOGIN
@@ -57,11 +58,11 @@ class AuthController extends Controller
             // 2. Si es Cliente, forzamos la ruta y LIMPIAMOS la intención previa
             if ($user->role_id === 2) {
                 $request->session()->forget('url.intended'); // <--- Esto evita el error 403
-                return redirect('/');
+                return redirect('/')->with('system_success', '¡Bienvenido! Has iniciado sesión correctamente.');;
             }
 
             // 3. Fallback para otros casos (dejo esto por ahora, parece que no es necesario)
-            return redirect('/');
+            return redirect('/')->with('system_success', '¡Bienvenido! Has iniciado sesión correctamente.');;
         }
 
         return back()->withErrors(['email' => 'Credenciales incorrectas.']);
@@ -78,6 +79,6 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         // 4. Redirigimos a la página principal o al login
-        return redirect()->route('home')->with('success', 'Sesión cerrada correctamente.');
+        return redirect()->route('home')->with('system_success', 'Sesión cerrada correctamente.');
     }
 }
