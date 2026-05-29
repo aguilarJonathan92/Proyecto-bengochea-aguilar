@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use App\Models\User;
-use App\Http\Requests\UserRequest; // 1. Importamos tu UserRequest
+use App\Http\Requests\UserRequest; // Importado UserRequest
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
@@ -14,8 +14,8 @@ class UserForm
 {
     public static function configure(Schema $schema): Schema
     {
-        // 2. Instanciamos el Request para extraer el array de reglas base.
-        // Pasamos null a la ruta para evitar errores ya que aquí no estamos en un controlador HTTP clásico.
+        // Instancia del Request para extraer el array de reglas base.
+
         $requestRules = (new UserRequest())->rules();
 
         return $schema
@@ -24,7 +24,7 @@ class UserForm
                     ->label('Apellido/s')
                     ->required()
                     ->string()
-                    ->rules($requestRules['last_name']) // 3. Acoplamos la regla del Request
+                    ->rules($requestRules['last_name']) // Regla del Request
                     ->disabled(fn($record) => $record !== null && Filament::auth()->id() !== $record->id)
                     ->dehydrated(fn($record) => $record === null || Filament::auth()->id() === $record->id)
                     ->maxLength(255),
@@ -33,7 +33,7 @@ class UserForm
                     ->label('Nombre/s')
                     ->required()
                     ->string()
-                    ->rules($requestRules['first_name']) // Acoplamos la regla del Request
+                    ->rules($requestRules['first_name']) // Regla del Request
                     ->disabled(fn($record) => $record !== null && Filament::auth()->id() !== $record->id)
                     ->dehydrated(fn($record) => $record === null || Filament::auth()->id() === $record->id)
                     ->maxLength(255),
@@ -46,7 +46,7 @@ class UserForm
                     ->maxLength(255)
                     ->disabled(fn($record) => $record !== null && Filament::auth()->id() !== $record->id)
                     ->dehydrated(fn($record) => $record === null || Filament::auth()->id() === $record->id)
-                    // Mantenemos tu lógica única nativa de Filament que es excelente ignorando el registro actual
+                    // Lógica de Filament para ignorar el registro actual
                     ->unique(table: 'users', column: 'email', ignoreRecord: true),
 
                 DateTimePicker::make('email_verified_at')
@@ -58,7 +58,7 @@ class UserForm
                     ->relationship('role', 'name')
                     ->required()
                     ->preload()
-                    ->rules($requestRules['role_id']) // Asegura que se valide contra 'exists:roles,id'
+                    ->rules($requestRules['role_id']) // Regla del Request. Asegura que se valide contra 'exists:roles,id'
                     ->disabled(fn($record): bool => $record !== null && Filament::auth()->id() === $record->id)
                     ->dehydrated(fn($state) => filled($state)),
 
@@ -69,8 +69,7 @@ class UserForm
                     ->string()
                     ->minLength(8)
                     ->confirmed()
-                    // Reemplazamos la regla plana por el objeto Password::defaults() que viene de tu Request
-                    ->rules($requestRules['password'])
+                    ->rules($requestRules['password']) // Regla del Request
                     ->dehydrated(fn($state) => filled($state)),
 
                 // Campo espejo obligatorio para la regla 'confirmed'
