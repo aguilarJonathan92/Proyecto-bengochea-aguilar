@@ -1,5 +1,6 @@
 <nav class="navbar navbar-expand-lg border-bottom nav-custom">
-    <div class="container-fluid d-flex flex-row align-items-center justify-content-between flex-nowrap">
+    {{-- Agregamos flex-wrap para permitir el salto en móvil, y flex-lg-nowrap para mantenerlo rígido en PC --}}
+    <div class="container-fluid d-flex flex-row align-items-center justify-content-between flex-wrap flex-lg-nowrap">
 
         {{-- Buscador Móvil (Contenedor ajustado) --}}
         <div class="d-flex d-lg-none flex-grow-1 pe-2 position-relative" style="min-width: 0;">
@@ -24,6 +25,7 @@
         </button>
 
         {{-- Menú Desplegable --}}
+        {{-- En móvil (w-100) ocupará toda la línea inferior. En PC vuelve a su comportamiento por defecto --}}
         <div class="collapse navbar-collapse w-100" id="navbarNavDropdown">
             <ul class="navbar-nav mx-auto py-2 text-center">
                 <li class="nav-item">
