@@ -24,7 +24,8 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         // Solo el role_id 1 tiene permiso de entrar a /admin
-        return $this->role && $this->role->name === 'admin';
+        // Si role es null, devuelve false automáticamente sin lanzar errores
+        return $this->role?->name === 'admin';
     }
     /**
      * Get the attributes that should be cast.
@@ -45,22 +46,26 @@ class User extends Authenticatable implements FilamentUser
     }
 
     //un usuario tiene un perfil
-    public function profile(){
+    public function profile()
+    {
         return $this->hasOne(UserProfile::class);
     }
-    
+
     // Un usuario puede tener muchas direcciones
-    public function addresses(){
+    public function addresses()
+    {
         return $this->hasMany(UserAddress::class, 'user_id');
     }
 
     //Un usuario se relaciona con un carrito
-    public function cart(){
+    public function cart()
+    {
         return $this->hasOne(Cart::class);
     }
 
     //Un usuario puede tener muchas ordenes (falta el modelo)
-    public function orders(){
+    public function orders()
+    {
         return $this->hasMany(Order::class);
     }
 

@@ -9,18 +9,13 @@ use App\Filament\Resources\Products\Schemas\ProductForm;
 use App\Filament\Resources\Products\Tables\ProductsTable;
 use App\Models\Product;
 use BackedEnum;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope; // 1. Importamos el Scope de Soft Deletes
 
 class ProductResource extends Resource
 {
@@ -57,23 +52,27 @@ class ProductResource extends Resource
         ];
     }
 
-    //Función para ignorar el active = false,asi aquí si se pueden visualizar productos desactivados
+    //Scopes globales: el del modelo y el que permite ver detalles de productos borrados sin tirar 404
     public static function getEloquentQuery(): Builder
     {
-        // Esto desactiva el alcance global "active" solo en Filament
-        return parent::getEloquentQuery()->withoutGlobalScope('active');
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                'active',                 // Mi lógica de ignorar productos desactivados (solo en filament admin)
+                SoftDeletingScope::class, // Suma el soporte para poder ver/editar productos eliminados con Soft Delete
+            ]);
     }
 
-    // Define qué campos se usan para la búsqueda global en la barra superior
+    // Campos que se usarán para la búsqueda global en la barra superior
     public static function getGloballySearchableAttributes(): array
     {
         return ['title', 'subtitle', 'description'];
     }
-    // Personaliza lo que se ve en el resultado de búsqueda global
+
+    // Personalización de lo que se ve en el resultado de búsqueda global
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Categoría' => $record->category->name,
+            'Categoría' => $record->category?->name ?? 'Sin categoría', // Agregado null-safe por si la categoría fue eliminada
             'Precio' => '$' . number_format($record->price, 2),
         ];
     }

@@ -13,13 +13,18 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder; // Importante para el query global
+use Illuminate\Database\Eloquent\SoftDeletingScope; // Importante para Soft Deletes
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $recordTitleAttribute = 'last_name'; //Para el buscador
+    //
+    // Como 'name' es el accesor (last_name + first_name), Filament lo entiende para títulos de registros globales.
+    protected static ?string $recordTitleAttribute = 'name';
 
+    // Rectángulos
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
@@ -48,7 +53,15 @@ class UserResource extends Resource
         ];
     }
 
-
+    // Soporte nativo para Soft Deletes en las consultas globales de Filament
+    // Esto permite que el panel pueda leer, editar o restaurar usuarios eliminados correctamente.
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
 
     // Nombre en la barra lateral
     protected static ?string $navigationLabel = 'Usuarios';
