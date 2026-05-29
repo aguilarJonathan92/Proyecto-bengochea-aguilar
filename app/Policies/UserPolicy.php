@@ -3,28 +3,32 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
+    //Afecta a filament. A otro controlador solo si explicitamente es llamado con $this->authorize('update', $user); por ej.
+    //o con el método can de usuario autenticado o el middleware can en las rutas.
+    // $user es el que está logueado manipulando datos
+    // $model es sobre la fila que se está trabajando
     /**
-     * Determine whether the user can view any models. (Solo el admin puede ver todos los usuarios)
+     * Determina cuando el usuario puede ver todos los modelos. (Solo el admin puede ver todos los usuarios)
      */
     public function viewAny(User $user): bool
     {
-        return $user->role->name === 'admin';
+        return $user->role?->name === 'admin';
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determina quien puede ver el modelo
      */
     public function view(User $user, User $model): bool
     {
-        return $user->role->name === 'admin';
+        //con ? me aseguro de no romper el código por si en pruebas creo un user sin rol. (entonces null === 'admin' da false)
+        return $user->role?->name === 'admin'; // Al estar restringido al rol 'admin', ningún cliente externo podría adivinar la URL e intentar espiar los datos privados de otro usuario.
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determina en que casos puede crearse el modelo
      * en true para que los clientes puedan registrarse en la web pública.
      */
     public function create(User $user): bool
@@ -33,12 +37,12 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determina cuando el usuario puede actualizar el modelo
      */
     public function update(User $user, User $model): bool
     {
         // 1. Si el usuario que intenta editar no es administrador, se le niega el acceso al panel
-        if ($user->role->name !== 'admin') {
+        if ($user->role?->name !== 'admin') {
             return false;
         }
 
@@ -48,24 +52,24 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determina cuando el usuario puede eliminar el modelo
      */
     public function delete(User $user, User $model): bool
     {
         //El administrador puede eliminar usuarios, excepto a sí mismo para no perder el acceso
-        return $user->role->name === 'admin' && $user->id !== $model->id;
+        return $user->role?->name === 'admin' && $user->id !== $model->id;
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determina cuando el usuario puede restaurar el modelo
      */
     public function restore(User $user, User $model): bool
     {
-        return false;
+        return $user->role?->name === 'admin'; // PARA PROBAR RESTAURAR USUARIO DESDE PANEL ADMIN
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determina el borrado permanente del modelo
      */
     public function forceDelete(User $user, User $model): bool
     {

@@ -2,8 +2,11 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\RestoreAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter; // Filtro de Soft Deletes
 use Filament\Tables\Table;
 
 class UsersTable
@@ -47,18 +50,20 @@ class UsersTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                // Al usar SoftDeletes en el modelo User, este filtro permite al admin
+                // alternar entre usuarios activos, eliminados o ver todos.
+                TrashedFilter::make(),
             ])
             ->recordActions([
-                EditAction::make(),
-            ])
+                // Esta acción se mostrará/ejecutará SOLO si el usuario NO está eliminado
+                EditAction::make()
+                    ->visible(fn($record) => !$record->trashed()),
 
-            // 🟢 Corregido el método nativo para el manejo de acciones por lote / toolbar
-            // Quitada la opción de borrar en grupo: ignora la política de usuario
-            ->bulkActions([
-                /* \Filament\Tables\Actions\BulkActionGroup::make([
-                    \Filament\Tables\Actions\DeleteBulkAction::make(),
-                ]), */
+                // Esta acción se mostrará/ejecutará SOLO si el usuario SÍ está eliminado
+                RestoreAction::make()
+                    ->visible(fn($record) => $record->trashed()),
+                DeleteAction::make()
+                    ->visible(fn($record) => !$record->trashed())
             ]);
     }
 }

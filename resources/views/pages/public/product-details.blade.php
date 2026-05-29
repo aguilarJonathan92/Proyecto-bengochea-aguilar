@@ -23,19 +23,19 @@
                         <div class="d-flex flex-column gap-2">
                             @if ($product->image_1)
                                 <div class="thumb-container active">
-                                    <img onclick="changeMainImage(this)" src="{{ Storage::url($product->image_1) }}"
+                                    <img onclick="changeMainImage(this)" src="{{ asset('storage/' . $product->image_1) }}"
                                         class="img-fluid">
                                 </div>
                             @endif
                             @if ($product->image_2)
                                 <div class="thumb-container">
-                                    <img onclick="changeMainImage(this)" src="{{ Storage::url($product->image_2) }}"
+                                    <img onclick="changeMainImage(this)" src="{{ asset('storage/' . $product->image_2) }}"
                                         class="img-fluid">
                                 </div>
                             @endif
                             @if ($product->image_3)
                                 <div class="thumb-container">
-                                    <img onclick="changeMainImage(this)" src="{{ Storage::url($product->image_3) }}"
+                                    <img onclick="changeMainImage(this)" src="{{ asset('storage/' . $product->image_3) }}"
                                         class="img-fluid">
                                 </div>
                             @endif
@@ -44,7 +44,7 @@
 
                     <div class="col-10">
                         <div class="product-main-image-card p-3 shadow-lg">
-                            <img id="mainImage" src="{{ Storage::url($product->image_1) }}" class="img-fluid w-100 rounded"
+                            <img id="mainImage" src="{{ asset('storage/' . $product->image_1) }}" class="img-fluid w-100 rounded"
                                 alt="Imagen principal">
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <input type="hidden" name="quantity" value="1"> {{-- Por ahora fijo en 1 --}}
-                            
+
                             <button type="submit" class="btn-add-cart text-uppercase py-3 w-100">
                                 Añadir al Carrito
                             </button>
