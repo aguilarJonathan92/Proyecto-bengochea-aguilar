@@ -180,18 +180,15 @@ class ProductForm
                             ->preserveFilenames()
                             ->imageEditor()
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
-                                // Limpieza de image_1
+                                // Reemplazo limpio de la imagen vieja al subir una nueva
                                 if ($record && $record->image_1) {
-                                    if (Storage::disk('public')->exists($record->image_1)) {
-                                        Storage::disk('public')->delete($record->image_1);
-                                    }
+                                    Storage::disk('public')->delete($record->image_1);
                                 }
                                 return $file->storeAs('products/images', $file->getClientOriginalName(), 'public');
                             })
-                            ->getUploadedFileNameForRemovalUsing(function ($state) {
-                                // No borramos el archivo físicamente aquí por seguridad.
-                                // Solo retornamos null para que Filament entienda que el usuario quitó el archivo de la vista
-                                // y lo obligue a subir uno nuevo (ya que el campo es ->required()).
+                            ->deleteUploadedFileUsing(function ($state) {
+                                // En la imagen 1 querías que no se borre físicamente por seguridad al quitarla de la vista,
+                                // simplemente no ejecutamos el Storage::delete() aquí.
                                 return null;
                             }),
 
@@ -206,18 +203,15 @@ class ProductForm
                             ->imageEditor()
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
                                 if ($record && $record->image_2) {
-                                    if (Storage::disk('public')->exists($record->image_2)) {
-                                        Storage::disk('public')->delete($record->image_2);
-                                    }
+                                    Storage::disk('public')->delete($record->image_2);
                                 }
                                 return $file->storeAs('products/images', $file->getClientOriginalName(), 'public');
                             })
-                            ->getUploadedFileNameForRemovalUsing(function ($state) {
-                                // Esto elimina físicamente el archivo del disco cuando se presiona la papelera 'x'
+                            ->deleteUploadedFileUsing(function ($state) {
+                                // Esto elimina físicamente el archivo del disco cuando se presiona la papelera
                                 if ($state) {
                                     Storage::disk('public')->delete($state);
                                 }
-                                return null;
                             }),
 
                         FileUpload::make('image_3')
@@ -230,20 +224,16 @@ class ProductForm
                             ->preserveFilenames()
                             ->imageEditor()
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
-                                // Limpieza de image_3
                                 if ($record && $record->image_3) {
-                                    if (Storage::disk('public')->exists($record->image_3)) {
-                                        Storage::disk('public')->delete($record->image_3);
-                                    }
+                                    Storage::disk('public')->delete($record->image_3);
                                 }
                                 return $file->storeAs('products/images', $file->getClientOriginalName(), 'public');
                             })
-                            ->getUploadedFileNameForRemovalUsing(function ($state) {
-                                // Esto elimina físicamente el archivo del disco cuando se presiona la papelera 'x'
+                            ->deleteUploadedFileUsing(function ($state) {
+                                // Esto elimina físicamente el archivo del disco cuando se presiona la papelera
                                 if ($state) {
                                     Storage::disk('public')->delete($state);
                                 }
-                                return null;
                             }),
                     ])->columns(3),
 
