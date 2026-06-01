@@ -14,14 +14,12 @@ class UpdateCategoryDisplayTitlesSeeder extends Seeder
     public function run(): void
     {
         $nombresCategorias = [
-            1 => 'Instrumentos Musicales',
-            2 => 'Equipos de Audio y Sonido',
-            3 => 'Trípodes y Soportes',
-            4 => 'Accesorios',
-            5 => 'Iluminación y Estudio',
-           //Crear manualmente para probar
-           // 6 => 'Bolsos y Mochilas',
-           // 7 => 'Outlet 🔥'
+            1 => 'Otros',  //Categoría base
+            2 => 'Instrumentos Musicales',
+            3 => 'Equipos de Audio y Sonido',
+            4 => 'Trípodes y Soportes',
+            5 => 'Accesorios',
+            6 => 'Iluminación y Estudio',
         ];
 
         foreach ($nombresCategorias as $id => $displayTitle) {
@@ -32,3 +30,4 @@ class UpdateCategoryDisplayTitlesSeeder extends Seeder
         }
     }
 }
+
