@@ -91,12 +91,37 @@ class CartController extends Controller
 
         // Validar stock del producto con la nueva cantidad solicitada
         if ($cartItem->product->stock < $request->quantity) {
+            if ($request->wantsJson()) {
+                return response()->json(['error' => 'No puedes actualizar a esa cantidad, supera el stock disponible.'], 422);
+            }
             return back()->with('cart_error', 'No puedes actualizar a esa cantidad, supera el stock disponible.');
         }
 
         $cartItem->update([
             'quantity' => $request->quantity
         ]);
+
+        // SI LA PETICIÓN ES AJAX/JSON (NUESTRO JS NUEVO)
+        if ($request->wantsJson()) {
+            // Obtenemos el carrito actualizado con todos sus ítems para recalcular el subtotal general
+            $cart = $request->user()->cart()->with('items.product')->first();
+            
+            $subtotalGeneral = 0;
+            foreach ($cart->items as $item) {
+                $subtotalGeneral += $item->product->final_price * $item->quantity;
+            }
+
+            // Calculamos el total específico de ESTE ítem que se acaba de modificar
+            $nuevoItemTotal = $cartItem->product->final_price * $cartItem->quantity;
+
+            return response()->json([
+                'success' => true,
+                'item_total' => $nuevoItemTotal, // Ej: 150000
+                'subtotal' => $subtotalGeneral,   // Ej: 450000
+                'formatted_item_total' => '$' . number_format($nuevoItemTotal, 0, ',', '.'),
+                'formatted_subtotal' => '$' . number_format($subtotalGeneral, 0, ',', '.')
+            ]);
+        }
 
         return back()->with('cart_success', 'Cantidad actualizada correctamente.');
     }

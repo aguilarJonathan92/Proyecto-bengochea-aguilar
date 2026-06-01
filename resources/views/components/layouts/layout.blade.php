@@ -22,6 +22,7 @@
         })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('icons/ico/icono-soundWave.ico') }}">
     <title>{{ $title ?? 'Inicio' }}</title>
     <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap.min.css') }}">
@@ -74,6 +75,7 @@
     <script src="{{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/search.js') }}"></script>
     <script src="{{ asset('js/flash-message.js') }}"></script>
+    <script src="{{ asset('js/cart-updater.js') }}"></script>
 </body>
 
 </html>

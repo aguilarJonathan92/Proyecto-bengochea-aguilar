@@ -26,7 +26,7 @@
                 @endphp
 
                 {{-- Item del Carrito Dinámico --}}
-                <div class="card mb-3 border-0 shadow-sm overflow-hidden item-cart-card">
+                <div class="card mb-3 border-0 shadow-sm overflow-hidden item-cart-card" data-item-id="{{ $item->id }}">
                     <div class="row g-0 align-items-center">
                         <div class="col-4 cart-img-container d-flex align-items-center justify-content-center p-2">
                             {{-- Mostramos la imagen real del producto si tiene una columna 'image', sino dejamos la que tenías por defecto --}}
@@ -50,12 +50,28 @@
                                             {{ $item->product->discount }}% OFF
                                         </span>
                                     @endif
-                                    <small class="text-muted-adaptativo d-block">Cantidad: {{ $item->quantity }}</small>
+                                    {{-- Selector de cantidad interactivo con límites de stock --}}
+                                    <div class="d-flex align-items-center my-2">
+                                        <small class="text-muted-adaptativo me-2">Cantidad:</small>
+                                        <div class="input-group input-group-sm" style="max-width: 120px;">
+                                            <button class="btn btn-outline-secondary btn-qty-decrement" type="button" data-item-id="{{ $item->id }}">-</button>
+                                            
+                                            <input type="number" 
+                                                class="form-control text-center input-qty-cart" 
+                                                value="{{ $item->quantity }}" 
+                                                min="1" 
+                                                max="{{ $item->product->stock }}" {{-- Controla el límite máximo del inventario --}}
+                                                data-item-id="{{ $item->id }}"
+                                                data-initial-value="{{ $item->quantity }}">
+                                            
+                                            <button class="btn btn-outline-secondary btn-qty-increment" type="button" data-item-id="{{ $item->id }}">+</button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     {{-- Formateamos el precio real a moneda local ($) --}}
                                     <span
-                                        class="fw-bold color-dorado-adaptativo">${{ number_format($itemTotal, 0, ',', '.') }}</span>
+                                        class="fw-bold color-dorado-adaptativo item-total-display">${{ number_format($itemTotal, 0, ',', '.') }}</span>
 
                                     {{-- Formulario para eliminar el producto de forma segura vía POST/DELETE --}}
                                     <form action="{{ route('cart.remove', $item->id) }}" method="POST"
@@ -80,7 +96,7 @@
             <div class="p-3 bg-superficie-adaptativa rounded shadow-sm">
                 <div class="d-flex justify-content-between mb-2">
                     <span class="text-muted-adaptativo">Subtotal</span>
-                    <span class="fw-bold color-adaptativo">${{ number_format($subtotal, 0, ',', '.') }}</span>
+                    <span class="fw-bold color-adaptativo cart-subtotal-display">${{ number_format($subtotal, 0, ',', '.') }}</span>
                 </div>
                 <div class="d-flex justify-content-between mb-3">
                     <span class="text-muted-adaptativo">Envío</span>
@@ -89,7 +105,7 @@
                 <hr class="border-ui-adaptativa">
                 <div class="d-flex justify-content-between mb-4">
                     <span class="fs-5 fw-bold color-adaptativo">TOTAL:</span>
-                    <span class="fs-5 fw-bold color-adaptativo">${{ number_format($subtotal, 0, ',', '.') }}</span>
+                    <span class="fs-5 fw-bold color-adaptativo cart-total-display">${{ number_format($subtotal, 0, ',', '.') }}</span>
                 </div>
 
                 <div class="d-grid gap-2">
