@@ -23,7 +23,11 @@ class EditCategory extends EditRecord
                 ]))
                 ->openUrlInNewTab(),
 
-            DeleteAction::make(),
+            DeleteAction::make() //No permite borrar la categoría OTROS (id 1)
+                ->hidden(fn($record) => $record->id === 1)
+                ->before(function ($record) {
+                    $record->products()->update(['category_id' => 1]);
+                }), //En caso de que la categoría sea eliminable, los productos son reasignados a la categ. 'Otros' por defecto
         ];
     }
     protected function getRedirectUrl(): string
