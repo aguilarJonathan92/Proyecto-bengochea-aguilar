@@ -14,7 +14,7 @@ class CategoryForm
 
                 TextInput::make('name') // Debe ser 'name' igual que en la DB
                     ->required()
-                    ->maxLength(100),
+                    ->maxLength(50),
                 TextInput::make('display_title')
                     ->label('Título Largo / Comercial')
                     ->placeholder('Ej: Equipos de Audio y Sonido')
