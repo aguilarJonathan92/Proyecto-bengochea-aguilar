@@ -47,10 +47,6 @@
             <a href="{{ route('signup.create') }}" class="text-decoration-none small color-dorado-adaptativo fw-bold">
                 ¿No tienes cuenta? Regístrate
             </a>
-            <br>
-            <a href="#" class="text-decoration-none small text-muted-adaptativo">
-                ¿Olvidaste tu contraseña?
-            </a>
         </div>
 
         <div class="mt-4 pt-3 border-top border-ui-adaptativa text-center">
