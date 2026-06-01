@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -28,6 +29,9 @@ class DatabaseSeeder extends Seeder
             'password'   => Hash::make('admin123'), // La contraseña que quieras
             'role_id'    => $adminRole->id,         // O simplemente 1
         ]);
+
+        Category::create(['name' => 'Otros']); //Creación de la categoría base.
+        
         $this->call([
             ProductSeeder::class,
             UpdateCategoryDisplayTitlesSeeder::class,
