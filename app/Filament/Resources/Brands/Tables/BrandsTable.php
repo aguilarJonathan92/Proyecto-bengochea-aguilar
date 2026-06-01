@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Brands\Tables;
 
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -9,6 +10,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Collection;
 
 class BrandsTable
 {
@@ -54,7 +56,28 @@ class BrandsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    // ACCIÓN 1: ACTIVAR
+                    BulkAction::make('activar')
+                        ->label('Activar seleccionadas')
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success') // Color verde
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            // Solo procesa las que están desactivadas actualmente
+                            $records->where('active', false)->each(fn($record) => $record->update(['active' => true]));
+                        })
+                        ->successNotificationTitle('Marcas seleccionadas activadas'),
+                    // ACCIÓN 2: DESACTIVAR
+                    BulkAction::make('desactivar')
+                        ->label('Desactivar seleccionadas')
+                        ->icon('heroicon-o-x-circle')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            // Solo procesa las que están activas actualmente
+                            $records->where('active', true)->each(fn($record) => $record->update(['active' => false]));
+                        })
+                        ->successNotificationTitle('Marcas seleccionadas desactivadas'),
                 ]),
             ]);
     }

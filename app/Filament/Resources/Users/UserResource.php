@@ -24,6 +24,15 @@ class UserResource extends Resource
     // Como 'name' es el accesor (last_name + first_name), Filament lo entiende para títulos de registros globales.
     protected static ?string $recordTitleAttribute = 'name';
 
+    //Para consulta a la base de datos, es como ejecutar:
+    //SELECT * FROM `users`
+    //WHERE (`users`.`first_name` LIKE '%yam%' OR `users`.`last_name` LIKE '%yam%')
+    //LIMIT 50
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['first_name', 'last_name'];
+    }
+
     // Rectángulos
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

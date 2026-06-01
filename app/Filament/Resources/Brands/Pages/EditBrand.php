@@ -6,6 +6,8 @@ use App\Filament\Resources\Brands\BrandResource;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Model;
 
 class EditBrand extends EditRecord
 {
@@ -33,7 +35,23 @@ class EditBrand extends EditRecord
                 ->disabled(fn() => empty($this->record->name) || strlen($this->record->name) < 3)
                 ->openUrlInNewTab(),
 
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->before(function (Model $record, DeleteAction $action) {
+                    // Si la marca tiene aunque sea un producto...
+                    if ($record->products()->exists()) { //es como si hiciera esta consulta: SELECT EXISTS(SELECT * FROM products WHERE brand_id = 4);
+
+                        // Enviamos una notificación push de Filament detallando el porqué
+                        Notification::make()
+                            ->danger()
+                            ->title('No se puede eliminar la marca')
+                            ->body("Esta marca tiene productos asociados. Por favor, utiliza la opción de 'Desactivar' en su lugar.")
+                            //->persistent()
+                            ->send();
+
+                        // Cancelamos la ejecución del borrado (detiene el SQL)
+                        $action->halt();
+                    }
+                }),
         ];
     }
     protected function getRedirectUrl(): string
