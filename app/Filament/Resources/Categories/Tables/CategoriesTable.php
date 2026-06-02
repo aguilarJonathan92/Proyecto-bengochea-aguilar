@@ -9,6 +9,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Notifications\Notification;
 
 class CategoriesTable
 {
@@ -58,23 +59,41 @@ class CategoriesTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
+                        ->successNotification(null) // 1. Apagamos el cartel automático de Filament
                         ->action(function (Collection $records) {
-                            // $records contiene todas las filas seleccionadas por el usuario
-                            $records->each(function (Model $record) {
-                                // Saltamos la categoría "Otros" (ID 1) para que nunca se elimine
+                            $contadorEliminados = 0;
+                            $seleccionoOtros = false;
+
+                            $records->each(function (Model $record) use (&$contadorEliminados, &$seleccionoOtros) {
+                                // Saltamos la categoría "Otros" (ID 1)
                                 if ($record->id === 1) {
+                                    $seleccionoOtros = true;
                                     return;
                                 }
 
-                                // Reasignación de los productos de esta categoría a la de "Otros"
+                                // Reasignación de productos
                                 $record->products()->update(['category_id' => 1]);
-
-                                // Ahora que sus productos están a salvo, eliminamos la categoría
                                 $record->delete();
+
+                                $contadorEliminados++; // Sumamos uno por cada éxito real
                             });
-                        })
-                        // Mensaje de éxito final
-                        ->successNotificationTitle('Categorías eliminadas y productos reasignados con éxito'),
+
+                            // 2. Evaluamos qué notificación mostrar según el resultado
+                            if ($contadorEliminados > 0) {
+                                // Si se borró al menos una categoría válida
+                                Notification::make()
+                                    ->success()
+                                    ->title('Categorías eliminadas y productos reasignados con éxito')
+                                    ->send();
+                            } elseif ($seleccionoOtros && $records->count() === 1) {
+                                // Si SOLO se había marcado la categoría "Otros"
+                                Notification::make()
+                                    ->warning()
+                                    ->title('Acción cancelada')
+                                    ->body('La categoría "Otros" está protegida por el sistema y no puede ser eliminada.')
+                                    ->send();
+                            }
+                        }),
                 ]),
             ]);
     }

@@ -29,7 +29,7 @@ class ProductRequest extends FormRequest
             // El descuento solo es requerido y numérico si 'on_sale' está marcado
             'discount'     => ['required_if:on_sale,true', 'nullable', 'numeric', 'between:0,100'],
             'sale_price'   => ['nullable', 'numeric'],
-            'installments' => ['nullable', 'integer', 'min:1'],
+            'installments' => ['required', 'integer', 'min:1'],
             'installment_price' => ['nullable', 'numeric'],
 
             //Las imágenes las maneja filament

@@ -139,6 +139,7 @@ class ProductForm
                             ->validationMessages($messages),
 
                         TextInput::make('sale_price')
+                            ->label('Precio Oferta')
                             ->placeholder(function (Get $get) {
                                 $price = (float) $get('price');
                                 $discount = (float) $get('discount');
@@ -147,6 +148,7 @@ class ProductForm
                                 }
                                 return 'N/A';
                             })
+                            ->readOnly()
                             ->rules($rules['sale_price']),
 
                         TextInput::make('installments')
@@ -206,13 +208,7 @@ class ProductForm
                                     Storage::disk('public')->delete($record->image_2);
                                 }
                                 return $file->storeAs('products/images', $file->getClientOriginalName(), 'public');
-                            })
-                            ->deleteUploadedFileUsing(function ($state) {
-                                // Esto elimina físicamente el archivo del disco cuando se presiona la papelera
-                                if ($state) {
-                                    Storage::disk('public')->delete($state);
-                                }
-                            }),
+                            }), // El borrado es manejado desde EditProduct.php -se quitó deleteUploadedFileUsing()
 
                         FileUpload::make('image_3')
                             ->label('Imagen Extra 2')
@@ -224,16 +220,11 @@ class ProductForm
                             ->preserveFilenames()
                             ->imageEditor()
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
+                                // Cambiazos limpios al reemplazar
                                 if ($record && $record->image_3) {
                                     Storage::disk('public')->delete($record->image_3);
                                 }
                                 return $file->storeAs('products/images', $file->getClientOriginalName(), 'public');
-                            })
-                            ->deleteUploadedFileUsing(function ($state) {
-                                // Esto elimina físicamente el archivo del disco cuando se presiona la papelera
-                                if ($state) {
-                                    Storage::disk('public')->delete($state);
-                                }
                             }),
                     ])->columns(3),
 
