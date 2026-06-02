@@ -6,6 +6,7 @@ use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -13,10 +14,44 @@ class Product extends Model
 
     protected static function booted()
     {
+        //Alcance global para solo mostrar productos activos
+        //en filament lo ignoro con withoutGlobalScopes() en el Resource
         static::addGlobalScope('active', function ($builder) {
             $builder->where('active', true);
         });
+
+        // Lógica de las imágenes opcionales
+        static::updating(function ($product) {
+            $imagenesOpcionales = ['image_2', 'image_3'];
+            foreach ($imagenesOpcionales as $campo) {
+                //cpn isDirty Laravel solo trabaja si hubo un cambio real en la interfaz.
+                //Si el campo pasó de tener una ruta a estar vacío (empty), va al disco public,
+                //confirma que el archivo físico existe y lo borra. No deja basura.
+                if ($product->isDirty($campo) && empty($product->$campo)) {
+                    $oldImage = $product->getOriginal($campo);
+                    if ($oldImage && Storage::disk('public')->exists($oldImage)) {
+                        Storage::disk('public')->delete($oldImage);
+                    }
+                }
+            }
+        });
+
+        // AJUSTE CRÍTICO PARA SOFT DELETES:
+        static::deleting(function ($product) {
+            // El evento deleting se dispara tanto para Soft Delete como para Force Delete.
+            // Con este IF, nos aseguramos de actuar SÓLO si es una eliminación permanente.
+            if ($product->isForceDeleting()) {
+                $todasLasImagenes = ['image_1', 'image_2', 'image_3'];
+
+                foreach ($todasLasImagenes as $campo) {
+                    if ($product->$campo && Storage::disk('public')->exists($product->$campo)) {
+                        Storage::disk('public')->delete($product->$campo);
+                    }
+                }
+            }
+        });
     }
+
     protected $fillable = [
         'category_id',
         'brand_id',
@@ -61,7 +96,7 @@ class Product extends Model
     public function orderItem(){
         return $this->hasMany(OrderItem::class);
     }
-    
+
     //Accesador para  $product->final_price
     public function getFinalPriceAttribute()
     {

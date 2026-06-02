@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\ImageColumn;
@@ -119,12 +120,18 @@ class ProductsTable
                 // Esta acción se mostrará/ejecutará SOLO si el producto NO está eliminado
                 EditAction::make()
                     ->visible(fn($record) => ! $record->trashed()),
+                DeleteAction::make()
+                    ->visible(fn($record) => !$record->trashed()),
 
                 // Esta acción se mostrará/ejecutará SOLO si el producto SÍ está eliminado
                 RestoreAction::make()
                     ->visible(fn($record) => $record->trashed()),
-                DeleteAction::make()
-                    ->visible(fn($record) => !$record->trashed())
+                //FORCEDELETE POR SI SE DESEA USAR...
+                /*ForceDeleteAction::make()
+                    ->visible(fn($record) => $record->trashed())
+                    ->label('Borrado definitivo')
+                    ->modalHeading('¿Estás absolutamente seguro?')
+                    ->modalDescription('No se puede deshacer. El registro se perderá para siempre.'), */
             ])
 
             ->toolbarActions([

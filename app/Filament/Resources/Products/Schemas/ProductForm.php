@@ -171,6 +171,7 @@ class ProductForm
                 // SECCIÓN 3: MULTIMEDIA
                 Section::make('Imágenes del Producto')
                     ->schema([
+                        //IMAGEN 1: Obligatoria
                         FileUpload::make('image_1')
                             ->label('Imagen Principal')
                             ->image()
@@ -182,20 +183,22 @@ class ProductForm
                             ->preserveFilenames()
                             ->imageEditor()
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
-                                // Reemplazo limpio de la imagen vieja al subir una nueva
                                 if ($record && $record->image_1) {
                                     Storage::disk('public')->delete($record->image_1);
                                 }
                                 return $file->storeAs('products/images', $file->getClientOriginalName(), 'public');
                             })
                             ->deleteUploadedFileUsing(function ($state) {
-                                // En la imagen 1 querías que no se borre físicamente por seguridad al quitarla de la vista,
-                                // simplemente no ejecutamos el Storage::delete() aquí.
+                                /* Si el administrador presiona la "X" en la interfaz pero luego se arrepiente
+                                y cancela o cierra el navegador, el archivo físico sigue a salvo en el servidor.
+                                Solo se destruirá la imagen vieja si se arrastra una foto nueva válida
+                                y se da a "Guardar" (saveUploadedFileUsing), o si borra el producto permanentemente
+                                (desde la lógica forceDeleting -si se aplica- del modelo).*/
                                 return null;
                             }),
-
+                        //IMAGEN 2: Opcional
                         FileUpload::make('image_2')
-                            ->label('Imagen Extra')
+                            ->label('Imagen Extra 1')
                             ->image()
                             ->maxSize(2048)
                             ->disk('public')
@@ -208,8 +211,8 @@ class ProductForm
                                     Storage::disk('public')->delete($record->image_2);
                                 }
                                 return $file->storeAs('products/images', $file->getClientOriginalName(), 'public');
-                            }), // El borrado es manejado desde EditProduct.php -se quitó deleteUploadedFileUsing()
-
+                            }),
+                        //IMAGEN 3: Opcional
                         FileUpload::make('image_3')
                             ->label('Imagen Extra 2')
                             ->image()
@@ -220,7 +223,6 @@ class ProductForm
                             ->preserveFilenames()
                             ->imageEditor()
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
-                                // Cambio limpio al reemplazar
                                 if ($record && $record->image_3) {
                                     Storage::disk('public')->delete($record->image_3);
                                 }
