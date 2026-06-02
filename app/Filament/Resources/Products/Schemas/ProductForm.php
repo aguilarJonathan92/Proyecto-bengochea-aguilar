@@ -220,7 +220,7 @@ class ProductForm
                             ->preserveFilenames()
                             ->imageEditor()
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file, $record) {
-                                // Cambiazos limpios al reemplazar
+                                // Cambio limpio al reemplazar
                                 if ($record && $record->image_3) {
                                     Storage::disk('public')->delete($record->image_3);
                                 }
