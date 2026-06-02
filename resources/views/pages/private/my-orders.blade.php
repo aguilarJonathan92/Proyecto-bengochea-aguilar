@@ -4,7 +4,7 @@
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-9">
-                
+
                 <h3 class="fw-bold color-adaptativo mb-4">
                     <i class="bi bi-box-seam me-2 color-dorado-adaptativo"></i>Mi Historial de Pedidos
                 </h3>
@@ -12,19 +12,19 @@
                 @if($orders->count() > 0)
                     {{-- Contenedor del Acordeón de Bootstrap --}}
                     <div class="accordion accordion-flush" id="accordionOrders">
-                        
+
                         @foreach($orders as $index => $order)
                             <div class="card mb-3 border border-ui-adaptativa shadow-sm overflow-hidden bg-superficie-adaptativa rounded">
-                                
+
                                 {{-- Encabezado del Pedido (Botón del Acordeón) --}}
                                 <div class="p-3" style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $order->id }}" aria-expanded="false" aria-controls="collapse-{{ $order->id }}">
                                     <div class="row align-items-center g-3">
-                                        
+
                                         <div class="col-6 col-md-3">
                                             <span class="text-muted-adaptativo small d-block">NÚMERO DE PEDIDO</span>
                                             <span class="fw-bold color-adaptativo">#{{ $order->id }}</span>
                                         </div>
-                                        
+
                                         <div class="col-6 col-md-3">
                                             <span class="text-muted-adaptativo small d-block">FECHA</span>
                                             <span class="color-adaptativo small">{{ $order->created_at->format('d/m/Y H:i') }}</span>
@@ -58,7 +58,7 @@
                                 {{-- Contenido Desplegable (Detalles del Pedido) --}}
                                 <div id="collapse-{{ $order->id }}" class="collapse {{ $index === 0 ? '' : '' }}" data-bs-parent="#accordionOrders">
                                     <div class="p-3 border-top border-ui-adaptativa bg-light-adaptativa" style="background-color: rgba(0,0,0,0.02);">
-                                        
+
                                         <h6 class="fw-bold small text-uppercase color-dorado-adaptativo mb-3">Productos Comprados</h6>
 
                                         {{-- Iteración de los productos del pedido --}}
@@ -67,7 +67,7 @@
                                                 <div class="col-12">
                                                     <div class="card border-0 shadow-sm overflow-hidden item-cart-card">
                                                         <div class="row g-0 align-items-center">
-                                                            
+
                                                             {{-- Imagen del Producto --}}
                                                             <div class="col-3 col-md-2 d-flex align-items-center justify-content-center p-2" style="max-width: 90px;">
                                                                 <img src="{{ $item->product->image_1 ? asset('storage/' . $item->product->image_1) : asset('images/piano-casio.webp') }}"
@@ -123,11 +123,11 @@
                     </div> {{-- Fin Accordion --}}
                 @else
                     {{-- Estado sin pedidos --}}
-                    <div class="text-center py-5 bg-superficie-adaptativa rounded shadow-sm border border-ui-adaptativa animate__animated animate__fadeIn">
+                    <div class="text-center p-5 bg-superficie-adaptativa rounded shadow-sm border border-ui-adaptativa animate__animated animate__fadeIn">
                         <i class="bi bi-journal-x text-muted" style="font-size: 4rem;"></i>
                         <h5 class="mt-3 fw-bold color-adaptativo">Aún no has realizado pedidos</h5>
                         <p class="text-muted-adaptativo">Cuando realices compras en nuestra tienda, verás el seguimiento aquí.</p>
-                        <a href="{{ route('catalog') }}" class="btn-brand text-uppercase py-2 px-4 text-decoration-none small inline-block mt-2">
+                        <a href="{{ route('catalog') }}" class="special-btn py-2 px-4 text-decoration-none small inline-block mt-2 ">
                             Ir al Catálogo
                         </a>
                     </div>
