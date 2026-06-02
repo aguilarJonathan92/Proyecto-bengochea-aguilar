@@ -21,20 +21,15 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //  Obtenemos las categorías activas, mandando el ID 1 al final
-        // y ordenando las demás alfabéticamente por nombre.
-        $categorias = Category::query()
-            ->where('active', true)
-            ->orderByRaw('id = 1 ASC')
-            ->orderBy('name', 'asc')
-            ->get();
+        // Agrupamos navbar y footer en un array.
+        // La consulta SOLO se ejecutará cuando uno de estos dos componentes se vaya a renderizar.
+        View::composer(['components.navbar', 'components.footer'], function ($view) {
+            $categorias = Category::query()
+                ->where('active', true)
+                ->orderByRaw('id = 1 ASC')
+                ->orderBy('name', 'asc')
+                ->get();
 
-        // Compartimos la misma colección optimizada con el Navbar y el Footer
-        View::composer('components.navbar', function ($view) use ($categorias) {
-            $view->with('categorias', $categorias);
-        });
-
-        View::composer('components.footer', function ($view) use ($categorias) {
             $view->with('categorias', $categorias);
         });
     }
