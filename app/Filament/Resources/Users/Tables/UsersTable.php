@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Users\Tables;
 
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter; // Filtro de Soft Deletes
@@ -58,12 +59,17 @@ class UsersTable
                 // Esta acción se mostrará/ejecutará SOLO si el usuario NO está eliminado
                 EditAction::make()
                     ->visible(fn($record) => !$record->trashed()),
+                DeleteAction::make()
+                    ->visible(fn($record) => !$record->trashed()),
 
                 // Esta acción se mostrará/ejecutará SOLO si el usuario SÍ está eliminado
                 RestoreAction::make()
                     ->visible(fn($record) => $record->trashed()),
-                DeleteAction::make()
-                    ->visible(fn($record) => !$record->trashed())
+                ForceDeleteAction::make()
+                    ->visible(fn($record) => $record->trashed())
+                    ->label('Borrado definitivo')
+                    ->modalHeading('¿Estás absolutamente seguro?')
+                    ->modalDescription('No se puede deshacer. El registro se perderá para siempre.')
             ]);
     }
 }

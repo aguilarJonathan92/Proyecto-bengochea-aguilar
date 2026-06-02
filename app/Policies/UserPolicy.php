@@ -41,23 +41,44 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        // 1. Si el usuario que intenta editar no es administrador, se le niega el acceso al panel
+        // 1. Si el usuario que intenta editar no es administrador, se le niega el acceso
         if ($user->role?->name !== 'admin') {
             return false;
         }
 
-        // 2. Si es administrador, se le permite abrir el formulario.
-        // Las restricciones de nombre, apellido y correo ya las maneja el UserForm con ->disabled()
+        // 2. PROTECCIÓN SEMILLA: Si se está intentando editar al admin ppal (ID 1)...
+        if ($model->id === 1) {
+            // solo permitimos la edición si el que está logueado ($user) es el mismísimo ID 1
+            return $user->id === 1;
+        }
+
+        // 3. Si pasó los filtros anteriores, es un admin editando a cualquier otro usuario
         return true;
     }
 
     /**
      * Determina cuando el usuario puede eliminar el modelo
+     * El softdelete está permitido en filament con el método activado getEloquentQuery
+     *  incluyendo el SoftDeletingScope en UserResource
      */
     public function delete(User $user, User $model): bool
     {
-        //El administrador puede eliminar usuarios, excepto a sí mismo para no perder el acceso
-        return $user->role?->name === 'admin' && $user->id !== $model->id;
+        // 1. Solo administradores
+        if ($user->role?->name !== 'admin') {
+            return false;
+        }
+
+        // 2. No puedes borrarte a ti mismo
+        if ($user->id === $model->id) {
+            return false;
+        }
+
+        // 3. El ID 1 es intocable
+        if ($model->id === 1) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -73,6 +94,21 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
-        return false;
+        // 1. Solo administradores
+        if ($user->role?->name !== 'admin') {
+            return false;
+        }
+
+        // 2. No puedes borrarte a ti mismo
+        if ($user->id === $model->id) {
+            return false;
+        }
+
+        // 3. El ID 1 es intocable
+        if ($model->id === 1) {
+            return false;
+        }
+
+        return true;
     }
 }

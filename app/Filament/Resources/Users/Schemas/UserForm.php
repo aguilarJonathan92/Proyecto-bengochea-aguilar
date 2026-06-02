@@ -61,22 +61,28 @@ class UserForm
                     ->rules($requestRules['role_id']) // Regla del Request. Asegura que se valide contra 'exists:roles,id'
                     ->disabled(fn($record): bool => $record !== null && Filament::auth()->id() === $record->id)
                     ->dehydrated(fn($state) => filled($state)),
-
+                //Aqui solo me manejo con la validación del lado de filament, para que no hayan conflictos en campos vacíos.
                 TextInput::make('password')
                     ->label('Contraseña')
                     ->password()
+                    ->revealable()
+                    // Obligatorio solo al crear
                     ->required(fn(string $operation): bool => $operation === 'create')
+                    // Estas reglas solo se aplicarán si el usuario escribió algo (gracias a 'nullable')
+                    ->nullable() //cuando el required no está activo, automáticamente el nullable ignora las otras reglas
                     ->string()
                     ->minLength(8)
                     ->confirmed()
-                    ->rules($requestRules['password']) // Regla del Request
+                    // Solo guardamos el campo en la base de datos si el usuario escribió algo
                     ->dehydrated(fn($state) => filled($state)),
 
-                // Campo espejo obligatorio para la regla 'confirmed'
                 TextInput::make('password_confirmation')
                     ->label('Confirmar Contraseña')
                     ->password()
+                    ->revealable()
+                    // Obligatorio solo si se está creando, o si estás editando y el campo password tiene texto
                     ->required(fn(string $operation, $get): bool => $operation === 'create' || filled($get('password')))
+                    // Evitamos que se envíe a la base de datos ya que solo sirve para validar
                     ->dehydrated(false),
             ]);
     }
