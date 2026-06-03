@@ -54,42 +54,43 @@ Route::middleware('guest')->controller(AuthController::class)->group(function ()
 });
 
 
-//RUTAS PROTEGIDAS - Inicio de sesión requerido
+//RUTAS PROTEGIDAS - Inicio de sesión requerido -
 Route::middleware('auth')->group(function () {
 
-    // Auth General
+    // Autenticación general -admin y clientes-
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    //Panel de Usuario y actualizacion de datos, deben tener todos los usuarios
-    Route::controller(UserController::class)->group(function () {
-        Route::get('/panel-usuario', 'index')->name('panel-usuario');
-        Route::put('/panel-usuario', 'update')->name('panel-usuario.update');
-    });
-
-    //rutas para el carrito de compra. Solo funciona logueado
-    Route::controller(CartController::class)->prefix('cart')->name('cart.')->group(function () {
-        Route::get('/', 'index')->name('list');
-        Route::post('/add', 'add')->name('add');
-        Route::put('/update/{itemId}', 'updateQuantity')->name('update');
-        Route::delete('/remove/{itemId}', 'removeItem')->name('remove');
-        Route::delete('/cart/clear', 'clear')->name('clear');
-    });
-
-    // EXCLUSIVO PARA CLIENTES (redirige a administradores)
+    // EXCLUSIVO PARA CLIENTES (redirige a administradores). Funciona logueado y con ID de rol != 1
     Route::middleware('no.admin')->group(function () {
+
+        //Panel de usuario y de actualización de datos(el de admin lo maneja filament)
+        Route::controller(UserController::class)->group(function () {
+            Route::get('/panel-usuario', 'index')->name('panel-usuario');
+            Route::put('/panel-usuario', 'update')->name('panel-usuario.update');
+        });
+
+        //Rutas del carrito
+        Route::controller(CartController::class)->prefix('cart')->name('cart.')->group(function () {
+            Route::get('/', 'index')->name('list');
+            Route::post('/add', 'add')->name('add');
+            Route::put('/update/{itemId}', 'updateQuantity')->name('update');
+            Route::delete('/remove/{itemId}', 'removeItem')->name('remove');
+            Route::delete('/clear', 'clear')->name('clear');
+        });
+
+        //Checkout y pedidos
         Route::get('/panel-cliente', [MainController::class, 'userPanel']);
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-
         // Procesar el formulario de compra
         Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-        
         // Ruta de éxito
         Route::get('/pedido-exitoso/{order}', [CheckoutController::class, 'success'])->name('orders.success');
-
         //Listado de compras realizadas
         Route::get('/mis-pedidos', [OrderController::class, 'index'])->name('mis-pedidos');
     });
 });
+
+
 
 // --- endpoints / API INTERNA (Para peticiones asíncronas de JavaScript) ---
 Route::get('/api/provincias/{province}/ciudades', [UserController::class, 'getCitiesByProvince'])->name('api.ciudades');
