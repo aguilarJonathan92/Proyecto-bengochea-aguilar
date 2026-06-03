@@ -42,6 +42,7 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
+
     public function authenticate(LoginRequest $request)
     {
         $credentials = $request->validated();
@@ -50,23 +51,40 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
 
-            // 1. Si es Admin, permitimos que 'intended' lo lleve a donde quería (ej. Filament)
+            // Recuperando la ruta a la que el usuario intentaba ir antes de loguearse
+            $intendedUrl = session()->get('url.intended');
+
+
+            // Lógica para el Admin
             if ($user->role_id === 1) {
-                return redirect()->intended('/admin');
+                // Si venía de una ruta de administración (contiene '/admin'), lo lleva hacia alla.
+                // Si venía del Home o catálogo, lo dejamos en el Home.
+                return redirect()->intended(route('home'));
             }
 
-            // 2. Si es Cliente, forzamos la ruta y LIMPIAMOS la intención previa
+            // =========================================================================
+            // LÓGICA PARA EL CLIENTE
+            // =========================================================================
             if ($user->role_id === 2) {
-                $request->session()->forget('url.intended'); // <--- Esto evita el error 403
-                return redirect('/')->with('system_success', '¡Bienvenido! Has iniciado sesión correctamente.');;
+                // Saneamiento: Si la URL previa contiene '/admin', un cliente NO puede ir ahí.(Se borra la 'intención para evitar 403)
+                if ($intendedUrl && str_contains($intendedUrl, '/admin')) {
+                    $request->session()->forget('url.intended');
+                    return redirect()->route('home')
+                        ->with('system_success', '¡Bienvenido! Has iniciado sesión correctamente.');
+                }
+
+                // Si la ruta era segura (ej: /checkout, /cart, o el Home), lo dejamos continuar
+                return redirect()->intended(route('home'))
+                    ->with('system_success', '¡Bienvenido! Has iniciado sesión correctamente.');
             }
 
-            // 3. Fallback para otros casos (dejo esto por ahora, parece que no es necesario)
-            return redirect('/')->with('system_success', '¡Bienvenido! Has iniciado sesión correctamente.');;
+            // Fallback general
+            return redirect()->intended(route('home'));
         }
 
         return back()->withErrors(['email' => 'Credenciales incorrectas.']);
     }
+
     public function logout(Request $request)
     {
         // 1. Cerramos la sesión en el "Guard" de Laravel
