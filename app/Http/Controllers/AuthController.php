@@ -62,9 +62,7 @@ class AuthController extends Controller
                 return redirect()->intended(route('home'));
             }
 
-            // =========================================================================
             // LÓGICA PARA EL CLIENTE
-            // =========================================================================
             if ($user->role_id === 2) {
                 // Saneamiento: Si la URL previa contiene '/admin', un cliente NO puede ir ahí.(Se borra la 'intención para evitar 403)
                 if ($intendedUrl && str_contains($intendedUrl, '/admin')) {
