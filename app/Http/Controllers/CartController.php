@@ -70,7 +70,12 @@ class CartController extends Controller
                 'quantity' => $request->quantity
             ]);
         }
-
+        
+        // Al momento de retornar la respuesta:
+        if ($request->input('action') === 'buy_now') {
+            // Si presionó "Finalizar Compra", va directo al checkout
+            return redirect()->route('checkout');
+        }
         // Redirecciona a la misma página donde estaba el usuario y envía un mensaje de éxito
         return back()->with('cart_success', 'Producto añadido al carrito.');
     }

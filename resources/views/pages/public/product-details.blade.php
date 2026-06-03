@@ -1,4 +1,9 @@
 <x-layouts.layout>
+    @if(session('cart_error'))
+        <div class="alert alert-danger mt-3">
+            {{ session('cart_error') }}
+        </div>
+    @endif
     <x-slot name='title'>{{ $product->title }}</x-slot>
     <div class="container py-5">
         {{-- Navegación superior adaptativa --}}
@@ -89,22 +94,66 @@
 
                         </ul>
                     </div>
-
+                    {{-- Indicador de Stock --}}
+                    <div class="mb-3">
+                        @if($product->stock > 5)
+                            <span class="text-success small fw-bold">
+                                <i class="bi bi-box-seam me-1"></i> Disponible ({{ $product->stock }} unidades)
+                            </span>
+                        @elseif($product->stock > 0)
+                            <span class="text-warning small fw-bold">
+                                <i class="bi bi-exclamation-triangle me-1"></i> ¡Últimas {{ $product->stock }} unidades disponibles!
+                            </span>
+                        @else
+                            <span class="text-danger small fw-bold">
+                                <i class="bi bi-x-circle me-1"></i> Producto Agotado
+                            </span>
+                        @endif
+                    </div>
                     <div class="d-grid gap-3">
                         {{-- Formulario tradicional para añadir al carrito --}}
                         <form action="{{ route('cart.add') }}" method="POST">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <input type="hidden" name="quantity" value="1"> {{-- Por ahora fijo en 1 --}}
+                            
+                            {{-- Selector de cantidad dinámico --}}
+                            @if($product->stock > 0)
+                                <div class="mb-3">
+                                    <label for="quantity" class="form-label color-adaptativo small fw-bold text-uppercase">Cantidad</label>
+                                    <div class="input-group" style="max-width: 140px;">
+                                        <button class="btn btn-outline-secondary border-ui-adaptativa" type="button" onclick="decrementQty()">-</button>
+                                        <input type="number" id="quantity" name="quantity" class="form-control text-center bg-transparent color-adaptativo border-ui-adaptativa" 
+                                            value="1" min="1" max="{{ $product->stock }}" oninput="validateKeyboardInput(this)">
+                                        <button class="btn btn-outline-secondary border-ui-adaptativa" type="button" onclick="incrementQty()">+</button>
+                                    </div>
 
-                            <button type="submit" class="btn-add-cart text-uppercase py-3 w-100">
-                                Añadir al Carrito
-                            </button>
+                                    {{-- Mensaje de alerta de stock máximo --}}
+                                    <div id="stock-alert" class="text-warning small mt-2 fw-bold d-none">
+                                        <i class="bi bi-exclamation-circle me-1"></i> Has alcanzado el límite de stock disponible.
+                                    </div>
+                                    {{-- Mensaje de alerta para caracteres no válidos (Nuevo) --}}
+                                    <div id="type-alert" class="text-danger small mt-2 fw-bold d-none">
+                                        <i class="bi bi-x-circle me-1"></i> Por favor, ingrese solo valores numéricos enteros.
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-3">
+                                    {{-- BOTÓN 1: Añade al carrito y se queda acá --}}
+                                    <button type="submit" name="action" value="add_to_cart" class="btn-add-cart text-uppercase py-3 w-100">
+                                        Añadir al Carrito
+                                    </button>
+
+                                    {{-- BOTÓN 2: Añade al carrito y redirige (Nuevo) --}}
+                                    <button type="submit" name="action" value="buy_now" class="btn-outline-adaptativo text-uppercase py-3 text-center text-decoration-none bg-transparent w-100">
+                                        Finalizar Compra
+                                    </button>
+                                </div>
+                            @else
+                                <button type="button" class="btn btn-secondary text-uppercase py-3 w-100" disabled>
+                                    Producto Agotado
+                                </button>
+                            @endif
                         </form>
-
-                        <a href="{{ route('checkout') }}" class="btn-outline-adaptativo text-uppercase py-3 text-center text-decoration-none">
-                            Finalizar Compra
-                        </a>
                     </div>
                 </div>
             </div>
@@ -169,6 +218,66 @@
 
             // Agregamos la clase 'active' al contenedor del clic actual
             thumbnail.parentElement.classList.add('active');
+        }
+
+        function incrementQty() {
+            const input = document.getElementById('quantity');
+            const alertBox = document.getElementById('stock-alert');
+            const max = parseInt(input.getAttribute('max'));
+            let value = parseInt(input.value);
+            
+            if (value < max) {
+                input.value = value + 1;
+                alertBox.classList.add('d-none'); // Se asegura de ocultar la alerta si aún hay margen
+            } else {
+                // Si ya llegó al máximo y sigue presionando "+", mostramos el aviso
+                alertBox.classList.remove('d-none');
+            }
+        }
+
+        function decrementQty() {
+            const input = document.getElementById('quantity');
+            const alertBox = document.getElementById('stock-alert');
+            let value = parseInt(input.value);
+            
+            if (value > 1) {
+                input.value = value - 1;
+                // Al bajar de la cantidad máxima, ocultamos el aviso inmediatamente
+                alertBox.classList.add('d-none');
+            }
+        }
+
+        function validateKeyboardInput(input) {
+            const stockAlert = document.getElementById('stock-alert');
+            const typeAlert = document.getElementById('type-alert');
+            const max = parseInt(input.getAttribute('max'));
+            
+            // Si el usuario borra todo o escribe una letra/carácter no válido, input.value viene vacío
+            if (input.value === '') {
+                typeAlert.classList.remove('d-none');
+                stockAlert.classList.add('d-none');
+                return; // Frenamos la ejecución acá hasta que corrija
+            }
+
+            // Si llegó acá, es un número válido. Escondemos la alerta de tipo de dato
+            typeAlert.classList.add('d-none');
+            
+            let value = parseInt(input.value);
+
+            // Si el número ingresado es menor a 1, lo forzamos a 1
+            if (value < 1) {
+                input.value = 1;
+                stockAlert.classList.add('d-none');
+            } 
+            // Si supera el stock máximo disponible
+            else if (value > max) {
+                input.value = max;
+                stockAlert.classList.remove('d-none');
+            } 
+            // Si el número está perfecto dentro del rango disponible
+            else {
+                stockAlert.classList.add('d-none');
+            }
         }
     </script>
 </x-layouts.layout>
