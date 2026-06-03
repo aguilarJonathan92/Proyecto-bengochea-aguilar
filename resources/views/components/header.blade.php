@@ -51,28 +51,40 @@
                             href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{{ asset('icons/svg/persona.svg') }}" alt="Usuario" class="icon-adaptive me-2">
                             <div class="d-flex flex-column d-none d-lg-flex text-start" style="line-height: 1.2;">
-                                {{-- Uso el campo first_name --}}
                                 <span class="fw-semibold color-adaptativo">Hola, {{ auth()->user()->first_name }}</span>
-                                <small class="text-muted-adaptativo text-center">Mi Cuenta</small>
+                                <small class="text-muted-adaptativo text-center">
+                                    {{ auth()->user()->role_id === 1 ? 'Administrador' : 'Mi Cuenta' }}
+                                </small>
                             </div>
                         </a>
 
                         <ul class="dropdown-menu shadow">
-                            <li>
-                                <a class="dropdown-item"
-                                    href="{{ auth()->user()->role_id === 1 ? url('/admin') : url('/panel-usuario') }}">
-                                    Mis Datos
-                                </a>
-                                <a class="dropdown-item"
-                                    href="{{ auth()->user()->role_id === 1 ? url('/admin') : url('/mis-pedidos') }}">
-                                    Mis Pedidos
-                                </a> {{-- Debo cambiar la ruta de este enlace --}}
-                            </li>
+                            @if (auth()->user()->role_id === 1)
+                                {{-- MENÚ EXCLUSIVO PARA ADMINISTRADOR --}}
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('/admin') }}">
+                                        Ir a panel Admin
+                                    </a>
+                                </li>
+                            @else
+                                {{-- MENÚ PARA USUARIOS REGULARES --}}
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('/panel-usuario') }}">
+                                        Mis Datos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('/mis-pedidos') }}">
+                                        Mis Pedidos
+                                    </a>
+                                </li>
+                            @endif
+
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                {{-- Formulario de Logout integrado en el dropdown --}}
+                                {{-- Formulario de Logout para ambos --}}
                                 <form action="{{ route('logout') }}" method="POST" class="px-3 py-1">
                                     @csrf
                                     <button type="submit" class="btn btn-sm btn-danger w-100">Cerrar Sesión</button>
@@ -83,22 +95,25 @@
                 </div>
             @endauth
 
-            {{-- Carrito (se mantiene igual para ambos casos) --}}
-            <a href="#" class="text-decoration-none px-2 position-relative" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasCart">
-                <img src="{{ asset('icons/svg/carrito.svg') }}" alt="carrito" class="icon-adaptive">
-                
-                @if($cartCount > 0)
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                        style="font-size: 0.5rem;">
-                        {{ $cartCount }}
-                    </span>
-                @endif
-            </a>
+            {{-- Carrito: Solo se muestra si es invitado O si está logueado pero NO es admin --}}
+            @if (!auth()->check() || auth()->user()->role_id !== 1)
+                <a href="#" class="text-decoration-none px-2 position-relative" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasCart">
+                    <img src="{{ asset('icons/svg/carrito.svg') }}" alt="carrito" class="icon-adaptive">
+
+                    @if (isset($cartCount) && $cartCount > 0)
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="font-size: 0.5rem;">
+                            {{ $cartCount }}
+                        </span>
+                    @endif
+                </a>
+            @endif
         </div>
     </div>
 </header>
-@error('query') {{-- Si la validación de búsqueda falla --}}
+@error('query')
+    {{-- Si la validación de búsqueda falla --}}
     <div class="alert alert-danger border-0 shadow-sm text-center">
         {{ $message }}
     </div>
