@@ -23,6 +23,34 @@ class CartController extends Controller
             ]);
         }
 
+        $mensajesAjuste = [];
+
+        foreach ($cart->items as $item) {
+            $product = $item->product;
+
+            // CASO 1: El producto directamente ya no tiene stock (Agotado)
+            if ($product->stock <= 0) {
+                $mensajesAjuste[] = "El producto '{$product->title}' se ha agotado y fue removido de tu carrito.";
+                $item->delete(); // Se borra de MariaDB automáticamente
+                continue;
+            }
+
+            // CASO 2: Hay stock, pero es menor a la cantidad que el usuario tenía guardada
+            if ($product->stock < $item->quantity) {
+                $mensajesAjuste[] = "El stock de '{$product->title}' cambió. Ajustamos la cantidad al máximo disponible ({$product->stock} unidades).";
+                
+                // Actualizamos el registro en MariaDB al tope real
+                $item->update(['quantity' => $product->stock]);
+            }
+        }
+
+        // Si hubo cambios, volvemos a cargar la relación limpia para la vista
+        if (!empty($mensajesAjuste)) {
+            $cart->load('items.product');
+            // Guardamos los avisos en la sesión para que Blade los muestre
+            session()->flash('cart_updates', $mensajesAjuste);
+        }
+        
         return back()->with([
             'cart_id' => $cart->id,
             'items' => $cart->items

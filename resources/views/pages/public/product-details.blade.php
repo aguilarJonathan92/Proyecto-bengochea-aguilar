@@ -100,9 +100,13 @@
                             <span class="text-success small fw-bold">
                                 <i class="bi bi-box-seam me-1"></i> Disponible ({{ $product->stock }} unidades)
                             </span>
-                        @elseif($product->stock > 0)
+                        @elseif($product->stock > 1)
                             <span class="text-warning small fw-bold">
                                 <i class="bi bi-exclamation-triangle me-1"></i> ¡Últimas {{ $product->stock }} unidades disponibles!
+                            </span>
+                        @elseif($product->stock == 1)
+                            <span class="text-warning small fw-bold">
+                                <i class="bi bi-x-circle me-1"></i> ¡Última unidad disponible!
                             </span>
                         @else
                             <span class="text-danger small fw-bold">

@@ -10,18 +10,39 @@
     <div class="offcanvas-body">
 
         @php
-            // Inicializamos el subtotal para calcularlo dinámicamente en la vista
             $subtotal = 0;
+            $huboAjusteStock = false;
         @endphp
-        {{-- Validamos si el usuario tiene un carrito y si este contiene artículos --}}
+
         @if ($cart && $cart->items->count() > 0)
 
-            {{-- Bucle para iterar los productos reales del carrito --}}
             @foreach ($cart->items as $item)
                 @php
-                    // Sumamos el precio del producto multiplicado por la cantidad elegida
-                    $precioUnitarioReal = $item->product->final_price;
-                    $itemTotal = $precioUnitarioReal * $item->quantity;
+                    $producto = $item->product;
+                    $cantidadReal = $item->quantity;
+                    $notificacionItem = null;
+
+                    // VALIDACIÓN Y PERSISTENCIA DE STOCK EN TIEMPO REAL (UserA vs UserB)
+                    if ($producto->stock <= 0) {
+                        // CASO 1: El producto se agotó por completo por culpa de UserA.
+                        $notificacionItem = 'agotado';
+                        $cantidadReal = 0;
+                        
+                        // PERSISTENCIA: Lo eliminamos de la base de datos para que no estorbe
+                        $item->delete(); 
+                    } elseif ($producto->stock < $item->quantity) {
+                        // CASO 2: Queda stock, pero UserA se llevó unidades y superó lo que UserB tenía guardado.
+                        $notificacionItem = 'ajustado';
+                        $cantidadReal = $producto->stock;
+                        $huboAjusteStock = true;
+                        
+                        // PERSISTENCIA: Actualizamos la fila en MariaDB al máximo disponible actual
+                        $item->update(['quantity' => $producto->stock]);
+                    }
+
+                    // Cálculos económicos basados en la realidad de la base de datos
+                    $precioUnitarioReal = $producto->final_price;
+                    $itemTotal = $precioUnitarioReal * $cantidadReal;
                     $subtotal += $itemTotal;
                 @endphp
 
@@ -29,57 +50,75 @@
                 <div class="card mb-3 border-0 shadow-sm overflow-hidden item-cart-card" data-item-id="{{ $item->id }}">
                     <div class="row g-0 align-items-center">
                         <div class="col-4 cart-img-container d-flex align-items-center justify-content-center p-2">
-                            {{-- Mostramos la imagen real del producto si tiene una columna 'image', sino dejamos la que tenías por defecto --}}
-                            <img src="{{ $item->product->image_1 ? asset('storage/' . $item->product->image_1) : asset('images/piano-casio.webp') }}"
-                                class="img-fluid" alt="{{ $item->product->title }}">
+                            <img src="{{ $producto->image_1 ? asset('storage/' . $producto->image_1) : asset('images/piano-casio.webp') }}"
+                                class="img-fluid @if($notificacionItem == 'agotado') opacity-50 @endif" alt="{{ $producto->title }}">
                         </div>
                         <div class="col-8">
                             <div class="card-body py-2">
-                                <h6 class="card-title mb-0 fw-bold text-uppercase color-adaptativo"
-                                    style="font-size: 0.85rem;">
-                                    {{ $item->product->title }}
+                                <h6 class="card-title mb-0 fw-bold text-uppercase color-adaptativo" style="font-size: 0.85rem;">
+                                    {{ $producto->title }}
                                 </h6>
 
                                 {{-- DETALLE DE PRECIOS SI TIENE DESCUENTO --}}
                                 <div class="small my-1">
-                                    @if($item->product->on_sale && $item->product->discount > 0)
+                                    @if($producto->on_sale && $producto->discount > 0)
                                         <span class="text-decoration-line-through text-muted-adaptativo me-1" style="font-size: 0.75rem;">
-                                            ${{ number_format($item->product->price, 0, ',', '.') }}
+                                            ${{ number_format($producto->price, 0, ',', '.') }}
                                         </span>
                                         <span class="badge bg-danger-subtle text-danger fw-normal" style="font-size: 0.65rem;">
-                                            {{ $item->product->discount }}% OFF
+                                            {{ $producto->discount }}% OFF
                                         </span>
                                     @endif
-                                    {{-- Selector de cantidad interactivo con límites de stock --}}
-                                    <div class="d-flex align-items-center my-2">
-                                        <small class="text-muted-adaptativo me-2">Cantidad:</small>
-                                        <div class="input-group input-group-sm" style="max-width: 120px;">
-                                            <button class="btn btn-outline-secondary btn-qty-decrement" type="button" data-item-id="{{ $item->id }}">-</button>
-                                            
-                                            <input type="number" 
-                                                class="form-control text-center input-qty-cart" 
-                                                value="{{ $item->quantity }}" 
-                                                min="1" 
-                                                max="{{ $item->product->stock }}" {{-- Controla el límite máximo del inventario --}}
-                                                data-item-id="{{ $item->id }}"
-                                                data-initial-value="{{ $item->quantity }}">
-                                            
-                                            <button class="btn btn-outline-secondary btn-qty-increment" type="button" data-item-id="{{ $item->id }}">+</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    {{-- Formateamos el precio real a moneda local ($) --}}
-                                    <span
-                                        class="fw-bold color-dorado-adaptativo item-total-display">${{ number_format($itemTotal, 0, ',', '.') }}</span>
 
-                                    {{-- Formulario para eliminar el producto de forma segura vía POST/DELETE --}}
-                                    <form action="{{ route('cart.remove', $item->id) }}" method="POST"
-                                        class="d-inline">
+                                    {{-- Gestión de alertas visuales de stock concurrentes --}}
+                                    @if($notificacionItem == 'agotado')
+                                        <div class="text-danger small fw-bold my-1" style="font-size: 0.75rem;">
+                                            <i class="bi bi-x-circle-fill"></i> El producto se ha agotado.
+                                        </div>
+                                    @elseif($notificacionItem == 'ajustado')
+                                        <div class="text-warning small fw-bold my-1" style="font-size: 0.72rem; line-height: 1.1;">
+                                            <i class="bi bi-exclamation-triangle-fill"></i> Stock ajustado al máximo disponible.
+                                        </div>
+                                    @endif
+
+                                    {{-- Selector de cantidad interactivo con límites de stock --}}
+                                    @if($producto->stock > 0)
+                                        <div class="d-flex align-items-center my-2">
+                                            <small class="text-muted-adaptativo me-2">Cantidad:</small>
+                                            <div class="input-group input-group-sm" style="max-width: 120px;">
+                                                <button class="btn btn-outline-secondary btn-qty-decrement" type="button" onclick="decrementCartQty(this)">-</button>
+                                                
+                                                {{-- Removido readonly, agregada validación oninput y estilos personalizados sin flechas --}}
+                                                <input type="number" 
+                                                    class="form-control text-center input-qty-cart no-spinners" 
+                                                    value="{{ $cantidadReal }}" 
+                                                    min="1" 
+                                                    max="{{ $producto->stock }}" 
+                                                    data-item-id="{{ $item->id }}"
+                                                    oninput="validateCartKeyboardInput(this)">
+                                                
+                                                <button class="btn btn-outline-secondary btn-qty-increment" type="button" onclick="incrementCartQty(this)">+</button>
+                                            </div>
+                                        </div>
+                                        {{-- Alerta dinámica de teclado --}}
+                                        <div class="text-warning small fw-bold d-none label-stock-max" style="font-size: 0.7rem;">
+                                            Máximo disponible alcanzado
+                                        </div>
+                                        <div class="text-danger small fw-bold d-none label-type-err" style="font-size: 0.7rem;">
+                                            Solo números enteros
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold color-dorado-adaptativo item-total-display">
+                                        ${{ number_format($itemTotal, 0, ',', '.') }}
+                                    </span>
+
+                                    <form action="{{ route('cart.remove', $item->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
-                                            class="btn p-0 text-danger border-0 bg-transparent texto-rojo">
+                                        <button type="submit" class="btn p-0 text-danger border-0 bg-transparent texto-rojo">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
@@ -109,15 +148,16 @@
                 </div>
 
                 <div class="d-grid gap-2">
+                    {{-- Si hubo productos agotados que bajaron a 0, se puede deshabilitar el botón de compra o dejar que se limpie en el controlador --}}
                     <a href="{{ route('checkout') }}"
                         class="btn-brand text-uppercase py-3 text-decoration-none text-center">
                         Iniciar Compra
                     </a>
-                    {{-- FORMULARIO Y BOTÓN PARA VACIAR EL CARRITO --}}
+                    
                     <form id="form-vaciar-carrito" action="{{ route('cart.clear') }}" method="POST" class="d-grid">
                         @csrf
                         @method('DELETE')
-                        <button type="button" id="btn-vaciar-carrito" class="btn btn-outline-danger text-uppercase py-2" style="font-size: 0.85rem;">
+                        <button type="submit" id="btn-vaciar-carrito" class="btn btn-outline-danger text-uppercase py-2" style="font-size: 0.85rem;">
                             <i class="bi bi-trash3 me-1"></i> Vaciar Carrito
                         </button>
                     </form>
@@ -128,7 +168,6 @@
                 </div>
             </div>
         @else
-            {{-- Estado Vacío por si no hay productos agregados --}}
             <div class="text-center py-5">
                 <i class="bi bi-cart-x text-muted" style="font-size: 3rem;"></i>
                 <p class="mt-3 text-muted-adaptativo">No tienes productos en tu carrito de compras.</p>
@@ -139,3 +178,81 @@
         @endif
     </div>
 </div>
+
+{{-- Estilos integrados en línea para remover las flechas del input --}}
+<style>
+    .no-spinners::-webkit-outer-spin-button,
+    .no-spinners::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .no-spinners {
+        -moz-appearance: textfield;
+    }
+</style>
+
+{{-- Scripts funcionales para el manejo interactivo del Offcanvas --}}
+<script>
+    function validateCartKeyboardInput(input) {
+        const cardBody = input.closest('.card-body');
+        const maxAlert = cardBody.querySelector('.label-stock-max');
+        const typeAlert = cardBody.querySelector('.label-type-err');
+        const max = parseInt(input.getAttribute('max'));
+
+        if (input.value === '') {
+            typeAlert.classList.remove('d-none');
+            maxAlert.classList.add('d-none');
+            return;
+        }
+
+        typeAlert.classList.add('d-none');
+        let value = parseInt(input.value);
+
+        if (value < 1) {
+            input.value = 1;
+            maxAlert.classList.add('d-none');
+        } else if (value > max) {
+            input.value = max;
+            maxAlert.classList.remove('d-none');
+        } else {
+            maxAlert.classList.add('d-none');
+        }
+        
+        // NOTA: Aquí deberían llamar a su función AJAX para actualizar el subtotal en la base de datos sin recargar la página.
+    }
+
+    function incrementCartQty(button) {
+        const input = button.parentElement.querySelector('.input-qty-cart');
+        const cardBody = button.closest('.card-body');
+        const maxAlert = cardBody.querySelector('.label-stock-max');
+        const typeAlert = cardBody.querySelector('.label-type-err');
+        const max = parseInt(input.getAttribute('max'));
+
+        if (input.value === '') input.value = 0;
+        typeAlert.classList.add('d-none');
+        let value = parseInt(input.value);
+
+        if (value < max) {
+            input.value = value + 1;
+            maxAlert.classList.add('d-none');
+        } else {
+            maxAlert.classList.remove('d-none');
+        }
+    }
+
+    function decrementCartQty(button) {
+        const input = button.parentElement.querySelector('.input-qty-cart');
+        const cardBody = button.closest('.card-body');
+        const maxAlert = cardBody.querySelector('.label-stock-max');
+        const typeAlert = cardBody.querySelector('.label-type-err');
+
+        if (input.value === '') input.value = 2;
+        typeAlert.classList.add('d-none');
+        let value = parseInt(input.value);
+
+        if (value > 1) {
+            input.value = value - 1;
+            maxAlert.classList.add('d-none');
+        }
+    }
+</script>
