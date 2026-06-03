@@ -222,28 +222,39 @@
 
         function incrementQty() {
             const input = document.getElementById('quantity');
-            const alertBox = document.getElementById('stock-alert');
+            const stockAlert = document.getElementById('stock-alert');
+            const typeAlert = document.getElementById('type-alert');
             const max = parseInt(input.getAttribute('max'));
+            
+            // Si estaba vacío por un error de tipeo, al presionar "+" lo reseteamos a 1
+            if (input.value === '') input.value = 0;
+            
+            typeAlert.classList.add('d-none'); // Limpia error de letras
             let value = parseInt(input.value);
             
             if (value < max) {
                 input.value = value + 1;
-                alertBox.classList.add('d-none'); // Se asegura de ocultar la alerta si aún hay margen
+                stockAlert.classList.add('d-none');
             } else {
-                // Si ya llegó al máximo y sigue presionando "+", mostramos el aviso
-                alertBox.classList.remove('d-none');
+                stockAlert.classList.remove('d-none');
             }
         }
 
         function decrementQty() {
             const input = document.getElementById('quantity');
-            const alertBox = document.getElementById('stock-alert');
+            const stockAlert = document.getElementById('stock-alert');
+            const typeAlert = document.getElementById('type-alert');
+            
+            if (input.value === '') {
+                input.value = 2; // Reseteo rápido para que al restar quede en 1
+            }
+            
+            typeAlert.classList.add('d-none'); // Limpia error de letras
             let value = parseInt(input.value);
             
             if (value > 1) {
                 input.value = value - 1;
-                // Al bajar de la cantidad máxima, ocultamos el aviso inmediatamente
-                alertBox.classList.add('d-none');
+                stockAlert.classList.add('d-none');
             }
         }
 
