@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Users;
 
 use App\Filament\Resources\Products\Pages\ViewUser;
+use App\Filament\Resources\Queries\Schemas\UserInfolist;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
@@ -17,6 +18,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder; // Importante para el query global
 use Illuminate\Database\Eloquent\SoftDeletingScope; // Importante para Soft Deletes
+
 
 class UserResource extends Resource
 {
@@ -46,11 +48,15 @@ class UserResource extends Resource
     {
         return UsersTable::configure($table);
     }
+    public static function infolist(Schema $schema): Schema
+    {
+        return UserInfolist::configure($schema); //Agregado el Infolist
+    }
 
     public static function getRelations(): array
     {
         return [
-            OrdersRelationManager::class, // <-- REVISA QUE ESTÉ AQUÍ
+            OrdersRelationManager::class, // Agregada la relación con sus órdenes
         ];
     }
 
