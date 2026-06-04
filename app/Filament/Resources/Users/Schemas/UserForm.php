@@ -28,7 +28,7 @@ class UserForm
                     ->disabled(fn($record) => $record !== null && Filament::auth()->id() !== $record->id)
                     ->dehydrated(fn($record) => $record === null || Filament::auth()->id() === $record->id)
                     ->maxLength(255),
-
+                //NOTA: el atributo ->hiddenOn('view') por ej, me permitía ocultar detalles en la vista view. Ya no lo uso por manejar todo en Infolist
                 TextInput::make('first_name')
                     ->label('Nombre/s')
                     ->required()
@@ -50,12 +50,10 @@ class UserForm
                     ->unique(table: 'users', column: 'email', ignoreRecord: true),
 
                 DateTimePicker::make('email_verified_at')
-                    ->hiddenOn('view')  //Oculto en la pantalla de vista
                     ->label('Correo verificado el día')
                     ->timezone('America/Argentina/Buenos_Aires'),
 
                 Select::make('role_id')
-                    ->hiddenOn('view') //Oculto en la pantalla de vista
                     ->label('Rol')
                     ->relationship('role', 'name')
                     ->required()
@@ -65,7 +63,6 @@ class UserForm
                     ->dehydrated(fn($state) => filled($state)),
                 //Aqui solo me manejo con la validación del lado de filament, para que no hayan conflictos en campos vacíos.
                 TextInput::make('password')
-                    ->hiddenOn('view') //Oculto en la pantalla de vista
                     ->label('Contraseña')
                     ->password()
                     ->revealable()
@@ -80,7 +77,6 @@ class UserForm
                     ->dehydrated(fn($state) => filled($state)),
 
                 TextInput::make('password_confirmation')
-                    ->hiddenOn('view') //Oculto en la pantalla de vista
                     ->label('Confirmar Contraseña')
                     ->password()
                     ->revealable()
