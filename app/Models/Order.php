@@ -72,4 +72,20 @@ class Order extends Model
             },
         );
     }
+    
+    protected function paymentMethodLabel(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                $methods = [
+                    'credit'   => 'Tarjeta de Crédito',
+                    'transfer_bank' => 'Transferencia Bancaria',
+                    'transfer_mp' => 'Mercado Pago',
+                ];
+
+                // Si el método de pago en la BD no existe en el array, por seguridad devuelve 'Desconocido'
+                return $methods[$attributes['payment_method']] ?? 'Desconocido';
+            },
+        );
+    }
 }
