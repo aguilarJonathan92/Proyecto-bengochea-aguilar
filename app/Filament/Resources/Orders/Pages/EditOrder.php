@@ -20,8 +20,9 @@ class EditOrder extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            ViewAction::make(),
-            DeleteAction::make(),
+            ViewAction::make()
+            ->label("Volver"),
+            //DeleteAction::make(),
         ];
     }
     protected function getRedirectUrl(): string
