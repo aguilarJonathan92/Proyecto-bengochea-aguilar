@@ -152,7 +152,7 @@
                                                     <p class="mb-1 color-adaptativo"><strong>Email:</strong>
                                                         {{ $order->customer_email }}</p>
                                                     <p class="mb-0 color-adaptativo"><strong>Método de pago:</strong>
-                                                        {{ $order->payment_method === 'transfer' ? 'Transferencia Bancaria' : 'Tarjeta de Crédito/Débito' }}
+                                                        {{ $order->payment_method_label }}
                                                     </p>
                                                 </div>
                                             </div>
