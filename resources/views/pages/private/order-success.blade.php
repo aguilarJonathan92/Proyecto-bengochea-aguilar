@@ -15,7 +15,7 @@
 
                     <h2 class="fw-bold color-adaptativo mb-2">¡Gracias por tu compra!</h2>
                     <p class="text-muted-adaptativo mb-4">
-                        Tu pedido ha sido recibido con éxito y ya se encuentra <strong>{{ $order->status }}</strong>.
+                        Tu Orden ha sido recibida con éxito. Puedes ver el estado en <br><strong><a class="text-decoration-none color-dorado-adaptativo"href="{{route('mis-pedidos')}}">Mis Pedidos</a></strong>.
                     </p>
 
                     {{-- Caja de Detalles del Pedido --}}
@@ -29,7 +29,7 @@
                         <div class="d-flex justify-content-between mb-2 small">
                             <span class="text-muted-adaptativo">Método de pago:</span>
                             <span class="fw-bold color-adaptativo text-uppercase">
-                                {{ $order->payment_method === 'transfer' ? 'Transferencia Bancaria' : 'Tarjeta' }}
+                                {{$order->payment_method_label}}
                             </span>
                         </div>
                         <div class="d-flex justify-content-between mb-2 small">
@@ -55,7 +55,7 @@
                     @else
                         <div class="alert alert-success text-start mb-4 small animate__animated animate__fadeIn animate__delay-1s">
                             <p class="mb-0">
-                                <i class="bi bi-shield-check me-2"></i> Tu pago con tarjeta fue aprobado. Te enviamos un correo electrónico con la confirmación y la factura de tu compra.
+                                <i class="bi bi-shield-check me-2"></i> ¡Gracias por tu compra! Tu pago fue confirmado. Estamos procesando tu pedido y pronto podrás acceder a tu comprobante.
                             </p>
                         </div>
                     @endif
