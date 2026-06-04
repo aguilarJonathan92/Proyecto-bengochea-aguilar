@@ -18,49 +18,40 @@ class OrdersTable
     {
         return $table
             ->columns([
-                // 1. El ID de la Orden como identificador principal
+                // El ID de la Orden como identificador principal
                 TextColumn::make('id')
                     ->label('Orden #')
                     ->searchable()
                     ->sortable(),
 
-                // 2. Traemos el nombre del usuario usando la relación 'user'
-                TextColumn::make('user.name')
-                    ->label('Usuario Reg.')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true), // Oculto por defecto si prefieren guiarse por los datos del cliente
-
-                // 3. Concatenamos Nombre y Apellido del Cliente que compró
-                TextColumn::make('customer_fullname')
+                // Nombre del usuario usando la relación 'user'
+                TextColumn::make('user.name') //el name es obtenido de la función del modelo getNameAttribute()
                     ->label('Cliente')
-                    ->searchable(['customer_name', 'customer_lastname']) // Permite buscar por ambos campos
-                    ->state(function (Order $record): string {
-                        return "{$record->customer_name} {$record->customer_lastname}";
-                    }),
+                    ->searchable(['first_name', 'last_name']) //Especificando los parámetros por los que se puede buscar a un cliente
+                    ->sortable(),
 
-                // 4. Mostramos la Ciudad usando la relación 'city'
+                // Mostramos la Ciudad usando la relación 'city'
                 TextColumn::make('city.name')
                     ->label('Ciudad')
                     ->searchable()
                     ->sortable(),
 
-                // 5. Formato moneda para el total (ej: ARS o el símbolo $)
+                // Formato moneda para el total (ARS)
                 TextColumn::make('total')
                     ->label('Total')
-                    ->money('ARS') // Podés cambiarlo por 'USD' o la moneda de tu tienda
+                    ->money('ARS')
                     ->sortable(),
 
-                // 6. Método de Pago resumido
+                // Método de Pago resumido
                 TextColumn::make('payment_method')
-                    ->label('Pago')
+                    ->label('Método de Pago')
                     ->searchable(),
 
                 // 7. El Estado Del Envío.
                 TextColumn::make('status')
-                    ->label('Estado')
+                    ->label('Estado de Envío')
                     ->badge()
-                    ->formatStateUsing(fn($record) => $record->status_label) // <-- Usa tu Opción 1
+                    ->formatStateUsing(fn($record) => $record->status_label)
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'warning',
                         'processing' => 'info',
@@ -70,7 +61,7 @@ class OrdersTable
                         default => 'gray',
                     }),
 
-                // 8. Traemos al frente la fecha de creación para saber cuándo se compró
+                // Fecha de creación para saber cuándo se compró
                 TextColumn::make('created_at')
                     ->label('Fecha')
                     ->dateTime('d/m/Y H:i', 'America/Argentina/Buenos_Aires')

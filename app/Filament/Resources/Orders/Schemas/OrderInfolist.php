@@ -41,7 +41,7 @@ class OrderInfolist
                     ])
                     ->collapsible(),
 
-                // Sección: PRODUCTOS COMPRADOS (Historial estático)
+                // Sección: PRODUCTOS COMPRADOS (estático)
                 ComponentsSection::make('Productos en el Pedido')
                     ->icon('heroicon-o-shopping-bag')
                     ->schema([
