@@ -7,6 +7,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Province;
 use App\Models\UserAddress;
+use App\Http\Requests\CheckoutRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -32,19 +33,9 @@ class CheckoutController extends Controller
         return view('pages.private.checkout', compact('cart', 'direcciones', 'provincias'));
     }
 
-    public function store(Request $request){
+    public function store(CheckoutRequest $request){
         // 1. Validar los datos que vienen del formulario del checkout
-        $validated = $request->validate([
-            'customer_name'     => 'required|string|max:255',
-            'customer_lastname' => 'required|string|max:255',
-            'customer_email'    => 'required|email|max:255',
-            'paymentMethod'     => 'required|string|in:credit,transfer_bank,transfer_mp',
-
-            // Estas reglas solo se activan si eligió registrar una nueva dirección
-        'delivery_street'      => 'required_if:user_address_id,nueva_direccion|nullable|string|max:255',
-        'delivery_postal_code' => 'required_if:user_address_id,nueva_direccion|nullable|string|max:10',
-        'delivery_city_id'     => 'required_if:user_address_id,nueva_direccion|nullable|exists:cities,id',
-        ]);
+        $validated = $request->validated();
 
         $user = $request->user();
 
@@ -52,7 +43,7 @@ class CheckoutController extends Controller
         $calleEnvio = '';
         $cpEnvio = '';
         $ciudadEnvioId = null;
-
+ 
         if ($request->user_address_id === 'nueva_direccion') {
             // 1. Es una dirección nueva: La guardamos en su cuenta para el futuro
             $nuevaDireccion = $user->addresses()->create([
