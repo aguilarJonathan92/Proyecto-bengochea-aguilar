@@ -86,18 +86,17 @@
                                         <div class="d-flex align-items-center my-2">
                                             <small class="text-muted-adaptativo me-2">Cantidad:</small>
                                             <div class="input-group input-group-sm" style="max-width: 120px;">
-                                                <button class="btn btn-outline-secondary btn-qty-decrement" type="button" onclick="decrementCartQty(this)">-</button>
+                                                 <button class="btn btn-outline-secondary btn-qty-decrement" type="button" data-item-id="{{ $item->id }}">-</button>
                                                 
-                                                {{-- Removido readonly, agregada validación oninput y estilos personalizados sin flechas --}}
                                                 <input type="number" 
                                                     class="form-control text-center input-qty-cart no-spinners" 
                                                     value="{{ $cantidadReal }}" 
                                                     min="1" 
                                                     max="{{ $producto->stock }}" 
                                                     data-item-id="{{ $item->id }}"
-                                                    oninput="validateCartKeyboardInput(this)">
+                                                    data-initial-value="{{ $cantidadReal }}">
                                                 
-                                                <button class="btn btn-outline-secondary btn-qty-increment" type="button" onclick="incrementCartQty(this)">+</button>
+                                                <button class="btn btn-outline-secondary btn-qty-increment" type="button" data-item-id="{{ $item->id }}">+</button>
                                             </div>
                                         </div>
                                         {{-- Alerta dinámica de teclado --}}
