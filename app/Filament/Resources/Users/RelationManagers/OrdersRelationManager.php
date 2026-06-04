@@ -22,8 +22,15 @@ class OrdersRelationManager extends RelationManager
             ]);
     }
     public static function canViewForRecord($record, $pageClass): bool
-{
-    // Solo se muestra si la página actual es la de "ViewUser"
-    return $pageClass === ViewUser::class;
-}
+    {
+
+        // 1ero: Que solo se muestre en la página de "Ver" (lo que ya tenías)
+        $isViewPage = $pageClass === ViewUser::class;
+
+        // 2do: Que el usuario evaluado ($record) NO sea un administrador
+        $isNotAdminRecord = $record->role->name !== 'admin';
+
+        // El Relation Manager solo se cargará si se cumplen ambas condiciones
+        return $isViewPage && $isNotAdminRecord;
+    }
 }

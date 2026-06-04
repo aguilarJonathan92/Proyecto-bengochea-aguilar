@@ -75,8 +75,9 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->with('role') // Precarga de los roles, para evitar N+1
             ->withoutGlobalScopes([
-                SoftDeletingScope::class,
+                SoftDeletingScope::class, //permitiendo Soft Deletes
             ]);
     }
 
