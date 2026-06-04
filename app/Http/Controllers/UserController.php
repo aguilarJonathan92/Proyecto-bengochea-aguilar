@@ -20,44 +20,29 @@ class UserController extends Controller
         return view('pages.private.user-panel', compact('user', 'provincias'));
     }
 
-    public function update(Request $request){
+    public function update(UpdateProfileRequest $request){
 
         $user = User::find(Auth::id()); //trae desde la base de datos, los datos de usuario autenticado
 
-        $request->validate([
-            'first_name' => 'required|string|max:100',
-            'last_name'  => 'required|string|max:100',
-            'email'      => 'required|email|unique:users,email,' . $user->id,
-            'password'   => 'nullable|min:8|confirmed',
-            'phone'      => 'nullable|string|max:20',
+        $profile = $request->validated();
 
-            // Reglas para el array de direcciones
-            'addresses'                 => 'nullable|array',
-            'addresses.*.id'            => 'nullable|exists:user_addresses,id',
-            'addresses.*.alias'         => 'required_with:addresses|string|max:50',
-            'addresses.*.street'        => 'required_with:addresses|string|max:255',
-            'addresses.*.postal_code'   => 'required_with:addresses|string|max:10',
-            'addresses.*.city_id'       => 'required_with:addresses|exists:cities,id',
-            'addresses.*.is_default'    => 'nullable',
-        ]);
+        $user->first_name = $profile['first_name'];
+        $user->last_name  = $profile['last_name'];
+        $user->email      = $profile['email'];
 
-        $user->first_name = $request->first_name;
-        $user->last_name  = $request->last_name;
-        $user->email      = $request->email;
-
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
+        if (!empty($profile['password'])) {
+            $user->password = Hash::make($profile['password']);
         }
 
         $user->save();
 
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
-            ['phone' => $request->phone]
+            ['phone' => $profile['phone'] ?? null]
         );
 
         // 3. Procesar Direcciones Dinámicas
-        $inputAddresses = $request->input('addresses', []);
+        $inputAddresses = $profile['addresses'] ?? [];
         $keepAddressIds = [];
 
         // Detectar si el usuario marcó alguna de las direcciones enviadas como predeterminada
