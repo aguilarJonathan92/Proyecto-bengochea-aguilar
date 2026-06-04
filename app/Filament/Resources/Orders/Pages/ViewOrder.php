@@ -10,6 +10,12 @@ class ViewOrder extends ViewRecord
 {
     protected static string $resource = OrderResource::class;
 
+    // Cambia el título de la página de visualización
+    public function getTitle(): string
+    {
+        return "Detalle de la Orden #" . $this->getRecord()->id;
+    }
+    
     protected function getHeaderActions(): array
     {
         return [

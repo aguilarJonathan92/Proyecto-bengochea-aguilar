@@ -11,6 +11,12 @@ class EditOrder extends EditRecord
 {
     protected static string $resource = OrderResource::class;
 
+    // Cambia el título de la página dinámicamente
+    public function getTitle(): string
+    {
+        return "Editar Orden #" . $this->getRecord()->id;
+    }
+
     protected function getHeaderActions(): array
     {
         return [

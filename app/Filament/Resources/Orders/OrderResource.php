@@ -55,12 +55,8 @@ class OrderResource extends Resource
             'edit' => EditOrder::route('/{record}/edit'),
         ];
     }
-    // Nombre en la barra lateral
+    //Nombres para la página ppal
+    protected static ?string $modelLabel = 'orden';
+    protected static ?string $pluralModelLabel = 'Órdenes';
     protected static ?string $navigationLabel = 'Órdenes';
-
-    // Título de la página (en plural)
-    protected static ?string $pluralLabel = 'Órdenes';
-
-    // Título para un solo registro (ej: "Crear Orden")
-    protected static ?string $modelLabel = 'Orden';
 }

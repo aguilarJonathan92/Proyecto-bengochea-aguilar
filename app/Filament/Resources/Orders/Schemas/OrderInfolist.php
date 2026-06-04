@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Orders\Schemas;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use App\Models\Order;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Schemas\Components\Section as ComponentsSection;
 use Filament\Infolists\Components\RepeatableEntry as ComponentsRepeatableEntry;
 
@@ -49,6 +50,11 @@ class OrderInfolist
                             ->schema([
                                 TextEntry::make('product.title')
                                     ->label('Producto'),
+                                ImageEntry::make('product.image_1') //ubicación de la imagen en la tabla
+                                    ->label('Foto')
+                                    ->disk('public') // disco por defecto
+                                    ->imageSize(50) // Tamaño en píxeles (cuadrado de 50x50)
+                                    ->circular(),
                                 TextEntry::make('quantity')
                                     ->label('Cantidad'),
                                 TextEntry::make('price')
@@ -63,8 +69,8 @@ class OrderInfolist
                         TextEntry::make('status')
                             ->label('Estado de la Orden')
                             ->badge()
-                            ->formatStateUsing(fn($record) => $record->status_label) // <-- Muestra tu texto del modelo
-                            ->color(fn(string $state): string => match ($state) {
+                            ->formatStateUsing(fn($record) => $record->status_label) // Texto de estado al español, traído del modelo
+                            ->color(fn(string $state): string => match ($state) { //color para cada uno de los estados
                                 'pending' => 'warning',
                                 'processing' => 'info',
                                 'shipped' => 'primary',
