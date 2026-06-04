@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Province;
 use App\Models\User;
 use App\Models\UserAddress;
+use App\Http\Requests\UpdateProfileRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;

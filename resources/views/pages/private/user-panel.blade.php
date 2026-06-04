@@ -119,9 +119,7 @@
                                         placeholder="Ej: Jonathan"
                                         value="{{ old('first_name', auth()->user()->first_name) }}"
                                         required>
-                                    @error('first_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <div class="invalid-feedback">{{ $errors->first('first_name') }}</div>
                                 </div>
  
                                 <div class="col-sm-6">
@@ -131,9 +129,7 @@
                                         placeholder="Ej: Aguilar"
                                         value="{{ old('last_name', auth()->user()->last_name) }}"
                                         required>
-                                    @error('last_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <div class="invalid-feedback">{{ $errors->first('last_name') }}</div>
                                 </div>
  
                                 <div class="col-12">
@@ -143,9 +139,7 @@
                                         placeholder="nombre@ejemplo.com"
                                         value="{{ old('email', auth()->user()->email) }}"
                                         required>
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <div class="invalid-feedback">{{ $errors->first('email') }}</div>
                                 </div>
                             </div>
 
@@ -155,15 +149,15 @@
                                     class="form-control checkout-input @error('phone') is-invalid @enderror"
                                     placeholder="Ej: +54 379 1234567"
                                     value="{{ old('phone', $user->profile?->phone) }}">
-                                @error('phone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <div class="invalid-feedback">{{ $errors->first('phone') }}</div>
                             </div>
+
+                            <hr class="checkout-separator">
  
                             {{-- SECCIÓN SELECCIONABLE DE DIRECCIONES DINÁMICAS --}}
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h6 class="checkout-title color-adaptativo mb-0">Mis Direcciones</h6>
-                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="agregarDireccion()">
+                                <button type="button" class="btn-editar" onclick="agregarDireccion()">
                                     <i class="bi bi-plus-lg"></i> Añadir dirección
                                 </button>
                             </div>
@@ -184,9 +178,9 @@
                                     <input type="password" name="password"
                                         class="form-control checkout-input @error('password') is-invalid @enderror"
                                         placeholder="Dejar vacío para no cambiar">
-                                    @error('password')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                     <div class="invalid-feedback">
+                                        {{ $errors->first('password') }}
+                                    </div>
                                 </div>
  
                                 <div class="col-12">
@@ -194,6 +188,7 @@
                                     <input type="password" name="password_confirmation"
                                         class="form-control checkout-input"
                                         placeholder="Repetir nueva contraseña">
+                                    <div class="invalid-feedback"></div>
                                 </div>
                             </div>
  
@@ -224,33 +219,51 @@
             </div>
             <div class="row g-2">
                 <div class="col-sm-6">
-                    <input type="text" name="addresses[{index}][alias]" class="form-control form-control-sm" placeholder="Alias (Ej: Casa, Trabajo)" value="{alias}" required>
+                    <input type="text" name="addresses[{index}][alias]" 
+                        class="form-control form-control-sm" 
+                        placeholder="Alias (Ej: Casa, Trabajo)" 
+                        value="{alias}" required>
+                    <div class="invalid-feedback">El alias es obligatorio.</div>
                 </div>
                 <div class="col-sm-6">
-                    <input type="text" name="addresses[{index}][postal_code]" class="form-control form-control-sm" placeholder="Cód. Postal" value="{postal_code}" required>
+                    <input type="text" name="addresses[{index}][postal_code]" 
+                        class="form-control form-control-sm" 
+                        placeholder="Cód. Postal" 
+                        value="{postal_code}" required>
+                    <div class="invalid-feedback">El código postal es obligatorio.</div>
                 </div>
                 <div class="col-12">
-                    <input type="text" name="addresses[{index}][street]" class="form-control form-control-sm" placeholder="Calle, número, piso/depto" value="{street}" required>
+                    <input type="text" name="addresses[{index}][street]" 
+                        class="form-control form-control-sm" 
+                        placeholder="Calle, número, piso/depto" 
+                        value="{street}" required>
+                    <div class="invalid-feedback">La calle es obligatoria.</div>
                 </div>
                 {{-- SELECT DE PROVINCIAS --}}
                 <div class="col-sm-6">
-                    <select class="form-select form-select-sm select-provincia" onchange="cargarCiudadesDinamico(this)" required>
+                    <select class="form-select form-select-sm select-provincia" 
+                        onchange="cargarCiudadesDinamico(this)" required>
                         <option value="" disabled selected>Selecciona Provincia...</option>
                         @foreach($provincias as $provincia)
                             <option value="{{ $provincia->id }}">{{ $provincia->name }}</option>
                         @endforeach
                     </select>
+                    <div class="invalid-feedback">Seleccioná una provincia.</div>
                 </div>
 
                 {{-- SELECT DE CIUDADES (Dependiente) --}}
                 <div class="col-sm-6">
-                    <select name="addresses[{index}][city_id]" class="form-select form-select-sm select-ciudad" required disabled>
+                    <select name="addresses[{index}][city_id]" 
+                        class="form-select form-select-sm select-ciudad" required disabled>
                         <option value="" disabled selected>Selecciona Ciudad...</option>
                     </select>
+                    <div class="invalid-feedback">Seleccioná una ciudad.</div>
                 </div>
                 <div class="col-12 mt-2">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="addresses[{index}][is_default]" value="1" id="def-{index}" {checked}>
+                        <input class="form-check-input" type="checkbox" 
+                            name="addresses[{index}][is_default]" 
+                            value="1" id="def-{index}" {checked}>
                         <label class="form-check-label small" for="def-{index}">Establecer como predeterminada</label>
                     </div>
                 </div>
