@@ -2,56 +2,91 @@
  * Maneja la actualización dinámica de cantidades respetando el stock.
  */
 document.addEventListener('DOMContentLoaded', function () {
-    
-    // NOTA: Ya no hace falta el código de persistencia de sessionStorage 
-    // porque al no recargarse la página, el Offcanvas nunca se cierra solo.
 
-    // 1. CONTROL DEL BOTÓN DE DECREMENTO (-)
+    // 1. DECREMENTO (-)
     document.querySelectorAll('.btn-qty-decrement').forEach(button => {
         button.addEventListener('click', function () {
             const itemId = this.getAttribute('data-item-id');
             const input = document.querySelector(`.input-qty-cart[data-item-id="${itemId}"]`);
-            let currentValue = parseInt(input.value);
-            
-            if (currentValue > 1) {
-                input.value = currentValue - 1;
+            const cardBody = input.closest('.card-body');
+            const maxAlert = cardBody.querySelector('.label-stock-max');
+            const typeAlert = cardBody.querySelector('.label-type-err');
+            let value = parseInt(input.value);
+
+            typeAlert.classList.add('d-none');
+
+            if (value > 1) {
+                input.value = value - 1;
+                maxAlert.classList.add('d-none');
                 updateCartQuantity(itemId, input.value, input);
             }
         });
     });
 
-    // 2. CONTROL DEL BOTÓN DE INCREMENTO (+)
+    // 2. INCREMENTO (+)
     document.querySelectorAll('.btn-qty-increment').forEach(button => {
         button.addEventListener('click', function () {
             const itemId = this.getAttribute('data-item-id');
             const input = document.querySelector(`.input-qty-cart[data-item-id="${itemId}"]`);
-            let currentValue = parseInt(input.value);
-            let maxStock = parseInt(input.getAttribute('max'));
-            
-            if (currentValue < maxStock) {
-                input.value = currentValue + 1;
+            const cardBody = input.closest('.card-body');
+            const maxAlert = cardBody.querySelector('.label-stock-max');
+            const typeAlert = cardBody.querySelector('.label-type-err');
+            const max = parseInt(input.getAttribute('max'));
+            let value = parseInt(input.value);
+
+            typeAlert.classList.add('d-none');
+
+            if (value < max) {
+                input.value = value + 1;
+                maxAlert.classList.add('d-none');
                 updateCartQuantity(itemId, input.value, input);
             } else {
-                alert(`No puedes agregar más de este producto. Stock máximo disponible: ${maxStock}`);
+                maxAlert.classList.remove('d-none');
             }
         });
     });
 
-    // 3. CONTROL DE CAMBIO MANUAL
+    // 3. INPUT MANUAL (oninput — validación en tiempo real)
     document.querySelectorAll('.input-qty-cart').forEach(input => {
+        input.addEventListener('input', function () {
+            const cardBody = this.closest('.card-body');
+            const maxAlert = cardBody.querySelector('.label-stock-max');
+            const typeAlert = cardBody.querySelector('.label-type-err');
+            const max = parseInt(this.getAttribute('max'));
+
+            if (this.value === '') {
+                typeAlert.classList.remove('d-none');
+                maxAlert.classList.add('d-none');
+                return;
+            }
+
+            typeAlert.classList.add('d-none');
+            let value = parseInt(this.value);
+
+            if (value < 1) {
+                this.value = 1;
+                maxAlert.classList.add('d-none');
+            } else if (value > max) {
+                this.value = max;
+                maxAlert.classList.remove('d-none');
+            } else {
+                maxAlert.classList.add('d-none');
+            }
+        });
+
+        // 4. CHANGE — dispara el AJAX cuando el usuario termina de escribir
         input.addEventListener('change', function () {
             const itemId = this.getAttribute('data-item-id');
             let value = parseInt(this.value);
-            let maxStock = parseInt(this.getAttribute('max'));
-            let initialValue = parseInt(this.getAttribute('data-initial-value'));
+            const max = parseInt(this.getAttribute('max'));
+            const initialValue = parseInt(this.getAttribute('data-initial-value'));
 
             if (isNaN(value) || value < 1) {
                 this.value = 1;
                 value = 1;
-            } else if (value > maxStock) {
-                alert(`Límite de stock superado. El inventario disponible es de ${maxStock} unidades.`);
-                this.value = maxStock;
-                value = maxStock;
+            } else if (value > max) {
+                this.value = max;
+                value = max;
             }
 
             if (value !== initialValue) {
@@ -60,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 4. PETICIÓN ASÍNCRONA Y ACTUALIZACIÓN EN TIEMPO REAL
+    // 5. AJAX — actualización en base de datos y refresco del DOM
     function updateCartQuantity(itemId, quantity, inputElement) {
         const url = `/cart/update/${itemId}`;
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -88,30 +123,23 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             if (data.success) {
-                // Actualizamos el valor de respaldo por si el usuario vuelve a cambiarlo equívocamente
                 inputElement.setAttribute('data-initial-value', quantity);
 
-                // 1. Buscar la tarjeta de este producto específico y actualizar su precio total
                 const itemCard = document.querySelector(`.item-cart-card[data-item-id="${itemId}"]`);
                 if (itemCard) {
                     const itemTotalDisplay = itemCard.querySelector('.item-total-display');
-                    if (itemTotalDisplay) {
-                        itemTotalDisplay.textContent = data.formatted_item_total;
-                    }
+                    if (itemTotalDisplay) itemTotalDisplay.textContent = data.formatted_item_total;
                 }
 
-                // 2. Actualizar los bloques del resumen de compra abajo
                 const subtotalDisplay = document.querySelector('.cart-subtotal-display');
                 const totalDisplay = document.querySelector('.cart-total-display');
-                
                 if (subtotalDisplay) subtotalDisplay.textContent = data.formatted_subtotal;
-                if (totalDisplay) totalDisplay.textContent = data.formatted_subtotal; // El total es igual al subtotal (envío gratis)
+                if (totalDisplay) totalDisplay.textContent = data.formatted_subtotal;
             }
         })
         .catch(error => {
             console.error('Error al actualizar el carrito:', error);
             alert(error.message || 'Ocurrió un error al actualizar la cantidad.');
-            // Revertimos el input al último valor seguro guardado en el backend
             inputElement.value = inputElement.getAttribute('data-initial-value');
         });
     }
