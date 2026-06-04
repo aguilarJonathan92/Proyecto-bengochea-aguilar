@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            //$table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // Hacemos que el campo pueda ser null y le asignamos la regla
+            $table->foreignId('user_id')
+                ->nullable() //  Permite que la orden se quede sin usuario temporalmente
+                ->constrained()
+                ->nullOnDelete(); //  Si el usuario se borra definitivamente, el ID pasa a NULL, pero la orden sigue
 
             //datos de la venta
             $table->decimal('total', 10, 2);

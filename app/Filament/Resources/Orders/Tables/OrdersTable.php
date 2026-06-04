@@ -27,8 +27,12 @@ class OrdersTable
                 // Nombre del usuario usando la relación 'user'
                 TextColumn::make('user.name') //el name es obtenido de la función del modelo getNameAttribute()
                     ->label('Cliente')
-                    ->searchable(['first_name', 'last_name']) //Especificando los parámetros por los que se puede buscar a un cliente
+                    // Si el usuario fue borrado definitivamente, mostrará esto:
+                    ->default('Usuario Eliminado (Historial Protegido)')
+                    // Busca en los campos del usuario, o en los fijos de la orden por si el usuario ya no existe
+                    ->searchable(['first_name', 'last_name', 'customer_name', 'customer_lastname'])
                     ->sortable(),
+
 
                 // Mostramos la Ciudad usando la relación 'city'
                 TextColumn::make('city.name')
@@ -74,9 +78,9 @@ class OrdersTable
             ])
             ->recordActions([
                 ViewAction::make()
-                ->label('Ver Detalles'),
+                    ->label('Ver Detalles'),
                 EditAction::make()
-                ->label('Cambiar Estado'),
+                    ->label('Cambiar Estado'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

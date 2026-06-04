@@ -98,7 +98,7 @@ class OrderInfolist
 
                         TextEntry::make('user.name')
                             ->label('Usuario Registrado')
-                            ->placeholder('Invitado / Sin registrar'),
+                            ->default('Usuario Eliminado (Historial Protegido)'),
                     ])
                     ->collapsible(),
             ]);

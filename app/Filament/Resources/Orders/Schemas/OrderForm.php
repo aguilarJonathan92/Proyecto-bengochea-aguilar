@@ -62,7 +62,10 @@ class OrderForm
                             ->schema([
                                 Select::make('product_id')
                                     ->label('Producto')
-                                    ->relationship('product', 'title')
+                                    // Con esto, Filament puede cargar el título del producto aunque tenga Soft Delete
+                                    //Al ser un select, necesita este ajuste. En cambio en la tabla y la infolist
+                                    //solo mira que el método product() de OrderItem incluya withTrashed()
+                                    ->relationship('product', 'title', fn($query) => $query->withTrashed())
                                     ->disabled(),
                                 TextInput::make('quantity')
                                     ->label('Cantidad')
@@ -108,6 +111,7 @@ class OrderForm
                     ]),
 
                 // Metadatos
+                // Sección: Metadatos
                 ComponentsSection::make('Metadatos')
                     ->schema([
                         TextInput::make('created_at')
@@ -122,11 +126,18 @@ class OrderForm
                                 }
                             }),
 
-                        TextInput::make('user_fullname')
+                        //  FORMULARIO BLINDADO PARA USUARIOS ELIMINADOS
+                        TextInput::make('user_fullname') //Es solo un campo representativo.
                             ->label('Usuario Registrado')
                             ->disabled()
                             ->formatStateUsing(function (Order $record) {
-                                return $record->user ? $record->user->name : 'Usuario no encontrado';
+                                // Si el usuario se borró definitivamente (user_id quedó en null)
+                                if (! $record->user) {
+                                    return 'Usuario Eliminado (Historial Protegido)';
+                                }
+
+                                // Si el usuario sigue activo en el sistema
+                                return $record->user->name;
                             }),
                     ])
                     ->icon('heroicon-o-information-circle')
