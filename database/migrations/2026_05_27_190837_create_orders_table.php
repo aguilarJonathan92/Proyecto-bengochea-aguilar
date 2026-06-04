@@ -17,8 +17,8 @@ return new class extends Migration
 
             //datos de la venta
             $table->decimal('total', 10, 2);
-            $table->string('payment_method'); 
-            $table->string('status')->default('en proceso');
+            $table->string('payment_method');
+            $table->string('status')->default('processing');
 
             // DATOS DE ENTREGA CONGELADOS (para el historial de compras)
             $table->string('customer_name');
