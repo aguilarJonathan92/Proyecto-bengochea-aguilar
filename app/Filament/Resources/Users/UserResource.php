@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\Users;
 
+use App\Filament\Resources\Products\Pages\ViewUser;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
+use App\Filament\Resources\Users\RelationManagers\OrdersRelationManager;
 use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
@@ -20,7 +22,6 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    //
     // Como 'name' es el accesor (last_name + first_name), Filament lo entiende para títulos de registros globales.
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -49,7 +50,7 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            OrdersRelationManager::class, // <-- REVISA QUE ESTÉ AQUÍ
         ];
     }
 
@@ -58,6 +59,7 @@ class UserResource extends Resource
         return [
             'index' => ListUsers::route('/'),
             'create' => CreateUser::route('/create'),
+            'view' => ViewUser::route('/{record}'),
             'edit' => EditUser::route('/{record}/edit'),
         ];
     }

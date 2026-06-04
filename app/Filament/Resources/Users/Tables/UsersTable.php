@@ -6,6 +6,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter; // Filtro de Soft Deletes
 use Filament\Tables\Table;
@@ -56,6 +57,7 @@ class UsersTable
                 TrashedFilter::make(),
             ])
             ->recordActions([
+                ViewAction::make(), // Chequear!
                 // Esta acción se mostrará/ejecutará SOLO si el usuario NO está eliminado
                 EditAction::make()
                     ->visible(fn($record) => !$record->trashed()),
@@ -73,3 +75,4 @@ class UsersTable
             ]);
     }
 }
+
