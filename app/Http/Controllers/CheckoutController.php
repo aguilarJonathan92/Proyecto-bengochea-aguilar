@@ -120,7 +120,7 @@ class CheckoutController extends Controller
                 'user_id'              => $request->user()->id,
                 'total'                => $subtotal,
                 'payment_method'       => $request->paymentMethod,
-                'status'               => 'en proceso',
+                'status'               => 'processing',
                 'customer_name'        => $request->customer_name,
                 'customer_lastname'    => $request->customer_lastname,
                 'customer_email'       => $request->customer_email,
