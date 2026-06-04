@@ -19,7 +19,13 @@
                 @enderror
             </div>
             <div class="mb-3">
-                <label for="passwordLogin" class="form-label color-adaptativo">Contraseña</label>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label for="passwordLogin" class="form-label color-adaptativo mb-0">Contraseña</label>
+                    <a href="{{ route('queries', ['motivo' => 'cuenta']) }}"
+                        class="text-decoration-none small color-dorado-adaptativo">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
                 <div class="position-relative d-flex align-items-center">
                     <input type="password" class="form-control pe-5" name="password" id="passwordLogin"
                         placeholder="********" required>

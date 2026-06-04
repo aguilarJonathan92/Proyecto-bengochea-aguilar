@@ -43,13 +43,24 @@
                 <div class="mb-3">
                     <label for="asunto" class="form-label color-adaptativo">Asunto *</label>
                     <select id="asunto" name="subject" class="form-select" aria-label="Seleccionar asunto">
-                        <option value="" disabled {{ old('subject') == '' ? 'selected' : '' }}>Elija una opción
+
+                        <option value="" disabled
+                            {{ old('subject') == '' && request('motivo') !== 'cuenta' ? 'selected' : '' }}>
+                            Elija una opción
                         </option>
+
                         <option value="1" {{ old('subject') == '1' ? 'selected' : '' }}>Formas de pago</option>
+
                         <option value="2" {{ old('subject') == '2' ? 'selected' : '' }}>Modos/costos de envío
                         </option>
+
                         <option value="3" {{ old('subject') == '3' ? 'selected' : '' }}>Devolución</option>
-                        <option value="4" {{ old('subject') == '4' ? 'selected' : '' }}>Cuenta</option>
+
+                        <option value="4"
+                            {{ old('subject') == '4' || (old('subject') == '' && request('motivo') == 'cuenta') ? 'selected' : '' }}>
+                            Cuenta
+                        </option>
+
                         <option value="5" {{ old('subject') == '5' ? 'selected' : '' }}>Otros</option>
                     </select>
                     @error('subject')
@@ -60,7 +71,10 @@
                 <div class="mb-3">
                     <label for="mensaje" class="form-label color-adaptativo">Mensaje *</label>
                     <textarea class="form-control" id="mensaje" maxlength="500" name="message" rows="4"
-                        placeholder="Escribe tu consulta aquí...">{{ old('mensaje') }}</textarea>
+                        placeholder="Escribe tu consulta aquí...">{{ old(
+                            'message',
+                            request('motivo') === 'cuenta' ? 'Hola soporte, solicito ayuda para restablecer la contraseña de mi cuenta.' : '',
+                        ) }}</textarea>
                     <div id="contador" style="text-align: right; font-size: 0.9em; color: #666;">
                         0 / 500 caracteres
                     </div>
