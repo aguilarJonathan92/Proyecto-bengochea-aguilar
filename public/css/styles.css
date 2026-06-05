@@ -1011,7 +1011,7 @@ footer {
     border: 1px solid var(--border-ui);
     border-radius: 12px;
 }
- 
+
 .perfil-avatar {
     width: 56px;
     height: 56px;
@@ -1145,4 +1145,27 @@ footer {
         right: auto !important;
         transform: translateX(-50%) !important;
     }
+}
+
+
+
+/* Decoración a métodos de pago */
+/* Hace que el cursor sea interactivo en toda la tarjeta */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Efecto hover suave para la zona de pago */
+.checkout-payment-option {
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.checkout-payment-option:hover {
+    background-color: rgba(0, 0, 0, 0.02); /* Ajustar según tema claro/oscuro */
+}
+
+/* Opcional: Resaltar visualmente la tarjeta si el radio está seleccionado */
+.checkout-payment-option:has(input:checked) {
+    border-color: var(--color-dos) !important;
+    background-color: rgba(13, 110, 253, 0.05);
 }
