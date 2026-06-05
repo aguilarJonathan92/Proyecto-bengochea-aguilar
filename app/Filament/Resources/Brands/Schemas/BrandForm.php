@@ -19,6 +19,7 @@ class BrandForm
                     ->description('Configura los datos básicos de la marca.')
                     ->schema([
                         TextInput::make('name')
+                            ->label('Nombre de la marca')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->columnSpan(1),
