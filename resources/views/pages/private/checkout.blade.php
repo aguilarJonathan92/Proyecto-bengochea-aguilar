@@ -82,7 +82,7 @@
                             {{-- BLOQUE OCULTO PARA NUEVA DIRECCIÓN --}}
                             {{-- Se mostrará automáticamente si el usuario no tiene ninguna guardada o si elige "Nueva dirección" --}}
                             <div id="bloque-nueva-direccion"
-                                class="{{ $direcciones->isNotEmpty() && old('user_address_id', 'guardada') !== 'nueva_direccion' ? 'd-none' : '' }} mt-3">
+                                class="{{ $direcciones->isNotEmpty() && old('user_address_id', 'guardada') !== 'nueva_direccion' ? 'd-none' : '' }} mt-3 pt-3">
                                 <div class="p-3 bg-superficie-adaptativa rounded border border-ui-adaptativa row g-3">
                                     <h6 class="color-dorado-adaptativo fw-bold mb-0">Registrar nueva dirección de
                                         entrega</h6>
