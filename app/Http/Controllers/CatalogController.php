@@ -29,7 +29,7 @@ class CatalogController extends Controller
         }
 
         // 5. Traemos los productos ( get() o paginate(12))
-        $products = $query->get();
+        $products = $query->paginate(8);
         $categoria = $categoriaId;
 
         return view('pages.public.catalog', compact('products', 'tituloCategoria', 'categoria'));

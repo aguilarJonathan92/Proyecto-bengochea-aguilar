@@ -28,5 +28,11 @@
                 </div>
             @endforelse
         </div>
+        {{-- Paginador --}}
+        @if ($products->hasPages())
+            <div class="d-flex justify-content-center mt-5">
+                {{ $products->appends(request()->query())->links() }}
+            </div>
+        @endif
     </div>
 </x-layouts.layout>
