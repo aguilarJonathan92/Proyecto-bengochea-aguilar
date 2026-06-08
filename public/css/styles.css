@@ -101,6 +101,17 @@ body.fondo {
     color: var(--color-seis) !important;
 }
 
+/* Carousel */
+.custom-carousel .carousel-item {
+    height: calc(100vh - 140px);
+}
+
+.custom-carousel .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
 /* ==========================================================================
    COMPONENTES GLOBALES (Botones, Inputs, Nav)
    ========================================================================== */
