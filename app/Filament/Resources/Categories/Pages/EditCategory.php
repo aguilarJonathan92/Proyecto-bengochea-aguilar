@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Categories\Pages;
 use App\Filament\Resources\Categories\CategoryResource;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditCategory extends EditRecord
@@ -23,11 +24,9 @@ class EditCategory extends EditRecord
                 ]))
                 ->openUrlInNewTab(),
 
-            DeleteAction::make() //No permite borrar la categoría OTROS (id 1)
-                ->hidden(fn($record) => $record->id === 1)
-                ->before(function ($record) {
-                    $record->products()->update(['category_id' => 1]);
-                }), //En caso de que la categoría sea eliminable, los productos son reasignados a la categ. 'Otros' por defecto
+            DeleteAction::make(),
+            RestoreAction::make(),
+
         ];
     }
     protected function getRedirectUrl(): string
