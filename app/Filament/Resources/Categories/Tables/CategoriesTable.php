@@ -3,13 +3,15 @@
 namespace App\Filament\Resources\Categories\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\RestoreAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Notifications\Notification;
 
 class CategoriesTable
 {
@@ -17,33 +19,31 @@ class CategoriesTable
     {
         return $table
             ->columns([
-                // ID de la categoría (opcional, útil para control interno)
                 TextColumn::make('id')
                     ->label('ID')
                     ->sortable(),
 
-                // Nombre de la categoría
                 TextColumn::make('name')
                     ->label('Nombre de la Categoría')
-                    ->searchable() // Permite buscar categorías rápidamente
+                    ->searchable()
                     ->sortable()
                     ->weight('bold'),
-                //Nombre para mostrar en la web
+
                 TextColumn::make('display_title')
                     ->label('Título Largo/Comercial')
                     ->badge()
                     ->color('gray')
                     ->searchable()
                     ->sortable(),
-                // Conteo de productos (Muestra cuántos productos tiene cada categoría)
+
                 TextColumn::make('products_count')
                     ->label('Cant. Productos')
-                    ->counts('products') // Usa el nombre de la relación HasMany de tu modelo
+                    // Importante: Por defecto cuenta los productos asociados vigentes.
+                    ->counts('products')
                     ->badge()
                     ->color('info')
                     ->alignCenter(),
 
-                // Fecha de creación
                 TextColumn::make('created_at')
                     ->label('Creada el')
                     ->dateTime('d/m/Y H:i')
@@ -51,50 +51,32 @@ class CategoriesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                // Este filtro le permite al usuario alternar entre activas, borradas o todas
+                TrashedFilter::make(),
             ])
             ->recordActions([
-                EditAction::make(),
+                // Esta acción se mostrará/ejecutará SOLO si la categoría no está eliminada
+                EditAction::make()
+                    ->visible(fn($record) => !$record->trashed()),
+                DeleteAction::make()
+                    ->visible(fn($record) => !$record->trashed()),
+
+                // Esta acción se mostrará/ejecutará SOLO si la categoría está eliminada (softdelete)
+                RestoreAction::make()
+                    ->visible(fn($record) => $record->trashed()),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make()
-                        ->successNotification(null) // 1. Apagamos el cartel automático de Filament
-                        ->action(function (Collection $records) {
-                            $contadorEliminados = 0;
-                            $seleccionoOtros = false;
+                    // Elimina usando Soft Delete (llena la columna deleted_at)
+                    DeleteBulkAction::make(),
 
-                            $records->each(function (Model $record) use (&$contadorEliminados, &$seleccionoOtros) {
-                                // Saltamos la categoría "Otros" (ID 1)
-                                if ($record->id === 1) {
-                                    $seleccionoOtros = true;
-                                    return;
-                                }
+                    // Permite restaurar categorías borradas desde el filtro "Trash"
+                    RestoreBulkAction::make(),
 
-                                // Reasignación de productos
-                                $record->products()->update(['category_id' => 1]);
-                                $record->delete();
-
-                                $contadorEliminados++; // Sumamos uno por cada éxito real
-                            });
-
-                            // 2. Evaluamos qué notificación mostrar según el resultado
-                            if ($contadorEliminados > 0) {
-                                // Si se borró al menos una categoría válida
-                                Notification::make()
-                                    ->success()
-                                    ->title('Categorías eliminadas y productos reasignados con éxito')
-                                    ->send();
-                            } elseif ($seleccionoOtros && $records->count() === 1) {
-                                // Si SOLO se había marcado la categoría "Otros"
-                                Notification::make()
-                                    ->warning()
-                                    ->title('Acción cancelada')
-                                    ->body('La categoría "Otros" está protegida por el sistema y no puede ser eliminada.')
-                                    ->send();
-                            }
-                        }),
+                    // Eliminado permanente. Desactivado
+                    //ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
 }
+
