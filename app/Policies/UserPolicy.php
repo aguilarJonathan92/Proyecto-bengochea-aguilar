@@ -41,6 +41,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
+        /*
         // 1. Si el usuario que intenta editar no es administrador, se le niega el acceso
         if ($user->role?->name !== 'admin') {
             return false;
@@ -54,6 +55,8 @@ class UserPolicy
 
         // 3. Si pasó los filtros anteriores, es un admin editando a cualquier otro usuario
         return true;
+        */
+        return false;
     }
 
     /**
@@ -63,6 +66,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
+
         // 1. Solo administradores
         if ($user->role?->name !== 'admin') {
             return false;
@@ -94,6 +98,8 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
+        /*
+
         // 1. Solo administradores
         if ($user->role?->name !== 'admin') {
             return false;
@@ -110,5 +116,7 @@ class UserPolicy
         }
 
         return true;
+        */
+        return false;
     }
 }
