@@ -98,20 +98,20 @@ class ProductForm
                             ->relationship(
                                 name: 'category',
                                 titleAttribute: 'name',
-                                modifyQueryUsing: function (Builder $query, $record) {
-                                    // Caso 1: Estamos EDITANDO un producto existente
-                                    if ($record && $record->category_id) {
-                                        return $query->where(function (Builder $q) use ($record) {
-                                            // Trae las categorías activas (comportamiento normal)
-                                            $q->whereNull('deleted_at')
-                                                // O trae la categoría específica que ya tiene el producto, aunque esté eliminada
-                                                ->orWhere('id', $record->category_id);
-                                        })->withTrashed(); // Habilita a Eloquent a buscar en los registros con soft delete
-                                    }
+                                //Función para modificar la consulta
+                                modifyQueryUsing: function (Builder $query, $record) { //parametros: la consulta y el modelo actual (producto)
+                                    // Caso 1: Editando un producto existente
+                                    if ($record && $record->category_id) { //si el modelo del producto actual ya está en la bbdd y tiene una categoria
+                                        return $query
+                                            ->withTrashed() //Trae todas las categorías, incluidas las que tienen soft deletes
+                                            ->where(function (Builder $q) use ($record) {
+                                                $q->whereNull('deleted_at')               // son las activas
+                                                    ->orWhere('id', $record->category_id);  // o  de las quitadas, la categoría actual (aunque esté eliminada)
+                                            });
+                                    } // basicamente traemos todas, y despues dejamos solo las activas y la que pertenece al modelo actual (si está desactivada).
 
-                                    // Caso 2: Estamos CREANDO un producto nuevo ($record es null)
-                                    // Solo muestra las categorías que NO tienen deleted_at (activas)
-                                    return $query->whereNull('deleted_at');
+                                    // Caso 2: Creando un producto nuevo
+                                    return $query->whereNull('deleted_at'); //para un producto nuevo, solo las activas
                                 }
                             )
                             ->label('Categoría')
