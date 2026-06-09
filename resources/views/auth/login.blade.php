@@ -21,10 +21,11 @@
             <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <label for="passwordLogin" class="form-label color-adaptativo mb-0">Contraseña</label>
+                    <!-- Este codigo dejo oculto si se implementa mas adelante
                     <a href="{{ route('queries', ['motivo' => 'cuenta']) }}"
                         class="text-decoration-none small color-dorado-adaptativo">
                         ¿Olvidaste tu contraseña?
-                    </a>
+                    </a> -->
                 </div>
                 <div class="position-relative d-flex align-items-center">
                     <input type="password" class="form-control pe-5" name="password" id="passwordLogin"
