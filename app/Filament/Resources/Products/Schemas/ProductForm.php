@@ -93,7 +93,26 @@ class ProductForm
                             ->rules($rules['subtitle']),
 
                         Select::make('category_id')
-                            ->relationship('category', 'name')
+                            ->label('Categoría')
+                            ->relationship(
+                                name: 'category',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: function (Builder $query, $record) {
+                                    // Caso 1: Estamos EDITANDO un producto existente
+                                    if ($record && $record->category_id) {
+                                        return $query->where(function (Builder $q) use ($record) {
+                                            // Trae las categorías activas (comportamiento normal)
+                                            $q->whereNull('deleted_at')
+                                                // O trae la categoría específica que ya tiene el producto, aunque esté eliminada
+                                                ->orWhere('id', $record->category_id);
+                                        })->withTrashed(); // Habilita a Eloquent a buscar en los registros con soft delete
+                                    }
+
+                                    // Caso 2: Estamos CREANDO un producto nuevo ($record es null)
+                                    // Solo muestra las categorías que NO tienen deleted_at (activas)
+                                    return $query->whereNull('deleted_at');
+                                }
+                            )
                             ->label('Categoría')
                             ->required()
                             ->rules($rules['category_id']),
