@@ -89,7 +89,8 @@ class ProductForm
                             ->rules($rules['title'])
                             ->validationMessages($messages),
                         TextInput::make('subtitle') // <--- Debe ser 'subtitle'
-                            ->label('Subtítulo (sin required en filament para probar validación laravel)')
+                            ->label('Modelo (sin required en filament para probar validación laravel)')
+                            ->unique()
                             ->rules($rules['subtitle']),
 
                         Select::make('category_id')
