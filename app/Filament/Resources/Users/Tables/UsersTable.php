@@ -67,12 +67,11 @@ class UsersTable
                 // Esta acción se mostrará/ejecutará SOLO si el usuario SÍ está eliminado
                 RestoreAction::make()
                     ->visible(fn($record) => $record->trashed()),
-                ForceDeleteAction::make()
+                /* ForceDeleteAction::make()
                     ->visible(fn($record) => $record->trashed())
                     ->label('Borrado definitivo')
                     ->modalHeading('¿Estás absolutamente seguro?')
-                    ->modalDescription('No se puede deshacer. El registro se perderá para siempre.')
+                    ->modalDescription('No se puede deshacer. El registro se perderá para siempre.') */
             ]);
     }
 }
-
