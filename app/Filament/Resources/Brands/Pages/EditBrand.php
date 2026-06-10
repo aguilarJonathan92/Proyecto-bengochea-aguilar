@@ -16,10 +16,11 @@ class EditBrand extends EditRecord
     // En EditBrand.php
     protected function getHeaderActions(): array
     {
+
         return [
             Action::make('verWeb')
                 ->label('Ver en tienda')
-                ->color('gray')
+                ->color('primary')
                 ->icon('heroicon-o-eye')
                 ->url(function (): ?string {
                     // Validación de seguridad por si acaso la marca no tiene nombre aún

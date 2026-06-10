@@ -22,7 +22,9 @@ class EditCategory extends EditRecord
                 ->url(fn(): string => route('catalog', [
                     'categoria' => $this->record->id // Pasa el ID de la categoría actual
                 ]))
-                ->openUrlInNewTab(),
+                ->openUrlInNewTab()
+                ->disabled(fn($record) => $record->trashed())
+                ->color(fn($record) => $record->trashed() ? 'gray' : 'primary'),
 
             DeleteAction::make(),
             RestoreAction::make(),
