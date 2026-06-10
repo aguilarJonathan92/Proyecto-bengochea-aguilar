@@ -135,6 +135,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 const totalDisplay = document.querySelector('.cart-total-display');
                 if (subtotalDisplay) subtotalDisplay.textContent = data.formatted_subtotal;
                 if (totalDisplay) totalDisplay.textContent = data.formatted_subtotal;
+
+                const cartBadge = document.querySelector('.global-cart-badge');
+
+                if (cartBadge) {
+                    cartBadge.textContent = data.total_quantity;
+                }
             }
         })
         .catch(error => {
