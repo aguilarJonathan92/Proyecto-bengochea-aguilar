@@ -29,12 +29,22 @@ class AuthController extends Controller
         $validated['password'] = Hash::make($validated['password']);
 
         // Creando el usuario
-        User::create($validated);
+        $user = User::create($validated);
+
+        //  Login automático
+        Auth::login($user);
+
+        /* Esto lo dejo aqui por si no convence
+        
         Swal::success([
             'title' => '!Hecho!',
             'text' => '¡La cuenta ha sido creada'
         ]);
-        return redirect()->route('login')->with('swal_success', 'Se ha creado la cuenta de usuario exitosamente');
+        return redirect()->route('login')->with('swal_success', 'Se ha creado la cuenta de usuario exitosamente');s
+        */
+ 
+        return redirect()->route('home')
+            ->with('cart_success', '¡Cuenta creada e inicio de sesión automático!');
     }
 
     //FUNCIONES ASOCIADAS AL LOGIN

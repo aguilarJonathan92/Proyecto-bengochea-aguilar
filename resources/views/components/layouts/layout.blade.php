@@ -35,14 +35,37 @@
 
 <body class="fondo d-flex flex-column min-vh-100">
     <x-header />
-    {{-- ALERTA FLOTANTE EXCLUSIVA PARA EL CARRITO --}}
-    @if(session('cart_success') || session('cart_error'))
-        <div id="flash-message" class="alert {{ session('cart_success') ? 'alert-success' : 'alert-danger' }} 
-            position-fixed bottom-0 start-0 m-3 shadow animate__animated animate__fadeInUp" 
-            style="z-index: 9999; min-width: 250px;">
-            <i class="bi {{ session('cart_success') ? 'bi-cart-check-fill' : 'bi-exclamation-triangle-fill' }} me-2"></i>
-            {{ session('cart_success') ?? session('cart_error') }}
+    {{-- ALERTA FLOTANTE (CART / SYSTEM FLASH) --}}
+    @if (session('cart_success') || session('cart_error'))
+        <div id="flash-message"
+            class="position-fixed bottom-0 start-0 m-3 shadow rounded px-3 py-2 text-white
+            {{ session('cart_success') ? 'bg-success' : 'bg-danger' }}
+            animate__animated animate__fadeInUp"
+            style="z-index: 9999; min-width: 280px; max-width: 350px;">
+
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi {{ session('cart_success') ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill' }}"></i>
+
+                <span class="small">
+                    {{ session('cart_success') ?? session('cart_error') }}
+                </span>
+
+                <button type="button"
+                    class="btn-close btn-close-white ms-auto"
+                    onclick="document.getElementById('flash-message').remove()">
+                </button>
+            </div>
         </div>
+
+        <script>
+            setTimeout(() => {
+                const el = document.getElementById('flash-message');
+                if (el) {
+                    el.classList.add('animate__fadeOutDown');
+                    setTimeout(() => el.remove(), 500);
+                }
+            }, 4000);
+        </script>
     @endif
     <button id="theme-toggle" class="btn-brand shadow-lg" title="Cambiar modo">
         <!-- Icono Sol: Se muestra cuando estamos en modo oscuro (porque el botón cambiará a claro) -->
