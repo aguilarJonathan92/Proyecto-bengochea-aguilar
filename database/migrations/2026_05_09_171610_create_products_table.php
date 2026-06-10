@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('installments');
             $table->decimal('installment_price', 10, 2);
             $table->boolean('on_sale');
+            $table->integer('views')->default(0); //para contar las vistas.
             $table->integer('discount')->default(0);
             $table->boolean('active')->default(true);
             $table->json('specs')->nullable();
