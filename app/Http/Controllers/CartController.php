@@ -168,11 +168,14 @@ class CartController extends Controller
 
             // Calculamos el total específico de ESTE ítem que se acaba de modificar
             $nuevoItemTotal = $cartItem->product->final_price * $cartItem->quantity;
+            $totalQuantity = $cart->items->sum('quantity');
 
             return response()->json([
                 'success' => true,
                 'item_total' => $nuevoItemTotal, // Ej: 150000
                 'subtotal' => $subtotalGeneral,   // Ej: 450000
+                'total_quantity' => $totalQuantity,
+
                 'formatted_item_total' => '$' . number_format($nuevoItemTotal, 0, ',', '.'),
                 'formatted_subtotal' => '$' . number_format($subtotalGeneral, 0, ',', '.')
             ]);
