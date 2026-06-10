@@ -62,6 +62,12 @@ class ProductsTable
                     ->sortable()
                     ->alignCenter(),
 
+                TextColumn::make('views')
+                    ->label('Nro de vistas')
+                    ->numeric()
+                    ->sortable()
+                    ->alignCenter(),
+
                 // Estados (on_sale y active)
                 // CheckboxColumn permite editar el estado directamente desde la tabla
                 CheckboxColumn::make('active')
