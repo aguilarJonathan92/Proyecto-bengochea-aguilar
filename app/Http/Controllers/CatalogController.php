@@ -37,12 +37,18 @@ class CatalogController extends Controller
 
     public function details(int $id)
     {
-        // Buscamos el producto por su ID.
-        // findOrFail lanza automáticamente un error 404 si no existe.
         $product = Product::findOrFail($id);
 
-        // No hace falta calcular el final_price aquí,
-        // lo invocas directamente en la vista con $product->final_price
+        // Lista de productos ya vistos desde la sesión (si no existe, empezamos un array vacío)
+        $vistos = session()->get('productos_vistos', []);
+
+        // Si el ID de este producto NO está en el array, sumamos la visita y lo agregamos
+        if (!in_array($id, $vistos)) {
+            $product->increment('views'); // Suma +1 de forma segura
+
+            session()->push('productos_vistos', $id); // Guarda este ID en la sesión
+        }
+        //el final_price lo calcula getFinalPriceAttribute() en el modelo
 
         return view('pages.public.product-details', compact('product'));
     }
