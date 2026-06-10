@@ -21,7 +21,7 @@ class BrandForm
                         TextInput::make('name')
                             ->label('Nombre de la marca')
                             ->required()
-                            ->unique(ignoreRecord: true)
+                            ->unique() // o ->unique(ignoreRecord: true)
                             ->columnSpan(1),
 
                         Toggle::make('active')

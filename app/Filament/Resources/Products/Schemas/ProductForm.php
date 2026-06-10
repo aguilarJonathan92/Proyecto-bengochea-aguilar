@@ -57,39 +57,32 @@ class ProductForm
                     ->schema([
                         Select::make('brand_id')
                             ->label('Marca')
-                            ->required()
                             ->relationship(
-                                'brand',
-                                'name',
+                                name: 'brand',
+                                titleAttribute: 'name',
                                 modifyQueryUsing: function (Builder $query, ?Model $record) {
-                                    // Si el producto existe (estamos editando)
+                                    // Si el producto existe y tiene marca (estamos editando)
                                     if ($record && $record->brand_id) {
                                         return $query->where(function ($q) use ($record) {
                                             $q->where('active', 1)
-                                                ->orWhere('id', $record->brand_id); // Mantenemos la marca actual aunque sea active = 0
+                                                ->orWhere('id', $record->brand_id); // Rescatamos la marca actual aunque active = 0
                                         });
                                     }
 
                                     // Si estamos creando un producto nuevo, solo marcas activas
                                     return $query->where('active', 1);
                                 }
-                            ) // 'brand' es la relación en el modelo Product, 'name' es la columna en brands
-                            ->options(
-                                // Aquí filtramos manualmente para el formulario
-                                Brand::query()
-                                    ->where('active', 1) // nombre de la columna ('is_active', etc.)
-                                    ->pluck('name', 'id') // trae solo esos datos, en lugar de todo como lo haría get()
                             )
                             ->searchable()
                             ->preload()
-                            ->required(), //Para que filament mantenga el asterisco en el campo
+                            ->required(), // Mantiene el asterisco y valida que no vaya vacío
                         TextInput::make('title')
                             ->label('Título')
                             ->required()
                             ->rules($rules['title'])
                             ->validationMessages($messages),
-                        TextInput::make('subtitle') // <--- Debe ser 'subtitle'
-                            ->label('Modelo (sin required en filament para probar validación laravel)')
+                        TextInput::make('subtitle') // Modelo del producto
+                            ->label('Modelo') //(sin required en filament para probar validación laravel) - no se dibuja el *
                             ->unique()
                             ->rules($rules['subtitle']),
 
