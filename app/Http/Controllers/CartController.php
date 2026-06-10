@@ -87,7 +87,9 @@ class CartController extends Controller
         if($cartItem){
             //Al existir, se valida stock y se acumula
             if ($product->stock < ($cartItem->quantity + $request->quantity)) {
-                // CAMBIADO: También redirige hacia atrás con error si supera el stock acumulado
+                if ($request->wantsJson()) {
+                    return response()->json(['error' => 'No puedes agregar el producto, supera el stock disponible.'], 422);
+                }
                 return back()->with('cart_error', 'No puedes agregar el producto, supera el stock disponible.');
             }
             $cartItem->increment('quantity', $request->quantity);
@@ -96,6 +98,26 @@ class CartController extends Controller
             $cart->items()->create([
                 'product_id' => $product->id,
                 'quantity' => $request->quantity
+            ]);
+        }
+
+        // SI LA PETICIÓN ES AJAX (NUESTRO NUEVO FETCH)
+        if ($request->wantsJson()) {
+            // Volvemos a cargar el carrito para tener los datos actualizados listos
+            $cart->load('items.product');
+            
+            $subtotalGeneral = 0;
+            foreach ($cart->items as $item) {
+                $subtotalGeneral += $item->product->final_price * $item->quantity;
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Producto añadido al carrito.',
+                'total_items_count' => $cart->items->sum('quantity'), // Nuevo contador general
+                'formatted_subtotal' => '$' . number_format($subtotalGeneral, 0, ',', '.'),
+                // Si necesitas re-renderizar todo el HTML del offcanvas, luego te enseño un truco,
+                // pero por ahora devolvemos los datos duros
             ]);
         }
         

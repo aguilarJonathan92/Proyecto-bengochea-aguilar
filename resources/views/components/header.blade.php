@@ -102,7 +102,7 @@
                     <img src="{{ asset('icons/svg/carrito.svg') }}" alt="carrito" class="icon-adaptive">
 
                     @if (isset($cartCount) && $cartCount > 0)
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger global-cart-badge"
                             style="font-size: 0.5rem;">
                             {{ $cartCount }}
                         </span>
