@@ -48,7 +48,7 @@
             <a href="{{ route('product-details', ['id' => $card->id ]) }}" class="stretched-link"></a>
 
             {{-- FORMULARIO ADAPTADO PARA AGREGAR AL CARRITO --}}
-            <form action="{{ route('cart.add') }}" method="POST" class="position-relative" style="z-index: 4;">
+            <form action="{{ route('cart.add') }}" method="POST" class="position-relative form-agregar-carrito" style="z-index: 4;">
                 @csrf
                 {{-- Enviamos los campos que el CartController espera validar --}}
                 <input type="hidden" name="product_id" value="{{ $card->id }}">

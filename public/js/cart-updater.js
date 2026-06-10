@@ -143,4 +143,5 @@ document.addEventListener('DOMContentLoaded', function () {
             inputElement.value = inputElement.getAttribute('data-initial-value');
         });
     }
+
 });

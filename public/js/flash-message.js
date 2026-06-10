@@ -1,38 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const flashMessage = document.getElementById('flash-message');
 
+    // 1. CONTROL DE ALERTAS FLASH EXISTENTES (Tu código actual)
+    const flashMessage = document.getElementById('flash-message');
     if (flashMessage) {
-        // Espera 3 segundos (3000ms) y luego inicia la animación de salida
         setTimeout(() => {
-            // Quitamos la animación de entrada y metemos la de salida de animate.css
             flashMessage.classList.remove('animate__fadeInUp');
             flashMessage.classList.add('animate__fadeOutDown');
-
-            // Una vez que termina la animación de salida (0.5s), lo removemos del DOM
             flashMessage.addEventListener('animationend', function() {
                 flashMessage.remove();
             });
         }, 3000);
     }
-});
 
-document.addEventListener('DOMContentLoaded', function () {
-    
-    // ... Mantén aquí arriba tu código existente que oculta el #flash-message después de 3 segundos ...
-
-    // NUEVO BLOQUE PARA VACIAR EL CARRITO (Con delegación de eventos)
+    // 2. VACIAR CARRITO CON SWEETALERT (Tu código actual)
     document.addEventListener('click', function (event) {
-        // Verificamos si el elemento clickeado (o su icono interno) es el botón de vaciar
         const btnVaciar = event.target.closest('#btn-vaciar-carrito');
-        
         if (btnVaciar) {
             const formVaciar = document.getElementById('form-vaciar-carrito');
-            
             if (formVaciar) {
-                // Prevenimos cualquier acción por defecto
                 event.preventDefault();
-
-                // Disparar SweetAlert2
                 Swal.fire({
                     title: '¿Estás seguro?',
                     text: "Se eliminarán todos los productos de tu carrito.",
@@ -53,4 +39,116 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // 3. NUEVO BLOQUE CORREGIDO: AÑADIR AL CARRITO ASÍNCRONO
+    document.addEventListener('submit', function (e) {
+        if (e.target && e.target.classList.contains('form-agregar-carrito')) {
+            e.preventDefault(); 
+
+            const form = e.target;
+            const url = form.action;
+            const formData = new FormData(form);
+            const submitBtn = form.querySelector('.btn-agregar');
+
+            if (submitBtn) submitBtn.disabled = true;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const dataFields = {};
+            formData.forEach((value, key) => { dataFields[key] = value });
+
+            const temaOscuro = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(dataFields)
+            })
+            .then(async response => {
+                // SOLUCIÓN AL INVITADO: Si devuelve 401 es porque no inició sesión
+                if (response.status === 401) {
+                    throw new Error('AUTH_REQUIRED');
+                }
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || 'No se pudo agregar al carrito');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Actualizamos los contadores visuales antes de congelar con la alerta
+                    const subtotalDisplay = document.querySelector('.cart-subtotal-display');
+                    const totalDisplay = document.querySelector('.cart-total-display');
+                    if (subtotalDisplay) subtotalDisplay.textContent = data.formatted_subtotal;
+                    if (totalDisplay) totalDisplay.textContent = data.formatted_subtotal;
+
+                    let globalBadge = document.querySelector('.global-cart-badge');
+                    if (globalBadge) {
+                        globalBadge.textContent = data.total_items_count;
+                    }
+
+                    // Lanzamos SweetAlert2 para dar un feedback limpio usando tus estilos
+                    Swal.fire({
+                        title: '¡Agregado!',
+                        text: data.message,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        background: temaOscuro ? '#212529' : '#ffffff',
+                        color: temaOscuro ? '#ffffff' : '#212529'
+                    }).then(() => {
+                        // Cuando la alerta desaparece, recargamos para actualizar el HTML interno del Offcanvas
+                        // Al estar en el callback del .then(), retenemos la UX y preservamos la posición del scroll
+                        window.location.reload();
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                
+                if (error.message === 'AUTH_REQUIRED') {
+                    // Redirección elegante para usuarios invitados
+                    Swal.fire({
+                        title: '¡Inicia sesión!',
+                        text: 'Debes tener una cuenta para poder añadir productos al carrito.',
+                        icon: 'info',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ir a Iniciar Sesión',
+                        background: temaOscuro ? '#212529' : '#ffffff',
+                        color: temaOscuro ? '#ffffff' : '#212529'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/login'; // Ajustá la URL si tu ruta usa otro patrón
+                        }
+                    });
+                } else {
+                    let mensajeUsuario = 'Ocurrió un error inesperado. Intenta nuevamente.';
+
+                    if (
+                        error.message.includes('stock') ||
+                        error.message.includes('Stock') ||
+                        error.message.includes('inventario')
+                    ) {
+                        mensajeUsuario = 'No hay suficiente stock disponible del producto solicitado.';
+                    }
+
+                    Swal.fire({
+                        title: 'Stock insuficiente',
+                        text: mensajeUsuario,
+                        icon: 'warning',
+                        confirmButtonColor: '#f39c12',
+                        background: temaOscuro ? '#212529' : '#ffffff',
+                        color: temaOscuro ? '#ffffff' : '#212529'
+                    });
+                }
+            })
+            .finally(() => {
+                if (submitBtn) submitBtn.disabled = false;
+            });
+        }
+    });
 });
