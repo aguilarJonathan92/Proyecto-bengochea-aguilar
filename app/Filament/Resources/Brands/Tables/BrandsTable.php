@@ -9,8 +9,10 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
 
 class BrandsTable
 {
@@ -29,11 +31,18 @@ class BrandsTable
                     ->weight('bold'),
 
                 // Contador de productos por marca
-                TextColumn::make('products_count') //nombre del método en el modelo Brands + _count que autom. obtiene la cantidad
-                    ->label('Cant. Productos')
-                    ->counts('products') // Usa la relación HasMany definida en tu modelo
+                TextColumn::make('products_count')
+                    ->label('Nro Productos Disponibles')
+                    // Forzamos al contador a ignorar el scope 'active' de la tienda
+                    ->counts([
+                        'products' => fn(Builder $query) => $query->withoutGlobalScopes([
+                            'active',
+                            // Sin contar los productos con soft deletes
+                        ])
+                    ])
                     ->badge()
-                    ->color('success'),
+                    ->alignCenter()
+                    ->color(fn($state) => $state > 0 ? 'success' : 'danger'),
 
                 // Usamos ToggleColumn para que puedas activar/desactivar
                 // la marca directamente desde la lista sin entrar a editar
@@ -50,6 +59,7 @@ class BrandsTable
                 TernaryFilter::make('active')
                     ->label('Estado de Marca')
                     ->boolean(),
+                TrashedFilter::make(),
             ])
             ->recordActions([
                 EditAction::make(),

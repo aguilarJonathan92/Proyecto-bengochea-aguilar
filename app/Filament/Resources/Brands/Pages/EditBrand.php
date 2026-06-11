@@ -5,9 +5,8 @@ namespace App\Filament\Resources\Brands\Pages;
 use App\Filament\Resources\Brands\BrandResource;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Notifications\Notification;
-use Illuminate\Database\Eloquent\Model;
 
 class EditBrand extends EditRecord
 {
@@ -18,41 +17,35 @@ class EditBrand extends EditRecord
         return [
             Action::make('verWeb')
                 ->label('Ver en tienda')
-                ->color('primary')
+                ->color(fn (): string => (
+                    !$this->record->active ||
+                    $this->record->trashed()
+                ) ? 'gray' : 'primary')
                 ->icon('heroicon-o-eye')
                 ->url(function (): ?string {
-                    if (empty($this->record->name) || strlen($this->record->name) < 3) {
+                    // Si el botón termina deshabilitado por las reglas de abajo,
+                    // devolvemos null para que no intente generar un enlace roto.
+                    if (
+                        empty($this->record->name) ||
+                        strlen($this->record->name) < 3 ||
+                        !$this->record->active ||
+                        $this->record->trashed()
+                    ) {
                         return null;
                     }
-
-                    return route('search', [
-                        'query' => $this->record->name,
-                    ]);
+                    return route('search', ['query' => $this->record->name]);
                 })
-                ->disabled(fn() => empty($this->record->name) || strlen($this->record->name) < 3)
+                ->disabled(function (): bool {
+                    // El botón se bloquea (disabled) si cumple cualquiera de estas condiciones:
+                    return empty($this->record->name) ||
+                        strlen($this->record->name) < 3 ||
+                        !$this->record->active ||       // 1. La marca está desactivada
+                        $this->record->trashed();       // 2. La marca sufrió un Soft Delete (está en papelera)
+                })
                 ->openUrlInNewTab(),
 
-            DeleteAction::make()
-                ->before(function (Model $record, DeleteAction $action) {
-                    // withTrashed() para buscar también en la papelera
-                    // Ahora la consulta será: SELECT EXISTS(SELECT * FROM products WHERE brand_id = X); sin filtrar por deleted_at
-                    if ($record->products()->withTrashed()->exists()) {
-
-                        Notification::make()
-                            ->danger()
-                            ->title('No se puede eliminar la marca')
-                            ->body("Esta marca tiene productos asociados (activos o en la papelera). Por favor, utiliza la opción de 'Desactivar' en su lugar.")
-                            ->send();
-
-                        // Cancelamos la ejecución del borrado físico en la base de datos
-                        $action->halt();
-                    }
-                }),
+            DeleteAction::make(),
+            RestoreAction::make()
         ];
-    }
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->getResource()::getUrl('index');
     }
 }

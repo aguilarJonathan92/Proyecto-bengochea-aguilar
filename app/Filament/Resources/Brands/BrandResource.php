@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Brands;
 use App\Filament\Resources\Brands\Pages\CreateBrand;
 use App\Filament\Resources\Brands\Pages\EditBrand;
 use App\Filament\Resources\Brands\Pages\ListBrands;
+use App\Filament\Resources\Brands\RelationManagers\ProductsRelationManager;
 use App\Filament\Resources\Brands\Schemas\BrandForm;
 use App\Filament\Resources\Brands\Tables\BrandsTable;
 use App\Models\Brand;
@@ -17,6 +18,8 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BrandResource extends Resource
 {
@@ -31,6 +34,14 @@ class BrandResource extends Resource
         return BrandForm::configure($schema);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class, // soporte eliminados con Soft Delete
+            ]);
+    }
+
     public static function table(Table $table): Table
     {
         return BrandsTable::configure($table);
@@ -39,7 +50,7 @@ class BrandResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ProductsRelationManager::class,
         ];
     }
 

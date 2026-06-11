@@ -14,10 +14,13 @@ class Product extends Model
 
     protected static function booted()
     {
-        //Alcance global para solo mostrar productos activos
+        // Alcance global para la tienda pública
         //en filament lo ignoro con withoutGlobalScopes() en el Resource
         static::addGlobalScope('active', function ($builder) {
-            $builder->where('active', true);
+            $builder->where('active', true) // 1. El producto debe estar activo
+                ->whereHas('brand', function ($query) {
+                    $query->where('active', true); // 2. La marca también debe estar activa
+                });
         });
 
         // Lógica de las imágenes opcionales
@@ -88,12 +91,14 @@ class Product extends Model
     }
 
     // Un producto solo se relaciona con un item del carrito
-    public function cartItem(){
+    public function cartItem()
+    {
         return $this->belongsTo(CartItem::class);
     }
 
     //Un producto puede figurar en muchos ítems de pedidos históricos
-    public function orderItem(){
+    public function orderItem()
+    {
         return $this->hasMany(OrderItem::class);
     }
 
@@ -104,12 +109,11 @@ class Product extends Model
     }
 
     //Método para calcular precio final . Sirve para el modelo y para filament
-    public static function calculateFinalPrice(float $price, bool $onSale, float $discount):float
+    public static function calculateFinalPrice(float $price, bool $onSale, float $discount): float
     {
-        if($onSale && $discount>0){
-            return $price - ($price * ($discount/100));
+        if ($onSale && $discount > 0) {
+            return $price - ($price * ($discount / 100));
         }
         return $price;
     }
-
 }

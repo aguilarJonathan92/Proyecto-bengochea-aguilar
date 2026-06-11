@@ -24,9 +24,9 @@ class EditProduct extends EditRecord
                 ->url(fn(): string => route('product-details', ['id' => $this->record->id]))
                 ->openUrlInNewTab()
                 //Desactivo el botón si el producto no está activo o está con soft deletes
-                ->disabled(fn($record) => $record->trashed() || !$record->active)
+                ->disabled(fn ($record) => $record->trashed() || !$record->active || !$record->brand?->active)
                 // Color a gris para que se note que está apagado
-                ->color(fn($record) => $record->trashed() || !$record->active ? 'gray' : 'primary'),
+                ->color(fn($record) => $record->trashed() || !$record->active || !$record->brand?->active? 'gray' : 'primary'),
             RestoreAction::make(),
             DeleteAction::make(),
         ];

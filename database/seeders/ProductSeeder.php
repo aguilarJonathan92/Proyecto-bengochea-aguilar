@@ -32,7 +32,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/guitarra-prs.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'PRS', 'Modelo' => 'SE 24-08', 'Conectividad' => 'Jack 6.35mm', 'Peso' => '3.5kg'],
+                'specs'             => ['Conectividad' => 'Jack 6.35mm', 'Peso' => '3.5kg'],
             ],
             [
                 'title'             => 'Guitarra electroacústica dreadnought con cutaway',
@@ -50,7 +50,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/guitarra-fender.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Fender', 'Modelo' => 'Redondo Player', 'Conectividad' => 'Jack 6.35mm', 'Peso' => '2.8kg'],
+                'specs'             => ['Conectividad' => 'Jack 6.35mm', 'Peso' => '2.8kg'],
             ],
             [
                 'title'             => 'Guitarra eléctrica tipo Stratocaster',
@@ -68,7 +68,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/guitarra-benson.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Benson', 'Modelo' => 'HD 901 BK', 'Conectividad' => 'Jack 6.35mm', 'Peso' => '3.2kg'],
+                'specs'             => ['Conectividad' => 'Jack 6.35mm', 'Peso' => '3.2kg'],
             ],
             [
                 'title'             => 'Guitarra acústica concierto',
@@ -86,7 +86,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/guitarra-cort.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Cort', 'Modelo' => 'AD810M', 'Conectividad' => 'No aplica', 'Peso' => '2.1kg'],
+                'specs'             => ['Conectividad' => 'No aplica', 'Peso' => '2.1kg'],
             ],
             [
                 'title'             => 'Guitarra electroacústica dreadnought',
@@ -104,7 +104,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/guitarra-cort.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Cort', 'Modelo' => 'AD810E', 'Conectividad' => 'Jack 6.35mm', 'Peso' => '2.3kg'],
+                'specs'             => ['Conectividad' => 'Jack 6.35mm', 'Peso' => '2.3kg'],
             ],
             [
                 'title'             => 'Guitarra eléctrica double cutaway',
@@ -122,7 +122,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/guitarra-prs.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'PRS', 'Modelo' => 'SE Custom 24-08', 'Conectividad' => 'Jack 6.35mm', 'Peso' => '3.6kg'],
+                'specs'             => ['Conectividad' => 'Jack 6.35mm', 'Peso' => '3.6kg'],
             ],
             [
                 'title'             => 'Piano digital compacto',
@@ -140,7 +140,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/piano-yamaha.webp',
                 'image_2'           => 'images/piano-casio.webp',
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Yamaha', 'Modelo' => 'P-45', 'Teclas' => '88', 'Conectividad' => 'USB, Jack 6.35mm', 'Peso' => '11.5kg'],
+                'specs'             => ['Teclas' => '88', 'Conectividad' => 'USB, Jack 6.35mm', 'Peso' => '11.5kg'],
             ],
             [
                 'title'             => 'Piano digital profesional',
@@ -158,7 +158,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/piano-casio.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Casio', 'Modelo' => 'Privia PX-160', 'Teclas' => '88', 'Conectividad' => 'USB, MIDI, Jack 6.35mm', 'Peso' => '10.8kg'],
+                'specs'             => ['Teclas' => '88', 'Conectividad' => 'USB, MIDI, Jack 6.35mm', 'Peso' => '10.8kg'],
             ],
             [
                 'title'             => 'Clarinete Sib estudio',
@@ -176,7 +176,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/clarinete-1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Yamaha', 'Modelo' => 'YCL-255', 'Tonalidad' => 'Sib', 'Material' => 'ABS', 'Peso' => '0.7kg'],
+                'specs'             => ['Tonalidad' => 'Sib', 'Material' => 'ABS', 'Peso' => '0.7kg'],
             ],
             [
                 'title'             => 'Clarinete profesional',
@@ -194,7 +194,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/clarinete-2.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Buffet Crampon', 'Modelo' => 'E11', 'Tonalidad' => 'Sib', 'Material' => 'Grenadilla', 'Peso' => '0.9kg'],
+                'specs'             => ['Tonalidad' => 'Sib', 'Material' => 'Grenadilla', 'Peso' => '0.9kg'],
             ],
             [
                 'title'             => 'Auriculares de estudio',
@@ -203,7 +203,7 @@ class ProductSeeder extends Seeder
                 'category'          => 'Audio',
                 'brand'             => 'Audio-Technica',
                 'stock'             => 15,
-                'price'             => 180000,
+                'price'             => 18000,
                 'installments'      => 3,
                 'installment_price' => 48000,
                 'on_sale'           => true,
@@ -212,7 +212,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/auricular-1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Audio-Technica', 'Modelo' => 'ATH-M20X', 'Tipo' => 'Circumaural cerrado', 'Impedancia' => '47 Ohm', 'Peso' => '190g'],
+                'specs'             => ['Tipo' => 'Circumaural cerrado', 'Impedancia' => '47 Ohm', 'Peso' => '190g'],
             ],
             [
                 'title'             => 'Auriculares profesionales',
@@ -230,7 +230,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/auricular-2.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Sony', 'Modelo' => 'MDR-7506', 'Tipo' => 'Circumaural cerrado', 'Impedancia' => '63 Ohm', 'Peso' => '230g'],
+                'specs'             => ['Tipo' => 'Circumaural cerrado', 'Impedancia' => '63 Ohm', 'Peso' => '230g'],
             ],
             [
                 'title'             => 'Atril plegable',
@@ -248,7 +248,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/atril-1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Hamilton', 'Modelo' => 'KB100', 'Material' => 'Acero', 'Plegable' => 'Sí', 'Peso' => '0.9kg'],
+                'specs'             => ['Material' => 'Acero', 'Plegable' => 'Sí', 'Peso' => '0.9kg'],
             ],
             [
                 'title'             => 'Atril reforzado',
@@ -266,7 +266,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/atril-2.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'K&M', 'Modelo' => '101', 'Material' => 'Acero reforzado', 'Plegable' => 'Sí', 'Peso' => '1.4kg'],
+                'specs'             => ['Material' => 'Acero reforzado', 'Plegable' => 'Sí', 'Peso' => '1.4kg'],
             ],
             [
                 'title'             => 'Flauta traversa estudio',
@@ -284,7 +284,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/flauta-1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Yamaha', 'Modelo' => 'YFL-222', 'Tonalidad' => 'Do', 'Material' => 'Alpaca plateada', 'Peso' => '0.5kg'],
+                'specs'             => ['Tonalidad' => 'Do', 'Material' => 'Alpaca plateada', 'Peso' => '0.5kg'],
             ],
             [
                 'title'             => 'Flauta traversa profesional',
@@ -302,7 +302,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/flauta-2.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Gemeinhardt', 'Modelo' => '2SP', 'Tonalidad' => 'Do', 'Material' => 'Plata sólida', 'Peso' => '0.6kg'],
+                'specs'             => ['Tonalidad' => 'Do', 'Material' => 'Plata sólida', 'Peso' => '0.6kg'],
             ],
             [
                 'title'             => 'Bajo eléctrico activo',
@@ -320,7 +320,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/bajo-1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Ibanez', 'Modelo' => 'GSR200', 'Cuerdas' => '4', 'Conectividad' => 'Jack 6.35mm', 'Peso' => '3.4kg'],
+                'specs'             => ['Cuerdas' => '4', 'Conectividad' => 'Jack 6.35mm', 'Peso' => '3.4kg'],
             ],
             [
                 'title'             => 'Bajo eléctrico clásico',
@@ -338,7 +338,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/bajo-2.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Fender', 'Modelo' => 'Precision Bass', 'Cuerdas' => '4', 'Conectividad' => 'Jack 6.35mm', 'Peso' => '4.1kg'],
+                'specs'             => ['Cuerdas' => '4', 'Conectividad' => 'Jack 6.35mm', 'Peso' => '4.1kg'],
             ],
             [
                 'title'             => 'Micrófono dinámico',
@@ -356,7 +356,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/microfono-1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Shure', 'Modelo' => 'SM58', 'Tipo' => 'Dinámico', 'Patrón' => 'Cardioide', 'Peso' => '298g'],
+                'specs'             => ['Tipo' => 'Dinámico', 'Patrón' => 'Cardioide', 'Peso' => '298g'],
             ],
             [
                 'title'             => 'Micrófono condensador',
@@ -374,7 +374,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/microfono-2.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'AKG', 'Modelo' => 'P120', 'Tipo' => 'Condensador', 'Patrón' => 'Cardioide', 'Peso' => '160g'],
+                'specs'             => ['Tipo' => 'Condensador', 'Patrón' => 'Cardioide', 'Peso' => '160g'],
             ],
             [
                 'title'             => 'Teclado portátil',
@@ -392,7 +392,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/teclado-1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Casio', 'Modelo' => 'CTK-3500', 'Teclas' => '61', 'Conectividad' => 'USB, Jack 3.5mm', 'Peso' => '3.6kg'],
+                'specs'             => ['Teclas' => '61', 'Conectividad' => 'USB, Jack 3.5mm', 'Peso' => '3.6kg'],
             ],
             [
                 'title'             => 'Teclado profesional',
@@ -410,7 +410,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/teclado-2.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Yamaha', 'Modelo' => 'PSR-E373', 'Teclas' => '61', 'Conectividad' => 'USB, Jack 3.5mm', 'Peso' => '4.2kg'],
+                'specs'             => ['Teclas' => '61', 'Conectividad' => 'USB, Jack 3.5mm', 'Peso' => '4.2kg'],
             ],
             [
                 'title'             => 'Batería acústica completa',
@@ -428,7 +428,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/guitarra-prs.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Pearl', 'Modelo' => 'Export EXX', 'Piezas' => '5', 'Material' => 'Álamo', 'Peso' => '45kg'],
+                'specs'             => ['Piezas' => '5', 'Material' => 'Álamo', 'Peso' => '45kg'],
             ],
             [
                 'title'             => 'Batería electrónica',
@@ -446,7 +446,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/piano-casio.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Roland', 'Modelo' => 'TD-1DMK', 'Piezas' => '5', 'Conectividad' => 'USB, Jack 6.35mm', 'Peso' => '22kg'],
+                'specs'             => ['Piezas' => '5', 'Conectividad' => 'USB, Jack 6.35mm', 'Peso' => '22kg'],
             ],
             [
                 'title'             => 'Violín de estudio',
@@ -464,7 +464,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/violin1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Stentor', 'Modelo' => 'Student II', 'Tamaño' => '4/4', 'Material' => 'Abeto y arce', 'Peso' => '0.3kg'],
+                'specs'             => ['Tamaño' => '4/4', 'Material' => 'Abeto y arce', 'Peso' => '0.3kg'],
             ],
             [
                 'title'             => 'Violín profesional',
@@ -482,7 +482,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/violin2.webp',
                 'image_2'           => 'images/violin3.webp',
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Yamaha', 'Modelo' => 'V7SG', 'Tamaño' => '4/4', 'Material' => 'Abeto sólido y arce flameado', 'Peso' => '0.4kg'],
+                'specs'             => ['Tamaño' => '4/4', 'Material' => 'Abeto sólido y arce flameado', 'Peso' => '0.4kg'],
             ],
             [
                 'title'             => 'Interface de audio USB',
@@ -500,7 +500,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/microfono-1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Focusrite', 'Modelo' => 'Scarlett Solo 3ra Gen', 'Entradas' => '2', 'Conectividad' => 'USB-C', 'Peso' => '170g'],
+                'specs'             => ['Entradas' => '2', 'Conectividad' => 'USB-C', 'Peso' => '170g'],
             ],
             [
                 'title'             => 'Soporte para guitarra',
@@ -518,7 +518,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/atril-1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Hercules', 'Modelo' => 'GS412B', 'Material' => 'Acero y goma', 'Plegable' => 'Sí', 'Peso' => '0.8kg'],
+                'specs'             => ['Material' => 'Acero y goma', 'Plegable' => 'Sí', 'Peso' => '0.8kg'],
             ],
             [
                 'title'             => 'Cable de instrumento',
@@ -536,7 +536,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/atril-2.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Monster', 'Modelo' => 'Standard 100', 'Longitud' => '3m', 'Conectores' => 'Jack 6.35mm', 'Peso' => '150g'],
+                'specs'             => ['Longitud' => '3m', 'Conectores' => 'Jack 6.35mm', 'Peso' => '150g'],
             ],
             [
                 'title'             => 'Afinador cromático digital',
@@ -554,7 +554,7 @@ class ProductSeeder extends Seeder
                 'image_1'           => 'images/auricular-1.webp',
                 'image_2'           => null,
                 'image_3'           => null,
-                'specs'             => ['Marca' => 'Korg', 'Modelo' => 'CA-50', 'Rango' => 'C1 - B7', 'Alimentación' => 'AAA x2', 'Peso' => '80g'],
+                'specs'             => ['Rango' => 'C1 - B7', 'Alimentación' => 'AAA x2', 'Peso' => '80g'],
             ],
         ];
 
