@@ -62,7 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify(dataFields)
             })
@@ -70,6 +71,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 // SOLUCIÓN AL INVITADO: Si devuelve 401 es porque no inició sesión
                 if (response.status === 401) {
                     throw new Error('AUTH_REQUIRED');
+                }
+
+                if (response.status === 403) {
+                    throw new Error('ADMIN_RESTRICTED');
                 }
                 
                 if (!response.ok) {
@@ -125,7 +130,25 @@ document.addEventListener('DOMContentLoaded', function () {
                             window.location.href = '/login'; // Ajustá la URL si tu ruta usa otro patrón
                         }
                     });
-                } else {
+                } else if (error.message === 'ADMIN_RESTRICTED') {
+                    // Bloqueo y redirección para el Administrador
+                    Swal.fire({
+                        title: 'Acceso Restringido',
+                        text: 'Los administradores no pueden añadir productos al carrito de compras.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Ir al Panel de Admin',
+                        cancelButtonText: 'Permanecer aquí',
+                        background: temaOscuro ? '#212529' : '#ffffff',
+                        color: temaOscuro ? '#ffffff' : '#212529'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/admin'; // Cambiá esto por la ruta real de tu panel
+                        }
+                    });
+                }else {
                     let mensajeUsuario = 'Ocurrió un error inesperado. Intenta nuevamente.';
 
                     if (
