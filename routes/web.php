@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get('/panel-usuario', 'index')->name('panel-usuario');
             Route::put('/panel-usuario', 'update')->name('panel-usuario.update');
+            Route::delete('/panel-usuario/eliminar', [UserController::class, 'destroy'])->name('panel-usuario.destroy');
         });
 
         //Rutas del carrito

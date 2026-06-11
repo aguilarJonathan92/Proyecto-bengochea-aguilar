@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index(){
-        
+    public function index()
+    {
+
         $user = Auth::user(); // Trae el usuario autenticado
 
         $provincias = Province::orderBy('name')->get(); // Traemos todas las provincias para el primer select
@@ -21,7 +22,8 @@ class UserController extends Controller
         return view('pages.private.user-panel', compact('user', 'provincias'));
     }
 
-    public function update(UpdateProfileRequest $request){
+    public function update(UpdateProfileRequest $request)
+    {
 
         $user = User::find(Auth::id()); //trae desde la base de datos, los datos de usuario autenticado
 
@@ -61,7 +63,7 @@ class UserController extends Controller
         }
 
         foreach ($inputAddresses as $addressData) {
-            // Si ya establecimos que hay una nueva por defecto, cualquier otra de este bucle 
+            // Si ya establecimos que hay una nueva por defecto, cualquier otra de este bucle
             // que NO tenga el '1' explícito, la forzamos a false.
             if ($hasNewDefault && (!isset($addressData['is_default']) || $addressData['is_default'] != '1')) {
                 $addressData['is_default'] = false;
@@ -94,5 +96,22 @@ class UserController extends Controller
     {
         // Devuelve las ciudades de la provincia seleccionada en formato JSON
         return response()->json($province->cities()->orderBy('name')->get());
+    }
+    //Eliminación de cuenta
+    public function destroy()
+    {
+        $user = User::find(Auth::id());
+
+        // 1. Desautenticar al usuario antes de borrarlo
+        Auth::logout();
+
+        // 2. Aplicar el Soft Delete
+        $user->delete();
+
+        // 3. Invalidar la sesión por seguridad y redirigir
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect()->route('home')->with('success', 'Tu cuenta ha sido eliminada correctamente.');
     }
 }
