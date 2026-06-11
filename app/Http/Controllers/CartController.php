@@ -68,6 +68,7 @@ class CartController extends Controller
         ]);
 
         $user = $request->user();
+
         $product = Product::findOrFail($request->product_id);
 
         //Valida que tenga suficiente stock para ingresar al carrito

@@ -13,7 +13,16 @@ class RedirectIfAdmin
     {
         // Si está logueado y es admin, lo redirigimos a la ruta del panel de Filament o tu ruta admin
         if (Auth::check() && Auth::user()->role->name === 'admin') {
-            return redirect('/admin');
+            // CLAVE: Si la petición espera un JSON o es AJAX, no redirigimos, tiramos 403 directo
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'error' => 'ADMIN_RESTRICTED',
+                    'message' => 'Los administradores no pueden realizar acciones de clientes.'
+                ], 403);
+            }
+
+            // Si es una petición común de navegador, que siga haciendo el redirect que ya tenías
+            return redirect('/admin')->with('error', 'No tienes acceso a esta sección.');
         }
 
         return $next($request);
