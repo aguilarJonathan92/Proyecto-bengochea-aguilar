@@ -51,7 +51,34 @@ class CheckoutController extends Controller
             return redirect()->route('catalog')->with('cart_error', 'Algunos productos ya no están disponibles y fueron removidos del carrito.');
         }
 
-        // Traemos las direcciones del usuario
+        // =========================================================================
+        // CONTROL DE SEGURIDAD 2: Validación de Stock en tiempo real (Usuario A vs Usuario B)
+        // =========================================================================
+        $huboCambiosDeStock = false;
+
+        foreach ($cart->items as $item) {
+            $product = $item->product;
+
+            // Caso 1: El stock quedó en 0 absoluto debido a la compra del Usuario B
+            if ($product->stock <= 0) {
+                $item->delete(); // Removemos el ítem porque ya no hay nada
+                $huboCambiosDeStock = true;
+            } 
+            // Caso 2: Queda stock, pero es MENOS de lo que el Usuario A quiere comprar
+            // Ej: El usuario A quiere 2, pero el usuario B compró y ahora solo queda 1 en stock
+            elseif ($product->stock < $item->quantity) {
+                $item->update(['quantity' => $product->stock]); // Le ajustamos la cantidad al máximo disponible
+                $huboCambiosDeStock = true;
+            }
+        }
+
+        // Si detectamos que el stock cambió por culpa de otra compra simultánea:
+        if ($huboCambiosDeStock) {
+            // Redirigimos al catálogo o al home y enviamos una sesión especial para activar el SweetAlert
+            return redirect()->route('catalog')->with('stock_changed_error', 'Hubo cambios en el stock de algunos productos de tu carrito. Por favor, revisa las cantidades antes de continuar.');
+        }
+
+        // Si todo es correcto, traemos las direcciones del usuario
         $direcciones = UserAddress::where('user_id', $request->user()->id)
             ->with('city.province')
             ->get();
@@ -76,7 +103,6 @@ class CheckoutController extends Controller
         $ciudadEnvioId = null;
 
         if ($request->user_address_id === 'nueva_direccion') {
-            // 1. Es una dirección nueva: La guardamos en su cuenta para el futuro
             $nuevaDireccion = $user->addresses()->create([
                 'alias'       => $request->delivery_alias ?? 'Dirección de Compra',
                 'street'      => $request->delivery_street,
@@ -89,7 +115,6 @@ class CheckoutController extends Controller
             $cpEnvio       = $nuevaDireccion->postal_code;
             $ciudadEnvioId = $nuevaDireccion->city_id;
         } else {
-            // 2. Eligió una dirección existente: Buscamos el registro
             $direccionExistente = $user->addresses()->findOrFail($request->user_address_id);
 
             $calleEnvio    = $direccionExistente->street;
@@ -110,29 +135,33 @@ class CheckoutController extends Controller
         try {
             $subtotal = 0;
             $itemsToCreate = [];
+            $huboCambiosDeStock = false;
 
             // 3. Iterar los productos del carrito para calcular totales y verificar Stock
             foreach ($cart->items as $item) {
                 $product = $item->product;
 
-                // =========================================================================
-                // CONTROL DE SEGURIDAD 2: El producto se desactivó justo antes de pagar
-                // =========================================================================
+                // Caso A: El producto se desactivó o eliminó de la tienda mientras el usuario rellenaba sus datos
                 if (!$product || !$product->active) {
-                    DB::rollBack();  // 1. Cancelamos la transacción primero
-                    $item->delete(); // 2. Removemos definitivamente el ítem de la base de datos
-
-                    // 3. Redirigimos usando 'cart_error' para que lo capte tu layout flotante
-                    return redirect()->route('catalog')->with('cart_error', 'Uno de los productos de tu orden dejó de estar disponible. El carrito fue actualizado.');
+                    $item->delete(); 
+                    $huboCambiosDeStock = true;
+                    continue; 
                 }
 
-                // Control de Stock tradicional
+                // Caso B: El usuario B compró antes y dejó al usuario A sin el stock necesario
                 if ($product->stock < $item->quantity) {
-                    DB::rollBack(); // Hacer rollback si rebota por falta de stock
-                    return redirect()->back()->with('cart_error', "Lo sentimos, no hay suficiente stock disponible para: {$product->title}. (Stock actual: {$product->stock})");
+                    $huboCambiosDeStock = true;
+
+                    if ($product->stock <= 0) {
+                        $item->delete(); 
+                    } else {
+                        $item->update(['quantity' => $product->stock]); 
+                    }
+                    continue;
                 }
 
-                // Calcular el precio real
+                // --- LOGICA DE PROCESAMIENTO REUBICADA CORRECTAMENTE ---
+                // Si el producto pasó los controles de stock, calculamos sus subtotales de forma normal
                 $precioUnitario = $product->final_price;
                 $subtotal += $precioUnitario * $item->quantity;
 
@@ -141,6 +170,13 @@ class CheckoutController extends Controller
                     'quantity'   => $item->quantity,
                     'price'      => $precioUnitario,
                 ];
+            } 
+
+            // --- RESPUESTA DE SEGURIDAD ---
+            // Si detectamos cualquier alteración en los productos o stocks, cancelamos la creación de la orden
+            if ($huboCambiosDeStock) {
+                DB::commit(); // Guardamos los cambios de reajuste del carrito
+                return redirect()->route('catalog')->with('stock_changed_error', 'Hubo cambios en el stock o disponibilidad de los productos mientras completabas tus datos. Tu carrito ha sido actualizado, por favor revísalo.');
             }
 
             // 4. Crear la Cabecera de la Orden
@@ -166,15 +202,16 @@ class CheckoutController extends Controller
                 $product->decrement('stock', $itemData['quantity']);
             }
 
-            // 6. Vaciar el carrito de compras del usuario
+            // 6. Vaciar el carrito de compras del usuario por completo
             $cart->items()->delete();
             $cart->delete();
 
-            DB::commit(); // Confirmamos todo en MariaDB
+            DB::commit(); // Confirmamos la compra de forma exitosa
 
             return redirect()->route('orders.success', $order->id)->with('cart_success', '¡Tu pedido ha sido procesado con éxito!');
+            
         } catch (\Exception $e) {
-            DB::rollBack();
+            DB::rollBack(); // Ante cualquier error inesperado de código, deshacemos cambios
             return redirect()->route('catalog')->with('cart_error', 'Ocurrió un error inesperado al procesar tu pedido: ' . $e->getMessage());
         }
     }

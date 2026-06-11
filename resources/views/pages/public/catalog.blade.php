@@ -1,5 +1,9 @@
 <x-layouts.layout>
     <x-slot name="title">Catálogo - {{ $tituloCategoria }}</x-slot>
+    {{-- Input oculto para pasar la alerta de stock al archivo JS --}}
+    @if(session('stock_changed_error'))
+        <input type="hidden" id="stock-error-bridge" value="{{ session('stock_changed_error') }}">
+    @endif
     <div class="container pt-2 pb-4">
 
         {{-- Título de Categoría Adaptativo --}}
