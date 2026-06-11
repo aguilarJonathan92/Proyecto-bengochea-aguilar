@@ -136,10 +136,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (subtotalDisplay) subtotalDisplay.textContent = data.formatted_subtotal;
                 if (totalDisplay) totalDisplay.textContent = data.formatted_subtotal;
 
-                const cartBadge = document.querySelector('.global-cart-badge');
+                // =========================================================================
+                // ACTUALIZACIÓN DINÁMICA DEL BADGE GLOBAL (MEJORADO)
+                // =========================================================================
+                const cartBadge = document.getElementById('global-cart-badge');
+                const totalQuantity = parseInt(data.total_quantity) || 0;
 
                 if (cartBadge) {
-                    cartBadge.textContent = data.total_quantity;
+                    // Actualizamos el número del contador con la respuesta del servidor
+                    cartBadge.textContent = totalQuantity;
+
+                    // Si el carrito se quedó vacío, ocultamos el badge y recargamos
+                    if (totalQuantity <= 0) {
+                        cartBadge.classList.add('d-none');
+
+                        // Forzamos una recarga rápida para que Blade dibuje el estado "Carrito Vacío"
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 300);
+                    } else {
+                        cartBadge.classList.remove('d-none');
+                    }
                 }
             }
         })

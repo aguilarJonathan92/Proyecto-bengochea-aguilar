@@ -12,7 +12,20 @@
         @php
             $subtotal = 0;
             $huboAjusteStock = false;
+
+            // FILTRADO PREVIO: Limpiamos los productos fantasmas ANTES de evaluar si el carrito está vacío
+            if ($cart) {
+                foreach ($cart->items as $item) {
+                    if (!$item->product || !$item->product->active || $item->product->stock <= 0) {
+                        $item->delete();
+                    }
+                }
+                // Recargamos la relación en caliente para que cuente los reales
+                $cart->load('items.product');
+            }
         @endphp
+
+        {{-- Ahora sí, evaluamos con la realidad de la base de datos --}}
 
         @if ($cart && $cart->items->count() > 0)
 
@@ -26,7 +39,7 @@
                         $item->delete();
                         continue; // Saltamos este producto y no renderizamos nada de su tarjeta
                     }
-                    
+
                     $cantidadReal = $item->quantity;
                     $notificacionItem = null;
 

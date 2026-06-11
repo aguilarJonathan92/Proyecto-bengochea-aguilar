@@ -14,26 +14,57 @@ use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         // Traemos el carrito del usuario autenticado con sus productos
         $cart = $request->user()->cart()->with('items.product')->first();
 
         // Si el carrito no existe o no tiene productos, lo mandamos de vuelta al catálogo
         if (!$cart || $cart->items->isEmpty()) {
-            return redirect()->route('catalog')->with('swal_error', 'Tu carrito está vacío. Añade productos antes de finalizar la compra.');
+            // CORREGIDO: Cambiado swal_error por cart_error
+            return redirect()->route('catalog')->with('cart_error', 'Tu carrito está vacío. Añade productos antes de finalizar la compra.');
         }
-        //Quite la ruta completa /App/Models/UserAddress
+
+        // =========================================================================
+        // CONTROL DE SEGURIDAD 1: Limpieza antes de renderizar la vista Checkout
+        // =========================================================================
+        $productosEliminados = false;
+        foreach ($cart->items as $item) {
+            $product = $item->product;
+
+            // Si el producto fue desactivado o borrado mientras miraba el carrito
+            if (!$product || !$product->active) {
+                $item->delete();
+                $productosEliminados = true;
+            }
+        }
+
+        if ($productosEliminados) {
+            $cart->load('items.product'); // Recargamos el carrito limpio
+
+            if ($cart->items->isEmpty()) {
+                // Cambiado swal_error por cart_error
+                return redirect()->route('catalog')->with('cart_error', 'Los productos de tu carrito ya no están disponibles.');
+            }
+
+            // Cambiado swal_error por cart_error y redirigimos al catálogo para asegurar el impacto visual
+            return redirect()->route('catalog')->with('cart_error', 'Algunos productos ya no están disponibles y fueron removidos del carrito.');
+        }
+
+        // Traemos las direcciones del usuario
         $direcciones = UserAddress::where('user_id', $request->user()->id)
-        ->with('city.province')
-        ->get();
+            ->with('city.province')
+            ->get();
 
         // Cargamos todas las provincias por si quiere agregar una nueva dirección en el momento
         $provincias = Province::orderBy('name')->get();
+
         // Retornamos la vista checkout.blade.php pasándole el carrito
         return view('pages.private.checkout', compact('cart', 'direcciones', 'provincias'));
     }
 
-    public function store(CheckoutRequest $request){
+    public function store(CheckoutRequest $request)
+    {
         // 1. Validar los datos que vienen del formulario del checkout
         $validated = $request->validated();
 
@@ -43,7 +74,7 @@ class CheckoutController extends Controller
         $calleEnvio = '';
         $cpEnvio = '';
         $ciudadEnvioId = null;
- 
+
         if ($request->user_address_id === 'nueva_direccion') {
             // 1. Es una dirección nueva: La guardamos en su cuenta para el futuro
             $nuevaDireccion = $user->addresses()->create([
@@ -51,7 +82,7 @@ class CheckoutController extends Controller
                 'street'      => $request->delivery_street,
                 'postal_code' => $request->delivery_postal_code,
                 'city_id'     => $request->delivery_city_id,
-                'is_default'  => $user->addresses()->count() === 0 // Si es la primera, queda default
+                'is_default'  => $user->addresses()->count() === 0
             ]);
 
             $calleEnvio    = $nuevaDireccion->street;
@@ -65,15 +96,15 @@ class CheckoutController extends Controller
             $cpEnvio       = $direccionExistente->postal_code;
             $ciudadEnvioId = $direccionExistente->city_id;
         }
+
         // Obtener el carrito del usuario con sus productos
         $cart = $request->user()->cart()->with('items.product')->first();
 
         if (!$cart || $cart->items->isEmpty()) {
-            return redirect()->route('catalog')->with('swal_error', 'No se pudo procesar la compra porque tu carrito está vacío.');
+            return redirect()->route('catalog')->with('cart_error', 'No se pudo procesar la compra porque tu carrito está vacío.');
         }
 
-        // 2. Usamos una Transacción de Base de Datos para asegurarnos de que se guarde TODO o NADA.
-        // Si a mitad de camino se cae el sistema o un producto se queda sin stock, no se creará una orden fantasma.
+        // 2. Usamos una Transacción de Base de Datos
         DB::beginTransaction();
 
         try {
@@ -84,27 +115,33 @@ class CheckoutController extends Controller
             foreach ($cart->items as $item) {
                 $product = $item->product;
 
-                // Control de Stock
-                if ($product->stock < $item->quantity) {
-                    return redirect()->back()->with('swal_error', "Lo sentimos, no hay suficiente stock disponible para: {$product->title}. (Stock actual: {$product->stock})");
+                // =========================================================================
+                // CONTROL DE SEGURIDAD 2: El producto se desactivó justo antes de pagar
+                // =========================================================================
+                if (!$product || !$product->active) {
+                    DB::rollBack();  // 1. Cancelamos la transacción primero
+                    $item->delete(); // 2. Removemos definitivamente el ítem de la base de datos
+
+                    // 3. Redirigimos usando 'cart_error' para que lo capte tu layout flotante
+                    return redirect()->route('catalog')->with('cart_error', 'Uno de los productos de tu orden dejó de estar disponible. El carrito fue actualizado.');
                 }
 
-                // Calcular el precio real (usando tu accesor final_price)
+                // Control de Stock tradicional
+                if ($product->stock < $item->quantity) {
+                    DB::rollBack(); // Hacer rollback si rebota por falta de stock
+                    return redirect()->back()->with('cart_error', "Lo sentimos, no hay suficiente stock disponible para: {$product->title}. (Stock actual: {$product->stock})");
+                }
+
+                // Calcular el precio real
                 $precioUnitario = $product->final_price;
                 $subtotal += $precioUnitario * $item->quantity;
 
-                // Guardamos los datos del ítem para crearlos luego de generar la cabecera de la orden
                 $itemsToCreate[] = [
                     'product_id' => $product->id,
                     'quantity'   => $item->quantity,
-                    'price'      => $precioUnitario, // Precio congelado con descuento si aplicaba
+                    'price'      => $precioUnitario,
                 ];
             }
-
-            // APLICAR DESCUENTO POR TRANSFERENCIA (Solo si hay tiempo)
-            //if ($request->paymentMethod === 'transfer') {
-            //    $subtotal = $subtotal * 0.90; // Aplica un 10% de descuento al total general
-            //}
 
             // 4. Crear la Cabecera de la Orden
             $order = Order::create([
@@ -122,36 +159,28 @@ class CheckoutController extends Controller
 
             // 5. Crear los ítems de la orden y restar stock de los productos
             foreach ($itemsToCreate as $itemData) {
-                // Asociamos el id de la orden que acabamos de crear
                 $itemData['order_id'] = $order->id;
                 OrderItem::create($itemData);
 
-                // Restar el stock físicamente al producto
                 $product = Product::find($itemData['product_id']);
                 $product->decrement('stock', $itemData['quantity']);
             }
 
-            // 6. Vaciar el carrito de compras del usuario (Eliminar sus ítems)
+            // 6. Vaciar el carrito de compras del usuario
             $cart->items()->delete();
-            $cart->delete(); // Opcional: puedes borrar el carrito completo o dejar la cabecera vacía
+            $cart->delete();
 
-            DB::commit(); // Todo salió bien, impactamos la base de datos de manera permanente
+            DB::commit(); // Confirmamos todo en MariaDB
 
-            // Redireccionar al usuario a una pantalla de éxito
-            return redirect()->route('orders.success', $order->id)->with('success', '¡Tu pedido ha sido procesado con éxito!');
-
+            return redirect()->route('orders.success', $order->id)->with('cart_success', '¡Tu pedido ha sido procesado con éxito!');
         } catch (\Exception $e) {
-            DB::rollBack(); // Si algo falló, deshacemos todos los cambios para no corromper datos
-            return redirect()->back()->with('swal_error', 'Ocurrió un error al procesar tu pedido: ' . $e->getMessage());
+            DB::rollBack();
+            return redirect()->route('catalog')->with('cart_error', 'Ocurrió un error inesperado al procesar tu pedido: ' . $e->getMessage());
         }
     }
 
-        /**
-     * Muestra la pantalla de éxito tras finalizar un pedido.
-     */
     public function success(Order $order)
     {
-        // Opcional: Validar que la orden pertenezca al usuario logueado para que nadie adivine IDs en la URL
         if ($order->user_id !== Auth::user()->id) {
             abort(403, 'No tienes permiso para ver este pedido.');
         }

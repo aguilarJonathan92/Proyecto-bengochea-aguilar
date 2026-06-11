@@ -80,7 +80,6 @@
                             </div>
 
                             {{-- BLOQUE OCULTO PARA NUEVA DIRECCIÓN --}}
-                            {{-- Se mostrará automáticamente si el usuario no tiene ninguna guardada o si elige "Nueva dirección" --}}
                             <div id="bloque-nueva-direccion"
                                 class="{{ $direcciones->isNotEmpty() && old('user_address_id', 'guardada') !== 'nueva_direccion' ? 'd-none' : '' }} mt-3 pt-3">
                                 <div class="p-3 bg-superficie-adaptativa rounded border border-ui-adaptativa row g-3">
@@ -157,7 +156,6 @@
                             <div class="alert alert-danger py-2 small mb-2">{{ $message }}</div>
                         @enderror
                         <div class="payment-options d-flex flex-column gap-2">
-                            <!-- Tarjeta de Crédito / Débito -->
                             <div class="checkout-payment-option rounded border">
                                 <label class="form-check d-flex align-items-center p-3 mb-0 w-100 cursor-pointer"
                                     for="credit">
@@ -170,7 +168,6 @@
                                 </label>
                             </div>
 
-                            <!-- Transferencia Bancaria -->
                             <div class="checkout-payment-option rounded border">
                                 <label class="form-check d-flex align-items-center p-3 mb-0 w-100 cursor-pointer"
                                     for="transfer_bank">
@@ -183,7 +180,6 @@
                                 </label>
                             </div>
 
-                            <!-- Mercado Pago -->
                             <div class="checkout-payment-option rounded border">
                                 <label class="form-check d-flex align-items-center p-3 mb-0 w-100 cursor-pointer"
                                     for="transfer_mp">
@@ -197,7 +193,6 @@
                             </div>
                         </div>
 
-                        {{-- Mensaje de error de los metodos de pago, fuera de los form-check --}}
                         <div id="payment-error" class="text-danger small mt-2 d-none" style="font-size: 0.85rem;">
                             <i class="bi bi-exclamation-circle-fill me-1"></i> Seleccioná un método de pago para
                             continuar.
@@ -215,12 +210,12 @@
             {{-- Resumen lateral mejorado --}}
             <div class="col-md-5 col-lg-4 order-1 order-md-2">
                 <div class="card checkout-summary-card shadow-sm border-0">
-                    {{-- El padding aquí evita que "RESUMEN" se pegue a los bordes --}}
                     <div class="summary-header p-4">
                         <h5 class="d-flex justify-content-between align-items-center mb-0 fw-bold color-adaptativo">
                             <span>RESUMEN</span>
-                            <span
-                                class="badge rounded-pill bg-adaptativo-badge px-3 py-2">{{ $cart->items->sum('quantity') }}</span>
+                            <span class="badge rounded-pill bg-adaptativo-badge px-3 py-2">
+                                {{ $cart->items->sum('quantity') }}
+                            </span>
                         </h5>
                     </div>
 
@@ -233,8 +228,10 @@
                         <div class="productos-checkout-lista mb-3" style="max-height: 280px; overflow-y: auto;">
                             @foreach ($cart->items as $item)
                                 @php
-                                    // Usamos final_price que contempla ofertas activas automáticamente
-                                    $precioUnitario = $item->product->final_price;
+                                    // =========================================================================
+                                    // BLINDAJE CON OPERADOR NULL-SAFE (?->) Y RESPALDO (??)
+                                    // =========================================================================
+                                    $precioUnitario = $item->product?->final_price ?? 0;
                                     $itemTotal = $precioUnitario * $item->quantity;
                                     $subtotal += $itemTotal;
                                 @endphp
@@ -243,7 +240,7 @@
                                     <div class="product-info grow me-2">
                                         <h6 class="product-name color-adaptativo mb-0 fw-bold text-uppercase small text-truncate"
                                             style="max-width: 160px;">
-                                            {{ $item->product->title }}
+                                            {{ $item->product?->title ?? 'Producto no disponible' }}
                                         </h6>
                                         <small class="text-muted-adaptativo">
                                             Cant: {{ $item->quantity }} x
