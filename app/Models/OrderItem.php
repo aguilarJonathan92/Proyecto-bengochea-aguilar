@@ -32,6 +32,8 @@ class OrderItem extends Model
     {
         // Usamos withTrashed() por si un producto se elimina del catálogo (Soft Delete)
         // para que el historial de compras del usuario no rompa la aplicación
-        return $this->belongsTo(Product::class)->withTrashed();
+        return $this->belongsTo(Product::class)
+            ->withoutGlobalScopes(['active']) // Ignora si la marca o el producto están apagados
+            ->withTrashed();
     }
 }

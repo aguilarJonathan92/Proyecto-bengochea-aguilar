@@ -65,7 +65,13 @@ class OrderForm
                                     // Con esto, Filament puede cargar el título del producto aunque tenga Soft Delete
                                     //Al ser un select, necesita este ajuste. En cambio en la tabla y la infolist
                                     //solo mira que el método product() de OrderItem incluya withTrashed()
-                                    ->relationship('product', 'title', fn($query) => $query->withTrashed())
+                                    ->relationship(
+                                        name: 'product',
+                                        titleAttribute: 'title',
+                                        modifyQueryUsing: fn($query) => $query
+                                            ->withoutGlobalScopes()  // remueve TODOS los global scopes
+                                            ->withTrashed()
+                                    )
                                     ->disabled(),
                                 TextInput::make('quantity')
                                     ->label('Cantidad')

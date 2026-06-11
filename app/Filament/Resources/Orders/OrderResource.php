@@ -16,6 +16,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class OrderResource extends Resource
 {
@@ -52,6 +54,15 @@ class OrderResource extends Resource
         return [
             OrderStats::class, // <-- Registramos el widget aquí
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->with(['items.product' => function ($query) {
+                //Trae los productos aunque esten borrados/con marca desactivada dentro de la orden
+                $query->withoutGlobalScopes(['active'])->withTrashed();
+            }]);
     }
 
     public static function getPages(): array
