@@ -13,7 +13,7 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        // Traemos el carrito del usuario con sus ítems y los datos del producto cargados (Eager Loading)
+        // Traemos el carrito del usuario con sus ítems y los datos del producto cargados
         $cart = $request->user()->cart()->with('items.product')->first();
 
         if (!$cart || $cart->items->isEmpty()) {
@@ -28,17 +28,26 @@ class CartController extends Controller
         foreach ($cart->items as $item) {
             $product = $item->product;
 
+            // ==================================================================================
+            // CASO 0: El producto ya no existe, está inactivo (active = false) o con soft-delete
+            // ==================================================================================
+            if (!$product || !$product->active) {
+                $mensajesAjuste[] = "Uno de los productos ya no está disponible y fue removido de tu carrito.";
+                $item->delete(); // Se borra de MariaDB automáticamente para que no vuelva a molestar
+                continue; // Saltamos al siguiente ítem del carrito
+            }
+
             // CASO 1: El producto directamente ya no tiene stock (Agotado)
             if ($product->stock <= 0) {
                 $mensajesAjuste[] = "El producto '{$product->title}' se ha agotado y fue removido de tu carrito.";
-                $item->delete(); // Se borra de MariaDB automáticamente
+                $item->delete();
                 continue;
             }
 
             // CASO 2: Hay stock, pero es menor a la cantidad que el usuario tenía guardada
             if ($product->stock < $item->quantity) {
                 $mensajesAjuste[] = "El stock de '{$product->title}' cambió. Ajustamos la cantidad al máximo disponible ({$product->stock} unidades).";
-                
+
                 // Actualizamos el registro en MariaDB al tope real
                 $item->update(['quantity' => $product->stock]);
             }
@@ -50,7 +59,7 @@ class CartController extends Controller
             // Guardamos los avisos en la sesión para que Blade los muestre
             session()->flash('cart_updates', $mensajesAjuste);
         }
-        
+
         return back()->with([
             'cart_id' => $cart->id,
             'items' => $cart->items
@@ -61,10 +70,11 @@ class CartController extends Controller
      * Agrega un producto al carrito o incrementa su cantidad si ya existe.
      */
 
-    public function add(Request $request){
+    public function add(Request $request)
+    {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1' 
+            'quantity' => 'required|integer|min:1'
         ]);
 
         $user = $request->user();
@@ -72,7 +82,7 @@ class CartController extends Controller
         $product = Product::findOrFail($request->product_id);
 
         //Valida que tenga suficiente stock para ingresar al carrito
-        if($product->stock < $request ->quantity){
+        if ($product->stock < $request->quantity) {
             return back()->with('cart_error', 'No hay stock suficiente del producto.');
         }
 
@@ -85,7 +95,7 @@ class CartController extends Controller
         //Buscamos si el producto esta en el carrito
         $cartItem = $cart->items()->where('product_id', $product->id)->first();
 
-        if($cartItem){
+        if ($cartItem) {
             //Al existir, se valida stock y se acumula
             if ($product->stock < ($cartItem->quantity + $request->quantity)) {
                 if ($request->wantsJson()) {
@@ -94,7 +104,7 @@ class CartController extends Controller
                 return back()->with('cart_error', 'No puedes agregar el producto, supera el stock disponible.');
             }
             $cartItem->increment('quantity', $request->quantity);
-        }else{
+        } else {
             // Si es nuevo, lo creamos
             $cart->items()->create([
                 'product_id' => $product->id,
@@ -106,7 +116,7 @@ class CartController extends Controller
         if ($request->wantsJson()) {
             // Volvemos a cargar el carrito para tener los datos actualizados listos
             $cart->load('items.product');
-            
+
             $subtotalGeneral = 0;
             foreach ($cart->items as $item) {
                 $subtotalGeneral += $item->product->final_price * $item->quantity;
@@ -121,7 +131,7 @@ class CartController extends Controller
                 // pero por ahora devolvemos los datos duros
             ]);
         }
-        
+
         // Al momento de retornar la respuesta:
         if ($request->input('action') === 'buy_now') {
             // Si presionó "Finalizar Compra", va directo al checkout
@@ -134,7 +144,8 @@ class CartController extends Controller
     /**
      * Actualiza la cantidad exacta de un artículo en el carrito.
      */
-    public function updateQuantity(Request $request, int $itemId){
+    public function updateQuantity(Request $request, int $itemId)
+    {
 
         $request->validate([
             'quantity' => 'required|integer|min:1'
@@ -161,7 +172,7 @@ class CartController extends Controller
         if ($request->wantsJson()) {
             // Obtenemos el carrito actualizado con todos sus ítems para recalcular el subtotal general
             $cart = $request->user()->cart()->with('items.product')->first();
-            
+
             $subtotalGeneral = 0;
             foreach ($cart->items as $item) {
                 $subtotalGeneral += $item->product->final_price * $item->quantity;
@@ -202,7 +213,8 @@ class CartController extends Controller
         return back()->with('cart_success', 'Producto removido del carrito.');
     }
 
-    public function clear(Request $request){
+    public function clear(Request $request)
+    {
         $cart = $request->user()->cart()->first();
 
         if ($cart) {

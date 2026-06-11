@@ -66,7 +66,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-
+        /*
         // 1. Solo administradores
         if ($user->role?->name !== 'admin') {
             return false;
@@ -83,6 +83,8 @@ class UserPolicy
         }
 
         return true;
+        */
+        return false;
     }
 
     /**
