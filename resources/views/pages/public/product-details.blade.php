@@ -118,7 +118,7 @@
 
                     <div class="d-grid gap-3">
                         {{-- Formulario tradicional para añadir al carrito --}}
-                        <form action="{{ route('cart.add') }}" method="POST">
+                        <form action="{{ route('cart.add') }}" method="POST" class="form-agregar-carrito">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
 
@@ -150,13 +150,13 @@
                                 </div>
 
                                 <div class="d-grid gap-3">
-                                    <button type="submit" name="action" value="add_to_cart"
-                                        class="btn-add-cart text-uppercase py-3 w-100">
+                                    {{-- BOTÓN 1: Añade al carrito y se queda acá --}}
+                                    <button type="submit" name="action" value="add_to_cart" class="btn-add-cart btn-agregar text-uppercase py-3 w-100">
                                         Añadir al Carrito
                                     </button>
 
-                                    <button type="submit" name="action" value="buy_now"
-                                        class="btn-outline-adaptativo text-uppercase py-3 text-center text-decoration-none bg-transparent w-100">
+                                    {{-- BOTÓN 2: Añade al carrito y redirige (Nuevo) --}}
+                                    <button type="submit" name="action" value="buy_now" class="btn-outline-adaptativo btn-agregar text-uppercase py-3 text-center text-decoration-none bg-transparent w-100">
                                         Finalizar Compra
                                     </button>
                                 </div>
