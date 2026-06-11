@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Brands\Pages;
 use App\Filament\Resources\Brands\BrandResource;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditBrand extends EditRecord
@@ -16,24 +17,35 @@ class EditBrand extends EditRecord
         return [
             Action::make('verWeb')
                 ->label('Ver en tienda')
-                ->color('primary')
+                ->color(fn (): string => (
+                    !$this->record->active ||
+                    $this->record->trashed()
+                ) ? 'gray' : 'primary')
                 ->icon('heroicon-o-eye')
                 ->url(function (): ?string {
-                    if (empty($this->record->name) || strlen($this->record->name) < 3) {
+                    // Si el botón termina deshabilitado por las reglas de abajo,
+                    // devolvemos null para que no intente generar un enlace roto.
+                    if (
+                        empty($this->record->name) ||
+                        strlen($this->record->name) < 3 ||
+                        !$this->record->active ||
+                        $this->record->trashed()
+                    ) {
                         return null;
                     }
                     return route('search', ['query' => $this->record->name]);
                 })
-                ->disabled(fn() => empty($this->record->name) || strlen($this->record->name) < 3)
+                ->disabled(function (): bool {
+                    // El botón se bloquea (disabled) si cumple cualquiera de estas condiciones:
+                    return empty($this->record->name) ||
+                        strlen($this->record->name) < 3 ||
+                        !$this->record->active ||       // 1. La marca está desactivada
+                        $this->record->trashed();       // 2. La marca sufrió un Soft Delete (está en papelera)
+                })
                 ->openUrlInNewTab(),
 
-            // Al ser soft delete, Filament sabe de forma nativa qué hacer
             DeleteAction::make(),
+            RestoreAction::make()
         ];
-    }
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->getResource()::getUrl('index');
     }
 }
