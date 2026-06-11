@@ -114,57 +114,82 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify({ quantity: parseInt(quantity) })
         })
-        .then(async response => {
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error || 'Error en el servidor');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                inputElement.setAttribute('data-initial-value', quantity);
-
-                const itemCard = document.querySelector(`.item-cart-card[data-item-id="${itemId}"]`);
-                if (itemCard) {
-                    const itemTotalDisplay = itemCard.querySelector('.item-total-display');
-                    if (itemTotalDisplay) itemTotalDisplay.textContent = data.formatted_item_total;
+            .then(async response => {
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || 'Error en el servidor');
                 }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    inputElement.setAttribute('data-initial-value', quantity);
 
-                const subtotalDisplay = document.querySelector('.cart-subtotal-display');
-                const totalDisplay = document.querySelector('.cart-total-display');
-                if (subtotalDisplay) subtotalDisplay.textContent = data.formatted_subtotal;
-                if (totalDisplay) totalDisplay.textContent = data.formatted_subtotal;
+                    const itemCard = document.querySelector(`.item-cart-card[data-item-id="${itemId}"]`);
+                    if (itemCard) {
+                        const itemTotalDisplay = itemCard.querySelector('.item-total-display');
+                        if (itemTotalDisplay) itemTotalDisplay.textContent = data.formatted_item_total;
+                    }
 
-                // =========================================================================
-                // ACTUALIZACIÓN DINÁMICA DEL BADGE GLOBAL (MEJORADO)
-                // =========================================================================
-                const cartBadge = document.getElementById('global-cart-badge');
-                const totalQuantity = parseInt(data.total_quantity) || 0;
+                    const subtotalDisplay = document.querySelector('.cart-subtotal-display');
+                    const totalDisplay = document.querySelector('.cart-total-display');
+                    if (subtotalDisplay) subtotalDisplay.textContent = data.formatted_subtotal;
+                    if (totalDisplay) totalDisplay.textContent = data.formatted_subtotal;
 
-                if (cartBadge) {
-                    // Actualizamos el número del contador con la respuesta del servidor
-                    cartBadge.textContent = totalQuantity;
+                    // =========================================================================
+                    // ACTUALIZACIÓN DINÁMICA DEL BADGE GLOBAL (MEJORADO)
+                    // =========================================================================
+                    const cartBadge = document.getElementById('global-cart-badge');
+                    const totalQuantity = parseInt(data.total_quantity) || 0;
 
-                    // Si el carrito se quedó vacío, ocultamos el badge y recargamos
-                    if (totalQuantity <= 0) {
-                        cartBadge.classList.add('d-none');
+                    if (cartBadge) {
+                        // Actualizamos el número del contador con la respuesta del servidor
+                        cartBadge.textContent = totalQuantity;
 
-                        // Forzamos una recarga rápida para que Blade dibuje el estado "Carrito Vacío"
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 300);
-                    } else {
-                        cartBadge.classList.remove('d-none');
+                        // Si el carrito se quedó vacío, ocultamos el badge y recargamos
+                        if (totalQuantity <= 0) {
+                            cartBadge.classList.add('d-none');
+
+                            // Forzamos una recarga rápida para que Blade dibuje el estado "Carrito Vacío"
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 300);
+                        } else {
+                            cartBadge.classList.remove('d-none');
+                        }
                     }
                 }
-            }
-        })
-        .catch(error => {
-            console.error('Error al actualizar el carrito:', error);
-            alert(error.message || 'Ocurrió un error al actualizar la cantidad.');
-            inputElement.value = inputElement.getAttribute('data-initial-value');
-        });
+            })
+            .catch(error => {
+                console.error('Error al actualizar el carrito:', error);
+                alert(error.message || 'Ocurrió un error al actualizar la cantidad.');
+                inputElement.value = inputElement.getAttribute('data-initial-value');
+            });
     }
 
+    // =========================================================================
+    // NUEVO: PASO DE MENSAJES DE STOCK DESDE LARAVEL (Usuario A vs Usuario B)
+    // =========================================================================
+    const bridgeInput = document.getElementById('stock-error-bridge');
+    // Evaluamos de forma segura si el html tiene la configuración oscura activa
+    const temaOscuro = document.documentElement.getAttribute('data-bs-theme') === 'dark' || document.documentElement.classList.contains('dark');
+
+    if (bridgeInput && bridgeInput.value.trim() !== "") {
+        Swal.fire({
+            title: '¡Atención! Carrito Actualizado',
+            text: bridgeInput.value,
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Revisar Carrito',
+            background: temaOscuro ? '#212529' : '#ffffff',
+            color: temaOscuro ? '#ffffff' : '#212529'
+        }).then(() => {
+            // Reemplaza 'offcanvasCarrito' por el ID real de la etiqueta de tu menú lateral
+            const cartOffcanvasEl = document.getElementById('offcanvasCarrito');
+            if (cartOffcanvasEl && typeof bootstrap !== 'undefined') {
+                const bsOffcanvas = bootstrap.Offcanvas.getInstance(cartOffcanvasEl) || new bootstrap.Offcanvas(cartOffcanvasEl);
+                bsOffcanvas.show();
+            }
+        });
+    }
 });
