@@ -51,6 +51,17 @@ class ProductForm
 
         return $schema
             ->schema([
+                //Notificar si el producto está invisible al público debido a la marca.
+                TextInput::make('brand_status_helper')
+                    ->label('Alerta de Visibilidad')
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->formatStateUsing(fn() => '⚠ OCULTO — La marca asociada está desactivada comercialmente.')
+                    ->extraInputAttributes([
+                        'class' => 'text-amber-700 bg-amber-50 dark:bg-amber-950/20 dark:text-amber-400 border-amber-300 font-bold'
+                    ])
+                    ->columnSpanFull()
+                    ->hidden(fn($record) => !($record?->brand && !$record->brand->active)),
                 // SECCIÓN 1 : Detalles del producto
                 Section::make('Información del Instrumento')
                     ->description('Detalles principales del producto')
