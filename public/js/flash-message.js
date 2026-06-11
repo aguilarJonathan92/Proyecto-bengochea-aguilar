@@ -102,19 +102,36 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
 
                         // Lanzamos SweetAlert2 para dar un feedback limpio usando tus estilos
-                        Swal.fire({
-                            title: '¡Agregado!',
-                            text: data.message,
-                            icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false,
-                            background: temaOscuro ? '#212529' : '#ffffff',
-                            color: temaOscuro ? '#ffffff' : '#212529'
-                        }).then(() => {
-                            // Cuando la alerta desaparece, recargamos para actualizar el HTML interno del Offcanvas
-                            // Al estar en el callback del .then(), retenemos la UX y preservamos la posición del scroll
-                            window.location.reload();
-                        });
+                        if (dataFields['action'] === 'buy_now') {
+
+                            // Feedback visual limpio de redirección
+                            Swal.fire({
+                                title: '¡Procesando!',
+                                text: 'Redirigiendo al formulario de pago...',
+                                icon: 'success',
+                                timer: 1500,
+                                showConfirmButton: false,
+                                background: temaOscuro ? '#212529' : '#ffffff',
+                                color: temaOscuro ? '#ffffff' : '#212529'
+                            }).then(() => {
+                                // Redirigimos al cliente directamente al checkout
+                                window.location.href = '/checkout'; // Ajustá la URL si tu ruta usa otro patrón
+                            });
+
+                        } else {
+                            // Comportamiento tradicional para "Añadir al Carrito" (se queda en la página)
+                            Swal.fire({
+                                title: '¡Agregado!',
+                                text: data.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false,
+                                background: temaOscuro ? '#212529' : '#ffffff',
+                                color: temaOscuro ? '#ffffff' : '#212529'
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        }
                     }
                 })
                 .catch(error => {
