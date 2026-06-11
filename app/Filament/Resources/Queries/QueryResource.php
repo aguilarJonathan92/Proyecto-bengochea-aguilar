@@ -20,7 +20,7 @@ class QueryResource extends Resource
 {
     protected static ?string $model = Query::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleOvalLeftEllipsis;
 
     protected static ?string $recordTitleAttribute = 'name';
 
