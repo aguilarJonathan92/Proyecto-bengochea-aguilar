@@ -32,7 +32,8 @@ class UsersTable
                 TextColumn::make('email_verified_at')
                     ->label('Fecha de verif. de correo')
                     ->dateTime('d/m/Y H:i', 'America/Argentina/Buenos_Aires')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('role.name')
                     ->label('Rol')
