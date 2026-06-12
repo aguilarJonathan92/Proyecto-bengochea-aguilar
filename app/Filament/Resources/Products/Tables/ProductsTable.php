@@ -29,7 +29,6 @@ class ProductsTable
                     ->label('Imagen')
                     ->disk('public')
                     ->circular()
-                    //Abrir imagen en tamaño normal en una pestaña nueva
                     ->url(fn($record) => $record->image_1 ? Storage::url($record->image_1) : null, shouldOpenInNewTab: true),
 
                 // Información principal
@@ -39,23 +38,35 @@ class ProductsTable
                     ->sortable()
                     ->weight('bold'),
 
-                TextColumn::make('category.name') // Category tiene 'name'
+                TextColumn::make('category.name')
                     ->label('Categoría')
                     ->searchable()
                     ->sortable()
                     ->badge()
                     ->color('gray'),
 
-                TextColumn::make('brand.name') // Atributo 'name' de Brand
+                TextColumn::make('brand.name')
                     ->label('Marca')
                     ->searchable()
                     ->sortable(),
 
-                // Precios y Stock
-                TextColumn::make('price')
-                    ->label('Precio')
-                    ->money('ARS') // Moneda Local
-                    ->sortable(),
+                // Detectar el precio final:
+                // Apunta al accesor final_price. Muestra el precio con descuento si está en oferta
+                TextColumn::make('final_price')
+                    ->label('Precio Actual')
+                    ->money('ARS')
+                    ->sortable(['price']) // Fuerza a la base de datos a ordenar usando la columna física 'price'(el precio de lista es el criterio valido)
+                    ->alignEnd()
+                    // Si está en oferta ('on_sale' es true), el texto resalta en verde, si no queda gris estándar
+                    ->color(fn($record) => $record->on_sale ? 'success' : 'gray')
+                    ->weight(fn($record) => $record->on_sale ? 'bold' : 'normal')
+                    // Si hay descuento, dibuja al administrador el precio original de lista debajo
+                    ->description(function ($record) {
+                        if ($record->on_sale && $record->discount > 0) {
+                            return 'Antes: $' . number_format($record->price, 2, ',', '.');
+                        }
+                        return null;
+                    }),
 
                 TextColumn::make('stock')
                     ->numeric()
@@ -68,8 +79,6 @@ class ProductsTable
                     ->sortable()
                     ->alignCenter(),
 
-                // Estados (on_sale y active)
-                // CheckboxColumn permite editar el estado directamente desde la tabla
                 CheckboxColumn::make('active')
                     ->label('Activo'),
 
@@ -83,6 +92,7 @@ class ProductsTable
                 TextColumn::make('discount')
                     ->label('% Desc.')
                     ->suffix('%')
+                    // Hacemos que la columna de descuento evalúe de forma segura usando la fila actual
                     ->visible(fn($record) => $record?->on_sale),
 
                 TextColumn::make('created_at')
