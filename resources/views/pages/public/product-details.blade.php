@@ -155,9 +155,9 @@
                                         Añadir al Carrito
                                     </button>
 
-                                    {{-- BOTÓN 2: Añade al carrito y redirige (Nuevo) --}}
-                                    <button type="submit" name="action" value="buy_now" class="btn-outline-adaptativo btn-agregar text-uppercase py-3 text-center text-decoration-none bg-transparent w-100">
-                                        Finalizar Compra
+                                    {{-- BOTÓN 2: Añade al carrito y lleva a la compra--}}
+                                    <button type="submit" name="action" value="buy_now" class="btn-agregar text-uppercase py-3 text-center btn-outline-adaptativo text-decoration-none  w-100">
+                                        Añadir y finalizar compra
                                     </button>
                                 </div>
                             @else

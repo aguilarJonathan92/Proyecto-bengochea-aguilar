@@ -184,7 +184,7 @@
                     {{-- Si hubo productos agotados que bajaron a 0, se puede deshabilitar el botón de compra o dejar que se limpie en el controlador --}}
                     <a href="{{ route('checkout') }}"
                         class="btn-brand text-uppercase py-3 text-decoration-none text-center">
-                        Iniciar Compra
+                        Confirmar carrito
                     </a>
 
                     <form id="form-vaciar-carrito" action="{{ route('cart.clear') }}" method="POST" class="d-grid">
