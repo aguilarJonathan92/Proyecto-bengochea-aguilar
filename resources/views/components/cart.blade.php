@@ -69,7 +69,7 @@
 
                 {{-- Item del Carrito Dinámico --}}
                 <div class="card mb-3 border-0 shadow-sm overflow-hidden item-cart-card"
-                    data-item-id="{{ $item->id }}">
+                    data-item-id="{{ $item->id }}" data-product-id="{{ $producto->id }}">
                     <div class="row g-0 align-items-center">
                         <div class="col-4 cart-img-container d-flex align-items-center justify-content-center p-2">
                             <img src="{{ $producto->image_1 ? asset('storage/' . $producto->image_1) : asset('images/piano-casio.webp') }}"

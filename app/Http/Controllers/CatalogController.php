@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 class CatalogController extends Controller
 
@@ -49,7 +49,25 @@ class CatalogController extends Controller
             session()->push('productos_vistos', $id); // Guarda este ID en la sesión
         }
         //el final_price lo calcula getFinalPriceAttribute() en el modelo
+        $cantidadEnCarrito = 0;
 
-        return view('pages.public.product-details', compact('product'));
+        // 2. CORRECCIÓN: Usamos Auth::check() que es 100% seguro
+        if (Auth::check()) {
+            $user = Auth::user(); // También podés usar Auth::user() aquí de forma segura
+
+            // Buscamos si ya tiene este producto en el carrito
+            $cartItem = \App\Models\CartItem::whereHas('cart', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->where('product_id', $id)->first();
+
+            if ($cartItem) {
+                $cantidadEnCarrito = $cartItem->quantity;
+            }
+        }
+
+        // 3. Calculamos el stock disponible temporal
+        $stockDisponible = max(0, $product->stock - $cantidadEnCarrito);
+
+        return view('pages.public.product-details', compact('product', 'stockDisponible'));
     }
 }

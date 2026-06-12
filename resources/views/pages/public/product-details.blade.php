@@ -94,24 +94,25 @@
                         </ul>
                     </div>
 
-                    {{-- Indicador de Stock --}}
-                    <div class="mb-3">
-                        @if ($product->stock > 5)
+                    {{-- Indicador de Stock Unificado (Con ID independiente para manipular por JS) --}}
+                    <div class="mb-4" id="stock-status-container">
+                        @if ($stockDisponible > 5)
                             <span class="text-success small fw-bold">
-                                <i class="bi bi-box-seam me-1"></i> Disponible ({{ $product->stock }} unidades)
+                                <i class="bi bi-box-seam me-1"></i> Disponible ({{ $stockDisponible }} unidades)
                             </span>
-                        @elseif($product->stock > 1)
+                        @elseif($stockDisponible > 1)
                             <span class="text-warning small fw-bold">
-                                <i class="bi bi-exclamation-triangle me-1"></i> ¡Últimas {{ $product->stock }} unidades
-                                disponibles!
+                                <i class="bi bi-exclamation-triangle me-1"></i> ¡Últimas {{ $stockDisponible }}
+                                unidades disponibles!
                             </span>
-                        @elseif($product->stock == 1)
+                        @elseif($stockDisponible == 1)
                             <span class="text-warning small fw-bold">
                                 <i class="bi bi-x-circle me-1"></i> ¡Última unidad disponible!
                             </span>
                         @else
                             <span class="text-danger small fw-bold">
-                                <i class="bi bi-x-circle me-1"></i> Producto Agotado
+                                <i class="bi bi-x-circle me-1"></i> Agotado (Ya añadiste el máximo disponible a tu
+                                carrito)
                             </span>
                         @endif
                     </div>
@@ -122,8 +123,8 @@
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-                            {{-- Selector de cantidad dinámico --}}
-                            @if ($product->stock > 0)
+                            {{-- El bloque de compra se deshabilita visualmente si no hay stock disponible para el usuario --}}
+                            <div id="quantity-selector-container" class="{{ $stockDisponible <= 0 ? 'd-none' : '' }}">
                                 <div class="mb-3">
                                     <label for="quantity"
                                         class="form-label color-adaptativo small fw-bold text-uppercase">Cantidad</label>
@@ -132,7 +133,7 @@
                                             onclick="decrementQty()">-</button>
                                         <input type="number" id="quantity" name="quantity"
                                             class="form-control text-center bg-transparent color-adaptativo border-ui-adaptativa"
-                                            value="1" min="1" max="{{ $product->stock }}"
+                                            value="1" min="1" max="{{ $stockDisponible }}"
                                             oninput="validateKeyboardInput(this)">
                                         <button class="btn btn-outline-secondary border-ui-adaptativa" type="button"
                                             onclick="incrementQty()">+</button>
@@ -149,22 +150,27 @@
                                     </div>
                                 </div>
 
-                                <div class="d-grid gap-3">
+                                <div class="d-grid gap-3 mb-3">
                                     {{-- BOTÓN 1: Añade al carrito y se queda acá --}}
-                                    <button type="submit" name="action" value="add_to_cart" class="btn-add-cart btn-agregar text-uppercase py-3 w-100">
+                                    <button type="submit" name="action" value="add_to_cart"
+                                        class="btn-add-cart btn-agregar text-uppercase py-3 w-100">
                                         Añadir al Carrito
                                     </button>
 
-                                    {{-- BOTÓN 2: Añade al carrito y lleva a la compra--}}
-                                    <button type="submit" name="action" value="buy_now" class="btn-agregar text-uppercase py-3 text-center btn-outline-adaptativo text-decoration-none  w-100">
+                                    {{-- BOTÓN 2: Añade al carrito y lleva a la compra (Estilo adaptativo corregido) --}}
+                                    <button type="submit" name="action" value="buy_now"
+                                        class="btn btn-outline-warning text-body-emphasis text-uppercase py-3 text-center text-decoration-none w-100">
                                         Añadir y finalizar compra
                                     </button>
                                 </div>
-                            @else
+                            </div>
+
+                            {{-- Botón estático de Agotado, visible solo si arranca sin stock --}}
+                            <div id="out-of-stock-button" class="{{ $stockDisponible > 0 ? 'd-none' : '' }}">
                                 <button type="button" class="btn btn-secondary text-uppercase py-3 w-100" disabled>
                                     Producto Agotado
                                 </button>
-                            @endif
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -194,7 +200,6 @@
                             <div class="table-responsive">
                                 <table class="table custom-table">
                                     <tbody>
-                                        {{-- Inyección manual de las columnas estructurales antes del array --}}
                                         <tr>
                                             <th scope="row">Marca</th>
                                             <td>{{ $product->brand->name ?? 'No especificada' }}</td>
@@ -204,7 +209,6 @@
                                             <td>{{ $product->subtitle }}</td>
                                         </tr>
 
-                                        {{-- Despliegue de las especificaciones dinámicas --}}
                                         @foreach ($product->specs as $title => $value)
                                             <tr>
                                                 <th scope="row">{{ $title }}</th>
@@ -219,7 +223,6 @@
                         {{-- 🛠️ Pestaña 2: Descripción Completa --}}
                         <div class="tab-pane fade" id="description" role="tabpanel">
                             <div class="color-adaptativo lh-lg">
-                                {{-- Renderiza el texto real de la columna 'description' de la base de datos --}}
                                 <p>{{ $product->description }}</p>
                             </div>
                         </div>
@@ -229,7 +232,7 @@
         </div>
     </div>
 
-    {{-- Bloque de scripts intacto --}}
+    {{-- Bloque de scripts corregido, optimizado y con sincronización en tiempo real --}}
     <script>
         function changeMainImage(thumbnail) {
             const mainImage = document.getElementById('mainImage');
@@ -252,7 +255,6 @@
                 input.value = value + 1;
                 stockAlert.classList.add('d-none');
             } else {
-                stockAlert.setTimeout;
                 stockAlert.classList.remove('d-none');
             }
         }
@@ -289,6 +291,55 @@
                 stockAlert.classList.remove('d-none');
             } else {
                 stockAlert.classList.add('d-none');
+            }
+        }
+
+        // =========================================================================
+        // ESCUCHA LOS CAMBIOS DEL CARRITO LATERAL EN TIEMPO REAL
+        // =========================================================================
+        function actualizarStockDesdeCarrito(cantidadEnCarrito) {
+            // Imprimimos el stock físico real directo desde el modelo de Eloquent
+            const stockFisico = {{ $product->stock }};
+            const disponible = Math.max(0, stockFisico - cantidadEnCarrito);
+
+            const container = document.getElementById('stock-status-container');
+            const selector = document.getElementById('quantity-selector-container');
+            const outOfStockBtn = document.getElementById('out-of-stock-button');
+            const input = document.getElementById('quantity');
+
+            // 1. Actualizar el cartel de texto de disponibilidad
+            if (container) {
+                if (disponible > 5) {
+                    container.innerHTML =
+                        `<span class="text-success small fw-bold"><i class="bi bi-box-seam me-1"></i> Disponible (${disponible} unidades)</span>`;
+                } else if (disponible > 1) {
+                    container.innerHTML =
+                        `<span class="text-warning small fw-bold"><i class="bi bi-exclamation-triangle me-1"></i> ¡Últimas ${disponible} unidades disponibles!</span>`;
+                } else if (disponible === 1) {
+                    container.innerHTML =
+                        `<span class="text-warning small fw-bold"><i class="bi bi-x-circle me-1"></i> ¡Última unidad disponible!</span>`;
+                } else {
+                    container.innerHTML =
+                        `<span class="text-danger small fw-bold"><i class="bi bi-x-circle me-1"></i> Agotado (Ya añadiste el máximo disponible a tu carrito)</span>`;
+                }
+            }
+
+            // 2. Actualizar el input numérico y alternar botones si se agota
+            if (disponible > 0) {
+                if (selector) selector.classList.remove('d-none');
+                if (outOfStockBtn) outOfStockBtn.classList.add('d-none');
+
+                if (input) {
+                    input.setAttribute('max', disponible);
+                    // Si el usuario tenía escrito un número mayor al nuevo stock, lo bajamos al tope
+                    if (parseInt(input.value) > disponible) {
+                        input.value = disponible;
+                    }
+                }
+            } else {
+                // Si el stock disponible para este usuario llegó a 0, ocultamos el selector y mostramos "Agotado"
+                if (selector) selector.classList.add('d-none');
+                if (outOfStockBtn) outOfStockBtn.classList.remove('d-none');
             }
         }
     </script>
