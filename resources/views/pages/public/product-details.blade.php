@@ -232,18 +232,20 @@
         </div>
     </div>
 
-@push('scripts')
-    <script src="{{ asset('js/product-stock-sync.js') }}"></script>
+    @push('scripts')
+        <script src="{{ asset('js/product-stock-sync.js') }}"></script>
 
-    <script>
-        // Sobrescribimos temporalmente la función que busca tu JS global del carrito lateral
-        // para inyectarle el stock físico real que viene de Laravel
-        const originalActualizarStock = actualizarStockDesdeCarrito;
+        <script>
+            // Sobrescribimos temporalmente la función que busca el JS global del carrito lateral
+            // para inyectarle el stock físico real que viene de Laravel
+            const originalActualizarStock = actualizarStockDesdeCarrito;
 
-        actualizarStockDesdeCarrito = function(cantidadEnCarrito) {
-            const stockRealDesdeBlade = {{ $product->stock }};
-            originalActualizarStock(cantidadEnCarrito, stockRealDesdeBlade);
-        };
-    </script>
-@endpush
+            //la variable apunta a una función wrapper, que nos sirve para envolver a la original suministrandole datos traidos del servidor(stock total del producto)
+            actualizarStockDesdeCarrito = function(
+            cantidadEnCarrito) { //cantidadEnCarrito trae el valor de cantidadEnCarritoActual de cart-updater.js
+                const stockRealDesdeBlade = {{ $product->stock }};
+                originalActualizarStock(cantidadEnCarrito, stockRealDesdeBlade);
+            };
+        </script>
+    @endpush
 </x-layouts.layout>
