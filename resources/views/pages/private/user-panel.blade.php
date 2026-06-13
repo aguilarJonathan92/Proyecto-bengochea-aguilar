@@ -284,20 +284,22 @@
             </div>
         </div>
     </template>
-    <script>
-        // Compartimos las direcciones del usuario autenticado de Laravel hacia Javascript de manera segura
-        const direccionesIniciales = @json($user->addresses()->with('city.province')->get());
+    {{-- ENCAPSULAMOS TODO EL COMPORTAMIENTO ACÁ --}}
+    @push('scripts')
+        <script>
+            // 1. Compartimos las direcciones de MariaDB a JS de manera segura
+            const direccionesIniciales = @json($user->addresses()->with('city.province')->get());
 
-        //Script para la confirmación de la eliminación de la cuenta
-        function confirmarEliminarCuenta() {
-            const mensaje =
-                "¿Estás completamente seguro de que deseas eliminar tu cuenta?\n\nEsta acción suspenderá tu acceso de forma inmediata.";
-
-            if (confirm(mensaje)) {
-                // Ejecuta el envío del formulario oculto si el usuario acepta
-                document.getElementById('form-eliminar-cuenta').submit();
+            // 2. Script para la confirmación de la eliminación de la cuenta
+            function confirmarEliminarCuenta() {
+                const mensaje =
+                    "¿Estás completamente seguro de que deseas eliminar tu cuenta?\n\nEsta acción suspenderá tu acceso de forma inmediata.";
+                if (confirm(mensaje)) {
+                    document.getElementById('form-eliminar-cuenta').submit();
+                }
             }
-        }
-    </script>
-    <script src="{{ asset('js/activar-editar.js') }}"></script>
+        </script>
+
+        <script src="{{ asset('js/activar-editar.js') }}"></script>
+    @endpush
 </x-layouts.layout>
