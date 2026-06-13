@@ -67,7 +67,7 @@
             }, 4000);
         </script>
     @endif
-    
+
     <button id="theme-toggle" class="btn-brand shadow-lg" title="Cambiar modo">
         <!-- Icono Sol: Se muestra cuando estamos en modo oscuro (porque el botón cambiará a claro) -->
         <span id="theme-toggle-light-icon" class="hidden"><i class="fa-solid fa-sun"></i></span>
@@ -95,12 +95,13 @@
     @if(session('swal_success') || session('swal_error'))
         @include('sweetalert2::index')
     @endif
-    
+
     <script src="{{ asset('js/theme-toggle.js') }}"></script>
     <script src="{{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/search.js') }}"></script>
     <script src="{{ asset('js/flash-message.js') }}"></script>
     <script src="{{ asset('js/cart-updater.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>
