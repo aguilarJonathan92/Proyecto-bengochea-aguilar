@@ -64,6 +64,7 @@
     <script src="{{ asset('js/theme-toggle.js') }}"></script>
     <script src="{{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
     @include('sweetalert2::index')
+    @stack('scripts')
 </body>
 
 </html>
