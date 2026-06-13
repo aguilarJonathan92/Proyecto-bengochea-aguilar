@@ -228,9 +228,9 @@
                         <div class="productos-checkout-lista mb-3" style="max-height: 280px; overflow-y: auto;">
                             @foreach ($cart->items as $item)
                                 @php
-                                    // =========================================================================
+
                                     // BLINDAJE CON OPERADOR NULL-SAFE (?->) Y RESPALDO (??)
-                                    // =========================================================================
+                                    
                                     $precioUnitario = $item->product?->final_price ?? 0;
                                     $itemTotal = $precioUnitario * $item->quantity;
                                     $subtotal += $itemTotal;
@@ -271,5 +271,8 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('js/checkout-direcciones.js') }}"></script>
+    @push('scripts')
+        <script src="{{ asset('js/checkout-direcciones.js') }}"></script>
+    @endpush
 </x-layouts.layout>
+
