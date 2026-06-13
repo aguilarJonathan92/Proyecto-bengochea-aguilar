@@ -89,5 +89,7 @@
             </form>
         </div>
     </div>
-    <script src="{{ asset('js/text-area.js') }}"></script>
+    @push('scripts')
+        <script src="{{ asset('js/text-area.js') }}"></script>
+    @endpush
 </x-layouts.layout>
