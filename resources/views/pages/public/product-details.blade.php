@@ -232,115 +232,18 @@
         </div>
     </div>
 
-    {{-- Bloque de scripts corregido, optimizado y con sincronización en tiempo real --}}
+@push('scripts')
+    <script src="{{ asset('js/product-stock-sync.js') }}"></script>
+
     <script>
-        function changeMainImage(thumbnail) {
-            const mainImage = document.getElementById('mainImage');
-            mainImage.src = thumbnail.src;
-            document.querySelectorAll('.thumb-container').forEach(container => {
-                container.classList.remove('active');
-            });
-            thumbnail.parentElement.classList.add('active');
-        }
+        // Sobrescribimos temporalmente la función que busca tu JS global del carrito lateral
+        // para inyectarle el stock físico real que viene de Laravel
+        const originalActualizarStock = actualizarStockDesdeCarrito;
 
-        function incrementQty() {
-            const input = document.getElementById('quantity');
-            const stockAlert = document.getElementById('stock-alert');
-            const typeAlert = document.getElementById('type-alert');
-            const max = parseInt(input.getAttribute('max'));
-            if (input.value === '') input.value = 0;
-            typeAlert.classList.add('d-none');
-            let value = parseInt(input.value);
-            if (value < max) {
-                input.value = value + 1;
-                stockAlert.classList.add('d-none');
-            } else {
-                stockAlert.classList.remove('d-none');
-            }
-        }
-
-        function decrementQty() {
-            const input = document.getElementById('quantity');
-            const stockAlert = document.getElementById('stock-alert');
-            const typeAlert = document.getElementById('type-alert');
-            if (input.value === '') input.value = 2;
-            typeAlert.classList.add('d-none');
-            let value = parseInt(input.value);
-            if (value > 1) {
-                input.value = value - 1;
-                stockAlert.classList.add('d-none');
-            }
-        }
-
-        function validateKeyboardInput(input) {
-            const stockAlert = document.getElementById('stock-alert');
-            const typeAlert = document.getElementById('type-alert');
-            const max = parseInt(input.getAttribute('max'));
-            if (input.value === '') {
-                typeAlert.classList.remove('d-none');
-                stockAlert.classList.add('d-none');
-                return;
-            }
-            typeAlert.classList.add('d-none');
-            let value = parseInt(input.value);
-            if (value < 1) {
-                input.value = 1;
-                stockAlert.classList.add('d-none');
-            } else if (value > max) {
-                input.value = max;
-                stockAlert.classList.remove('d-none');
-            } else {
-                stockAlert.classList.add('d-none');
-            }
-        }
-
-        // =========================================================================
-        // ESCUCHA LOS CAMBIOS DEL CARRITO LATERAL EN TIEMPO REAL
-        // =========================================================================
-        function actualizarStockDesdeCarrito(cantidadEnCarrito) {
-            // Imprimimos el stock físico real directo desde el modelo de Eloquent
-            const stockFisico = {{ $product->stock }};
-            const disponible = Math.max(0, stockFisico - cantidadEnCarrito);
-
-            const container = document.getElementById('stock-status-container');
-            const selector = document.getElementById('quantity-selector-container');
-            const outOfStockBtn = document.getElementById('out-of-stock-button');
-            const input = document.getElementById('quantity');
-
-            // 1. Actualizar el cartel de texto de disponibilidad
-            if (container) {
-                if (disponible > 5) {
-                    container.innerHTML =
-                        `<span class="text-success small fw-bold"><i class="bi bi-box-seam me-1"></i> Disponible (${disponible} unidades)</span>`;
-                } else if (disponible > 1) {
-                    container.innerHTML =
-                        `<span class="text-warning small fw-bold"><i class="bi bi-exclamation-triangle me-1"></i> ¡Últimas ${disponible} unidades disponibles!</span>`;
-                } else if (disponible === 1) {
-                    container.innerHTML =
-                        `<span class="text-warning small fw-bold"><i class="bi bi-x-circle me-1"></i> ¡Última unidad disponible!</span>`;
-                } else {
-                    container.innerHTML =
-                        `<span class="text-danger small fw-bold"><i class="bi bi-x-circle me-1"></i> Agotado (Ya añadiste el máximo disponible a tu carrito)</span>`;
-                }
-            }
-
-            // 2. Actualizar el input numérico y alternar botones si se agota
-            if (disponible > 0) {
-                if (selector) selector.classList.remove('d-none');
-                if (outOfStockBtn) outOfStockBtn.classList.add('d-none');
-
-                if (input) {
-                    input.setAttribute('max', disponible);
-                    // Si el usuario tenía escrito un número mayor al nuevo stock, lo bajamos al tope
-                    if (parseInt(input.value) > disponible) {
-                        input.value = disponible;
-                    }
-                }
-            } else {
-                // Si el stock disponible para este usuario llegó a 0, ocultamos el selector y mostramos "Agotado"
-                if (selector) selector.classList.add('d-none');
-                if (outOfStockBtn) outOfStockBtn.classList.remove('d-none');
-            }
-        }
+        actualizarStockDesdeCarrito = function(cantidadEnCarrito) {
+            const stockRealDesdeBlade = {{ $product->stock }};
+            originalActualizarStock(cantidadEnCarrito, stockRealDesdeBlade);
+        };
     </script>
+@endpush
 </x-layouts.layout>
