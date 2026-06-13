@@ -11,7 +11,7 @@ function activarEdicion() {
 function cancelarEdicion() {
     document.getElementById('modo-edicion').classList.add('hidden');
     document.getElementById('modo-vista').classList.remove('hidden');
-    
+
     // Al cancelar, limpiamos los cambios temporales y restauramos las direcciones originales
     restaurarDireccionesOriginales();
 }
@@ -26,6 +26,32 @@ if (tieneErrores) {
 
 function agregarDireccion(data = null) {
     const contenedor = document.getElementById('contenedor-direcciones');
+
+    // =========================================================================
+    // CONTROL DE INTERFAZ: Bloquear clics rápidos si el último formulario está vacío
+    // =========================================================================
+    // Solo validamos si es una acción manual del usuario (cuando data es null)
+    if (!data) {
+        const direccionesActivas = contenedor.querySelectorAll('.posicion-direccion');
+
+        if (direccionesActivas.length > 0) {
+            const ultimaCard = direccionesActivas[direccionesActivas.length - 1];
+            const inputCalle = ultimaCard.querySelector('input[name*="[street]"]');
+            const inputCP = ultimaCard.querySelector('input[name*="[postal_code]"]');
+
+            // Si el usuario no completó los datos básicos del formulario anterior, lo frenamos
+            if (inputCalle && inputCP && (inputCalle.value.trim() === "" || inputCP.value.trim() === "")) {
+
+                // Efecto visual opcional: Si usas Animate.css, esto le pegará un sacudón a la tarjeta
+                ultimaCard.classList.add('animate__animated', 'animate__shakeX');
+                setTimeout(() => ultimaCard.classList.remove('animate__shakeX'), 600);
+
+                inputCalle.focus(); // Llevamos el cursor al campo vacío
+                return; // Cortamos la ejecución acá. No se añade nada.
+            }
+        }
+    }
+
     const template = document.getElementById('template-direccion').innerHTML;
 
     const datosHTML = {
@@ -58,7 +84,7 @@ function agregarDireccion(data = null) {
     if (data && data.city && data.city.province_id) {
         // 1. Seleccionar la provincia guardada
         selectProvincia.value = data.city.province_id;
-        
+
         // 2. Cargar las ciudades de esa provincia y preseleccionar la ciudad guardada
         fetch(`/api/provincias/${data.city.province_id}/ciudades`)
             .then(response => response.json())
@@ -96,7 +122,7 @@ function cargarCiudadesDinamico(selectProvincia) {
         .then(response => response.json())
         .then(ciudades => {
             selectCiudad.innerHTML = '<option value="" disabled selected>Selecciona Ciudad...</option>';
-            
+
             ciudades.forEach(ciudad => {
                 const option = document.createElement('option');
                 option.value = ciudad.id;
@@ -133,7 +159,7 @@ function reindexarDirecciones() {
                 const nuevoName = name.replace(/addresses\[\d+\]/, `addresses[${idx}]`);
                 input.setAttribute('name', nuevoName);
             }
-            
+
             if (input.type === 'checkbox') {
                 input.setAttribute('id', `def-${idx}`);
                 const label = card.querySelector('label');
@@ -156,18 +182,18 @@ function restaurarDireccionesOriginales() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     restaurarDireccionesOriginales();
 });
 
 // Escucha cuando se hace click en cualquier checkbox de predeterminado
-document.addEventListener('change', function(e) {
+document.addEventListener('change', function (e) {
     if (e.target && e.target.classList.contains('form-check-input') && e.target.name.includes('[is_default]')) {
         // Si el checkbox fue marcado (true)
         if (e.target.checked) {
             const contenedor = document.getElementById('contenedor-direcciones');
             const todosLosCheckboxes = contenedor.querySelectorAll('input[type="checkbox"]');
-            
+
             // Destildamos absolutamente todos los DEMÁS checkboxes de la sección
             todosLosCheckboxes.forEach(cb => {
                 if (cb !== e.target) {
@@ -214,24 +240,24 @@ document.addEventListener('change', function(e) {
         {
             name: 'first_name',
             tests: [
-                { fn: v => v.trim() !== '',            msg: 'El nombre es obligatorio.' },
-                { fn: v => v.trim().length >= 2,       msg: 'Mínimo 2 caracteres.' },
+                { fn: v => v.trim() !== '', msg: 'El nombre es obligatorio.' },
+                { fn: v => v.trim().length >= 2, msg: 'Mínimo 2 caracteres.' },
                 { fn: v => /^[\p{L}\s\-]+$/u.test(v), msg: 'Solo puede contener letras.' },
             ]
         },
         {
             name: 'last_name',
             tests: [
-                { fn: v => v.trim() !== '',            msg: 'El apellido es obligatorio.' },
-                { fn: v => v.trim().length >= 2,       msg: 'Mínimo 2 caracteres.' },
+                { fn: v => v.trim() !== '', msg: 'El apellido es obligatorio.' },
+                { fn: v => v.trim().length >= 2, msg: 'Mínimo 2 caracteres.' },
                 { fn: v => /^[\p{L}\s\-]+$/u.test(v), msg: 'Solo puede contener letras.' },
             ]
         },
         {
             name: 'email',
             tests: [
-                { fn: v => v.trim() !== '',                        msg: 'El email es obligatorio.' },
-                { fn: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),  msg: 'Ingresá un email válido.' },
+                { fn: v => v.trim() !== '', msg: 'El email es obligatorio.' },
+                { fn: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), msg: 'Ingresá un email válido.' },
             ]
         },
         {
@@ -255,7 +281,7 @@ document.addEventListener('change', function(e) {
 
     // ── Validación de contraseña ──────────────────────────────────────────────
     function validarPassword() {
-        const pass    = form.querySelector('[name="password"]');
+        const pass = form.querySelector('[name="password"]');
         const confirm = form.querySelector('[name="password_confirmation"]');
 
         // Si confirmation tiene valor pero password no, es un error
@@ -301,9 +327,9 @@ document.addEventListener('change', function(e) {
         let valido = true;
 
         tarjetas.forEach(tarjeta => {
-            const alias  = tarjeta.querySelector('[name*="[alias]"]');
+            const alias = tarjeta.querySelector('[name*="[alias]"]');
             const street = tarjeta.querySelector('[name*="[street]"]');
-            const cp     = tarjeta.querySelector('[name*="[postal_code]"]');
+            const cp = tarjeta.querySelector('[name*="[postal_code]"]');
             const ciudad = tarjeta.querySelector('.select-ciudad');
             const selectProvincia = tarjeta.querySelector('.select-provincia');
 
@@ -363,8 +389,8 @@ document.addEventListener('change', function(e) {
             if (input && !validarCampo(input)) formValido = false;
         });
 
-        if (!validarPassword())     formValido = false;
-        if (!validarDirecciones())  formValido = false;
+        if (!validarPassword()) formValido = false;
+        if (!validarDirecciones()) formValido = false;
 
         if (!formValido) {
             e.preventDefault();

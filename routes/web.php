@@ -88,6 +88,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/pedido-exitoso/{order}', [CheckoutController::class, 'success'])->name('orders.success');
         //Listado de compras realizadas
         Route::get('/mis-pedidos', [OrderController::class, 'index'])->name('mis-pedidos');
+
+        Route::get('/mis-pedidos/{order}/comprobante', [OrderController::class, 'descargarComprobante'])
+            ->name('orders.comprobante');
     });
 });
 

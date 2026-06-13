@@ -155,6 +155,23 @@
                                                         {{ $order->payment_method_label }}
                                                     </p>
                                                 </div>
+                                               {{-- ACCIÓN DE DESCARGA DE COMPROBANTE --}}
+                                                <div class="col-md-3 text-md-end mt-3 mt-md-0 pt-3">
+                                                    @if(in_array($order->status, ['processing', 'shipped', 'delivered']))
+                                                        <a href="{{ route('orders.comprobante', $order->id) }}"
+                                                        class="btn-outline-adaptativo w-100 py-2 d-flex align-items-center justify-content-center gap-2"
+                                                        style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">
+                                                            <i class="bi bi-file-earmark-pdf-fill fs-6"></i>
+                                                            Descargar Factura
+                                                        </a>
+                                                    @else
+                                                        <button class="btn-regresar w-100 py-2 d-flex align-items-center justify-content-center gap-2"
+                                                                disabled style="font-size: 0.75rem; text-transform: uppercase; cursor: not-allowed; opacity: 0.5;">
+                                                            <i class="bi bi-lock-fill"></i>
+                                                            Comprobante no disp.
+                                                        </button>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
 
