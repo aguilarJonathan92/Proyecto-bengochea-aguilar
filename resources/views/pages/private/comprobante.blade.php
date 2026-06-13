@@ -30,8 +30,7 @@
         }
 
         .invoice-box {
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
             background-color: #FFFFFF;
         }
 
@@ -105,6 +104,7 @@
         /* ── Cuerpo ── */
         .body {
             padding: 24px 28px;
+            padding-bottom: 80px;
         }
 
         /* ── Etiqueta de sección ── */
@@ -203,7 +203,7 @@
         /* ── Caja de total ── */
         .total-wrapper {
             width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 24px;
         }
 
         .total-box {
@@ -262,7 +262,8 @@
         .footer {
             background-color: var(--color-cuatro);
             padding: 14px 28px;
-            margin-top: 24px;
+            margin-top: 40px;
+            border-top: 2px solid var(--color-dos);
         }
 
         .footer-table {
