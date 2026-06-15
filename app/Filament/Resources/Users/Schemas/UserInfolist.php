@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Queries\Schemas;
+namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section as ComponentsSection;
