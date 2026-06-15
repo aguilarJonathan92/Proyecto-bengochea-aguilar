@@ -3,8 +3,7 @@
 namespace App\Filament\Resources\Users\RelationManagers;
 
 use App\Filament\Resources\Orders\OrderResource;
-use App\Filament\Resources\Products\Pages\ViewUser;
-use Filament\Actions\CreateAction;
+use App\Filament\Resources\Users\Pages\ViewUser;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 
