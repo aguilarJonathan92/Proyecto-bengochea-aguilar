@@ -50,22 +50,42 @@
 ## 🛠️ Instalación
 1. Clonar el repositorio:
    ```bash
-   git clone https://github.com/tuusuario/soundwave-store.git
-   cd soundwave-store
+   git clone https://github.com/aguilarJonathan92/Proyecto-bengochea-aguilar.git
+   cd Proyecto-bengochea-aguilar
    ```
 
 2. Configurar variables de entorno en `.env` (Copias el `.env.example` y agregas tus datos).
+
+### Datos Básicos para el .env
+- **DB_CONNECTION**=mariadb
+- **DB_HOST**=127.0.0.1
+- **DB_PORT**=3306
+- **DB_DATABASE**=db_bengochea_aguilar
+- **DB_USERNAME**=NOMBRE_DE_TU_MOTOR
+- **DB_PASSWORD**=CONTRASEÑA_DE_TU_MOTOR
+- **APP_URL**=http://localhost:8000 
+- **APP_LOCALE**=es
+- **APP_FALLBACK_LOCALE**=es
+- **APP_FAKER_LOCALE**=es_AR
+
+ > **Nota:** Es importante el puerto :8000 en APP_URL para el correcto reconocimiento de las imágenes en filament
+
+
 
 3. Instalar Dependencias y generamos clave
     ```bash
     composer install
     npm install
     php artisan key:generate
+    php artisan storage:link
     ```
 
-4. Ejecutamos migración
+4. Ejecutamos migración (activar xampp o lo que o el servidor web local que utilices)
 ```bash
     php artisan migrate:fresh --seed 
 ```
 
 5. Iniciamos servidor
+```bash
+    php artisan serve
+```
