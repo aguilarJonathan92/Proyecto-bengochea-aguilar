@@ -11,6 +11,7 @@ class Order extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
         'user_id',
         'total',
@@ -24,6 +25,20 @@ class Order extends Model
         'delivery_postal_code',
         'delivery_city_id',
     ];
+
+    protected static function booted()
+    {
+        static::updating(function ($order) {
+            // Si el estado CAMBIÓ a cancelled
+            if ($order->isDirty('status') && $order->status === 'cancelled') {
+                foreach ($order->items as $item) {
+                    $item->product()->withoutGlobalScopes()->withTrashed()
+                        ->first()
+                        ->increment('stock', $item->quantity);
+                }
+            }
+        });
+    }
 
     // Una orden tiene muchos ítems comprados
     public function items()

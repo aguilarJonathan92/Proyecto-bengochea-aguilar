@@ -94,7 +94,7 @@ class OrderForm
                     ->schema([
                         Select::make('status')
                             ->label('Estado de la Orden')
-                            ->required()
+                            ->required(fn($record) => $record?->status !== 'cancelled')
                             ->options([
                                 'pending' => 'Pendiente de Pago',
                                 'processing' => 'En Proceso / Armando Pedido',
@@ -102,7 +102,10 @@ class OrderForm
                                 'delivered' => 'Entregado',
                                 'cancelled' => 'Cancelado',
                             ])
+                            ->disabled(fn($record) => $record?->status === 'cancelled')
+                            ->dehydrated(fn($record) => $record?->status !== 'cancelled')
                             ->selectablePlaceholder(false),
+
                         Textarea::make('details')
                             ->label('Observaciones'),
 
