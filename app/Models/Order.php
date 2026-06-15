@@ -15,6 +15,7 @@ class Order extends Model
         'user_id',
         'total',
         'payment_method',
+        'details',
         'status',
         'customer_name',
         'customer_lastname',
@@ -72,7 +73,7 @@ class Order extends Model
             },
         );
     }
-    
+
     protected function paymentMethodLabel(): Attribute
     {
         return Attribute::make(

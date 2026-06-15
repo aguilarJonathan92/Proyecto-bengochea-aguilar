@@ -82,6 +82,10 @@ class OrderInfolist
                         TextEntry::make('payment_method')
                             ->label('Método de Pago'),
 
+                        TextEntry::make('details')
+                            ->label('Observaciones')
+                            ->placeholder('Sin observaciones'),
+
                         TextEntry::make('total')
                             ->label('Total Cobrado')
                             ->money('ARS')

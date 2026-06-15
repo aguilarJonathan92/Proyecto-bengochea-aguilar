@@ -23,6 +23,7 @@ return new class extends Migration
             //datos de la venta
             $table->decimal('total', 10, 2);
             $table->string('payment_method');
+            $table->text('details')->nullable();
             $table->string('status')->default('processing');
 
             // DATOS DE ENTREGA CONGELADOS (para el historial de compras)

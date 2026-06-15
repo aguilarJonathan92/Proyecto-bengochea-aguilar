@@ -18,28 +18,51 @@
                                 class="card mb-3 border border-ui-adaptativa shadow-sm overflow-hidden bg-superficie-adaptativa rounded">
 
                                 {{-- Encabezado del Pedido (Botón del Acordeón) --}}
-                                <div class="p-3" style="cursor: pointer;" data-bs-toggle="collapse"
+                                <div class="p-3" style="cursor: pointer; min-height: 80px;" data-bs-toggle="collapse"
                                     data-bs-target="#collapse-{{ $order->id }}" aria-expanded="false"
                                     aria-controls="collapse-{{ $order->id }}">
                                     <div class="row align-items-center g-3">
 
-                                        <div class="col-6 col-md-3">
+                                        @php
+                                            $colBase = $order->details ? 'col-md-2' : 'col-md-3';
+                                        @endphp
+
+                                        <div class="col-6 {{ $colBase }} d-flex flex-column justify-content-center">
                                             <span class="text-muted-adaptativo small d-block">NÚMERO DE PEDIDO</span>
                                             <span class="fw-bold color-adaptativo">#{{ $order->id }}</span>
                                         </div>
 
-                                        <div class="col-6 col-md-3">
+                                        <div class="col-6 {{ $colBase }} d-flex flex-column justify-content-center">
                                             <span class="text-muted-adaptativo small d-block">FECHA</span>
                                             <span class="color-adaptativo small">{{ $order->fecha_argentina }}</span>
                                         </div>
 
-                                        <div class="col-6 col-md-3">
+                                        <div class="col-6 {{ $colBase }} d-flex flex-column justify-content-center">
                                             <span class="text-muted-adaptativo small d-block">TOTAL</span>
                                             <span
                                                 class="fw-bold color-dorado-adaptativo">${{ number_format($order->total, 0, ',', '.') }}</span>
                                         </div>
 
-                                        <div class="col-6 col-md-3 text-md-end">
+                                        {{-- Observaciones, si se ha hecho alguna --}}
+
+                                        @if ($order->details)
+                                            @php
+                                                $colorNota =
+                                                    $order->status === 'cancelled'
+                                                        ? 'bg-danger-subtle text-danger border-danger'
+                                                        : 'bg-warning-subtle text-warning border-warning';
+                                            @endphp
+                                            <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
+                                                <span class="text-muted-adaptativo small d-block text-md-center">OBSERVACIONES</span>
+                                                <span class="badge {{ $colorNota }} border px-2 py-1 align-self-start align-self-md-center"
+                                                    style="font-size: 0.7rem;">
+                                                    <i class="bi bi-chat-left-text-fill me-1"></i>Expandir para ver
+                                                </span>
+                                            </div>
+                                        @endif
+
+                                        <div
+                                            class="col-6 col-md-3 d-flex justify-content-md-end align-items-center">
                                             @if ($order->status === 'pending')
                                                 <span
                                                     class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 text-uppercase"
@@ -155,18 +178,31 @@
                                                         {{ $order->payment_method_label }}
                                                     </p>
                                                 </div>
-                                               {{-- ACCIÓN DE DESCARGA DE COMPROBANTE --}}
+                                                @if ($order->details)
+                                                    <div class="col-12">
+                                                        <span
+                                                            class="color-dorado-adaptativo d-block text-uppercase fw-bold mb-1"
+                                                            style="font-size: 0.75rem;">
+                                                            <i class="bi bi-chat-left-text me-1"></i>Observaciones
+                                                        </span>
+                                                        <p class="mb-0 text-muted-adaptativo fw-bold">
+                                                            {{ $order->details }}</p>
+                                                    </div>
+                                                @endif
+                                                {{-- ACCIÓN DE DESCARGA DE COMPROBANTE --}}
                                                 <div class="col-md-3 text-md-end mt-3 mt-md-0 pt-3">
-                                                    @if(in_array($order->status, ['processing', 'shipped', 'delivered']))
+                                                    @if (in_array($order->status, ['processing', 'shipped', 'delivered']))
                                                         <a href="{{ route('orders.comprobante', $order->id) }}"
-                                                        class="btn-outline-adaptativo w-100 py-2 d-flex align-items-center justify-content-center gap-2"
-                                                        style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">
+                                                            class="btn-outline-adaptativo w-100 py-2 d-flex align-items-center justify-content-center gap-2"
+                                                            style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">
                                                             <i class="bi bi-file-earmark-pdf-fill fs-6"></i>
                                                             Descargar Factura
                                                         </a>
                                                     @else
-                                                        <button class="btn-regresar w-100 py-2 d-flex align-items-center justify-content-center gap-2"
-                                                                disabled style="font-size: 0.75rem; text-transform: uppercase; cursor: not-allowed; opacity: 0.5;">
+                                                        <button
+                                                            class="btn-regresar w-100 py-2 d-flex align-items-center justify-content-center gap-2"
+                                                            disabled
+                                                            style="font-size: 0.75rem; text-transform: uppercase; cursor: not-allowed; opacity: 0.5;">
                                                             <i class="bi bi-lock-fill"></i>
                                                             Comprobante no disp.
                                                         </button>
@@ -188,7 +224,8 @@
                         class="text-center p-5 bg-superficie-adaptativa rounded shadow-sm border border-ui-adaptativa animate__animated animate__fadeIn">
                         <i class="bi bi-journal-x text-muted" style="font-size: 4rem;"></i>
                         <h5 class="mt-3 fw-bold color-adaptativo">Aún no has realizado pedidos</h5>
-                        <p class="text-muted-adaptativo">Cuando realices compras en nuestra tienda, verás el seguimiento
+                        <p class="text-muted-adaptativo">Cuando realices compras en nuestra tienda, verás el
+                            seguimiento
                             aquí.</p>
                         <a href="{{ route('catalog') }}"
                             class="special-btn py-2 px-4 text-decoration-none small inline-block mt-2 ">

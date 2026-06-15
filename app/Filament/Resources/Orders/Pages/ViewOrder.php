@@ -20,7 +20,7 @@ class ViewOrder extends ViewRecord
     {
         return [
             EditAction::make()
-            ->label('Cambiar Estado'),
+            ->label('Modificar estado'),
         ];
     }
 }

@@ -8,6 +8,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Repeater;
 use Filament\Schemas\Schema;
 use App\Models\Order;
+use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section as ComponentsSection;
 
 class OrderForm
@@ -102,6 +103,8 @@ class OrderForm
                                 'cancelled' => 'Cancelado',
                             ])
                             ->selectablePlaceholder(false),
+                        Textarea::make('details')
+                            ->label('Observaciones'),
 
                         TextInput::make('payment_method')
                             ->label('Método de Pago')
