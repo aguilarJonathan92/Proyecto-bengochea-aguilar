@@ -90,10 +90,10 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
-    // Un producto solo se relaciona con un item del carrito
-    public function cartItem()
+    // Por si se quisiera algún día saber en cuantos carritos está el producto. Por ej: {{ $product->cartItems->count() }}
+    public function cartItems()
     {
-        return $this->belongsTo(CartItem::class);
+        return $this->hasMany(CartItem::class);
     }
 
     //Un producto puede figurar en muchos ítems de pedidos históricos
