@@ -111,8 +111,7 @@
                             </span>
                         @else
                             <span class="text-danger small fw-bold">
-                                <i class="bi bi-x-circle me-1"></i> Agotado (Ya añadiste el máximo disponible a tu
-                                carrito)
+                                <i class="bi bi-x-circle me-1"></i> Stock Agotado
                             </span>
                         @endif
                     </div>

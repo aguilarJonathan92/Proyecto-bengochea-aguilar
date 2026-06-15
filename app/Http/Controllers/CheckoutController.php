@@ -63,7 +63,7 @@ class CheckoutController extends Controller
             if ($product->stock <= 0) {
                 $item->delete(); // Removemos el ítem porque ya no hay nada
                 $huboCambiosDeStock = true;
-            } 
+            }
             // Caso 2: Queda stock, pero es MENOS de lo que el Usuario A quiere comprar
             // Ej: El usuario A quiere 2, pero el usuario B compró y ahora solo queda 1 en stock
             elseif ($product->stock < $item->quantity) {
@@ -143,9 +143,9 @@ class CheckoutController extends Controller
 
                 // Caso A: El producto se desactivó o eliminó de la tienda mientras el usuario rellenaba sus datos
                 if (!$product || !$product->active) {
-                    $item->delete(); 
+                    $item->delete();
                     $huboCambiosDeStock = true;
-                    continue; 
+                    continue;
                 }
 
                 // Caso B: El usuario B compró antes y dejó al usuario A sin el stock necesario
@@ -153,9 +153,9 @@ class CheckoutController extends Controller
                     $huboCambiosDeStock = true;
 
                     if ($product->stock <= 0) {
-                        $item->delete(); 
+                        $item->delete();
                     } else {
-                        $item->update(['quantity' => $product->stock]); 
+                        $item->update(['quantity' => $product->stock]);
                     }
                     continue;
                 }
@@ -170,7 +170,7 @@ class CheckoutController extends Controller
                     'quantity'   => $item->quantity,
                     'price'      => $precioUnitario,
                 ];
-            } 
+            }
 
             // --- RESPUESTA DE SEGURIDAD ---
             // Si detectamos cualquier alteración en los productos o stocks, cancelamos la creación de la orden
@@ -198,8 +198,11 @@ class CheckoutController extends Controller
                 $itemData['order_id'] = $order->id;
                 OrderItem::create($itemData);
 
-                $product = Product::find($itemData['product_id']);
-                $product->decrement('stock', $itemData['quantity']);
+                //$product = Product::find($itemData['product_id']);
+                //$product->decrement('stock', $itemData['quantity']);
+                // Mismo resultado que las dos líneas de arriba pero en una query y con lock. No es necesario guardar en $product ya que no se vuelve a utilizar
+                Product::lockForUpdate()->find($itemData['product_id']) //Impide que dos usuarios confirmen un mismo producto (si quedará uno)
+                    ->decrement('stock', $itemData['quantity']);
             }
 
             // 6. Vaciar el carrito de compras del usuario por completo
@@ -209,7 +212,6 @@ class CheckoutController extends Controller
             DB::commit(); // Confirmamos la compra de forma exitosa
 
             return redirect()->route('orders.success', $order->id)->with('cart_success', '¡Tu pedido ha sido procesado con éxito!');
-            
         } catch (\Exception $e) {
             DB::rollBack(); // Ante cualquier error inesperado de código, deshacemos cambios
             return redirect()->route('catalog')->with('cart_error', 'Ocurrió un error inesperado al procesar tu pedido: ' . $e->getMessage());

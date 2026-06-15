@@ -18,13 +18,13 @@ return new class extends Migration
             $table->string('title', 200);
             $table->string('subtitle', 200);
             $table->text('description');
-            $table->integer('stock');
+            $table->integer('stock')->unsigned(); // no valores negativos.
             $table->decimal('price', 10, 2);
-            $table->integer('installments');
+            $table->integer('installments')->unsigned();
             $table->decimal('installment_price', 10, 2);
             $table->boolean('on_sale');
-            $table->integer('views')->default(0); //para contar las vistas.
-            $table->integer('discount')->default(0);
+            $table->integer('views')->default(0)->unsigned(); //para contar las vistas.
+            $table->integer('discount')->default(0)->unsigned();
             $table->boolean('active')->default(true);
             $table->json('specs')->nullable();
             $table->string('image_1');        // obligatoria
