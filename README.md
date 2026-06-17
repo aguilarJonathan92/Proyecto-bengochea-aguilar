@@ -135,7 +135,7 @@ Desarrollado con vistas **Blade** tradicionales y controladores optimizados para
 - **APP_FALLBACK_LOCALE**=es
 - **APP_FAKER_LOCALE**=es_AR
 
- > **Nota:** Es importante el puerto :8000 en APP_URL para el correcto reconocimiento de las imágenes en filament
+ > **Nota:** Es importante el puerto :8000 en APP_URL para el correcto reconocimiento y carga de las imágenes en filament (con php artisan serve). Si se utiliza HERD, la APP_URL adecuada es http://proyecto-bengochea-aguilar.test/
 
 
 
